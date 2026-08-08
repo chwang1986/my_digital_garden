@@ -2,85 +2,149 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { SITE_TITLE, SITE_DESCRIPTION, SITE_BRAND } from '../consts';
 ---
 
 <!doctype html>
 <html lang="zh-CN">
 	<head>
-		<BaseHead title={`关于与站点指南 - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+		<BaseHead title={`关于 - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
 		<style>
-			.about-header {
-				margin-bottom: 2.5rem;
-				padding-bottom: 1.5rem;
-				border-bottom: 1px dashed #e5e7eb;
+			main {
+				max-width: var(--wide-width);
+				margin: 0 auto;
+				padding: 4.5rem 1.25rem 1rem;
 			}
+
+			.hero {
+				padding-bottom: 2.5rem;
+				margin-bottom: 3rem;
+				border-bottom: 1px solid var(--border-color);
+			}
+
+			.eyebrow {
+				font-size: 0.8rem;
+				font-weight: 600;
+				letter-spacing: 0.18em;
+				text-transform: uppercase;
+				color: var(--primary-color);
+				margin: 0 0 1rem;
+			}
+
 			.about-title {
-				font-family: Georgia, Cambria, "Times New Roman", Times, serif;
 				font-size: 2.8rem;
-				font-weight: 700;
-				margin-bottom: 0.75rem;
-				background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
-				-webkit-background-clip: text;
-				-webkit-text-fill-color: transparent;
+				font-weight: 800;
+				letter-spacing: -0.02em;
+				line-height: 1.15;
+				margin: 0 0 1.1rem;
+				color: var(--text-main);
 			}
+
+			.about-title .accent {
+				color: var(--primary-color);
+			}
+
 			.about-intro {
 				font-size: 1.15rem;
 				line-height: 1.8;
-				color: #374151;
+				color: var(--text-secondary);
+				margin: 0;
+				max-width: 36rem;
 			}
+
+			.prose {
+				max-width: var(--content-width);
+				margin: 0 auto;
+			}
+
 			.section-title {
-				font-size: 1.3rem;
-				color: #111827;
-				margin-top: 2rem;
-				margin-bottom: 1rem;
+				font-size: 1.4rem;
+				font-weight: 700;
+				color: var(--text-main);
+				margin: 2.75rem 0 1rem;
 			}
+
+			.section-title:first-child {
+				margin-top: 0;
+			}
+
+			.lead {
+				font-size: 1.1rem;
+				line-height: 1.8;
+				color: var(--text-secondary);
+				margin: 0 0 1.5rem;
+			}
+
 			.guide-list {
 				line-height: 1.8;
-				color: #4b5563;
-				padding-left: 1.2rem;
+				color: var(--text-secondary);
+				padding-left: 1.25rem;
 			}
+
 			.guide-list li {
 				margin-bottom: 0.5rem;
 			}
+
 			code {
-				background-color: #f3f4f6;
+				background-color: var(--code-bg);
 				padding: 0.2rem 0.4rem;
 				border-radius: 4px;
 				font-size: 0.9em;
-				color: #0f172a;
-				font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+				color: var(--text-main);
+				font-family: var(--font-mono);
 			}
+
 			.card-box {
-				background-color: #f9fafb;
-				border: 1px solid #e5e7eb;
+				background-color: var(--card-bg);
+				border: 1px solid var(--border-color);
 				border-radius: 12px;
-				padding: 1.25rem;
-				margin-top: 1.5rem;
+				padding: 1.25rem 1.4rem;
+				margin-top: 1.75rem;
 			}
+
 			.card-box p {
 				margin: 0 0 0.75rem 0;
-				line-height: 1.6;
-				color: #4b5563;
+				line-height: 1.7;
+				color: var(--text-secondary);
 			}
+
 			.card-box p:last-child {
 				margin-bottom: 0;
+			}
+
+			.card-box a {
+				color: var(--primary-color);
+				text-decoration: none;
+			}
+
+			.card-box a:hover {
+				text-decoration: underline;
+			}
+
+			@media (max-width: 600px) {
+				main {
+					padding-top: 3rem;
+				}
+				.about-title {
+					font-size: 2.1rem;
+				}
 			}
 		</style>
 	</head>
 	<body>
 		<Header />
 		<main>
-			<section class="about-header">
-				<h1 class="about-title">关于本站 (About)</h1>
+			<section class="hero">
+				<p class="eyebrow">关于 · About</p>
+				<h1 class="about-title">关于 <span class="accent">{SITE_BRAND}</span></h1>
 				<p class="about-intro">
-					欢迎来到 <strong>Wang's Notes</strong>。这是一个采用 Astro 构建的轻量级数字花园，旨在提供极致的加载响应与纯粹的文字排版体验。
+					欢迎来到 <strong>{SITE_BRAND}</strong>。这是一个采用 Astro 构建的轻量级数字花园，旨在分享我的想法和一些笔记。
 				</p>
 			</section>
 
-			<article>
-				<h2 class="section-title">🚀 站点开发与配置指南</h2>
-				<p class="about-intro">
+			<article class="prose">
+				<h2 class="section-title">站点开发与配置指南</h2>
+				<p class="lead">
 					本站继承了 Astro 极简博客底座的核心优势。以下是开发与维护这个工程的关键指引：
 				</p>
 
@@ -88,25 +152,25 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				<ul class="guide-list">
 					<li><strong>首页编辑：</strong> 对应 <code>src/pages/index.astro</code> 文件，控制首页视觉与随笔列表。</li>
 					<li><strong>导航与页脚：</strong> 分别在 <code>src/components/Header.astro</code> 和 <code>src/components/Footer.astro</code> 中自定义全局结构。</li>
-					<li><strong>文章资产库：</strong> 所有随笔与技术笔记存放在 <code>src/content/blog/</code> 目录下（使用标准 Markdown 格式）。</li>
-					<li><strong>文章排版布局：</strong> 随笔的详细排版风格可通过 <code>src/layouts/BlogPost.astro</code> 进行深度调整。</li>
+					<li><strong>文章笔记库：</strong> 所有随笔与技术笔记存放在 <code>src/content/blog/</code> 目录下（使用标准 Markdown 格式）。</li>
+					<li><strong>文章布局：</strong> 随笔的详细排版风格可通过 <code>src/layouts/BlogPost.astro</code> 进行深度调整。</li>
 				</ul>
 
-				<h3 class="section-title">2. 生态与扩展性 (Integrations)</h3>
-				<p class="about-intro">
-					项目已在配置文件 <code>astro.config.mjs</code> 中完成了基础设施构建。根据未来需求，可通过 <a href="https://astro.build/integrations" target="_blank">Astro Integrations</a> 自由拓展工具链：
+				<h3 class="section-title">2. 生态与扩展性</h3>
+				<p class="lead">
+					项目已在配置文件 <code>astro.config.mjs</code> 中完成了基础设施构建。根据未来需求，可通过 <a href="https://astro.build/integrations" target="_blank" rel="noopener">Astro Integrations</a> 自由拓展工具链：
 				</p>
 				<ul class="guide-list">
 					<li>引入 <strong>Tailwind CSS</strong> 进行快速样式构建。</li>
-					<li>按需无缝挂载 <strong>React / Vue</strong> 独立交互组件（用于交互地图或 5x5 围棋 Demo）。</li>
+					<li>按需无缝挂载 <strong>React / Vue</strong> 独立交互组件。</li>
 				</ul>
 
 				<div class="card-box">
 					<p>
-						📚 <strong>开发者文档与资源：</strong> 如需探究更多底层特性，可随时查阅 <a href="https://docs.astro.build/" target="_blank">Astro 官方文档</a> 或加入 <a href="https://astro.build/chat" target="_blank">Discord 官方社区</a> 交流讨论。
+						📚 <strong>开发者文档与资源：</strong> 如需探究更多底层特性，可随时查阅 <a href="https://docs.astro.build/" target="_blank" rel="noopener">Astro 官方文档</a> 或加入 <a href="https://astro.build/chat" target="_blank" rel="noopener">Discord 官方社区</a> 交流讨论。
 					</p>
 					<p>
-						🎨 Looking for a blog template with a bit more personality? Check out <a href="https://github.com/Charca/astro-blog-template" target="_blank">astro-blog-template</a> by <a href="https://twitter.com/Charca" target="_blank">Maxi Ferreira</a>.
+						🎨 想要更有个性的博客模板？推荐参考 <a href="https://github.com/Charca/astro-blog-template" target="_blank" rel="noopener">astro-blog-template</a> by <a href="https://twitter.com/Charca" target="_blank" rel="noopener">Maxi Ferreira</a>。
 					</p>
 				</div>
 			</article>

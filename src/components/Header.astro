@@ -1,62 +1,121 @@
 ---
 import HeaderLink from './HeaderLink.astro';
-import { SITE_TITLE } from '../consts';
+import ThemeToggle from './ThemeToggle.astro';
+import { SITE_BRAND } from '../consts';
 ---
 
 <header>
 	<nav>
-		<h2><a href="/">{SITE_TITLE}</a></h2>
-		<div class="internal-links">
-			<HeaderLink href="/">首页</HeaderLink>
-			<HeaderLink href="/blog">随笔 & 笔记</HeaderLink>
-			<HeaderLink href="/about">关于</HeaderLink>
+		<!-- 站点标题 / Logo -->
+		<h2><a href="/">{SITE_BRAND}</a></h2>
+
+		<!-- 导航菜单与主题切换 -->
+		<div class="nav-links">
+			<div class="internal-links">
+				<HeaderLink href="/">首页</HeaderLink>
+				<HeaderLink href="/blog">文章</HeaderLink>
+				<HeaderLink href="/about">关于</HeaderLink>
+			</div>
+			<!-- 暗黑模式切换按钮 -->
+			<ThemeToggle />
 		</div>
 	</nav>
 </header>
+
 <style>
 	header {
 		margin: 0;
-		padding: 0 1em;
-		background: white;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-	}
-	h2 {
-		margin: 0;
-		font-size: 1.2rem;
-		font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+		padding: 1.1rem 1.25rem;
+		border-bottom: 1px solid var(--border-color);
+		background-color: color-mix(in srgb, var(--bg-color) 85%, transparent);
+		transition:
+			background-color 0.2s ease,
+			border-color 0.2s ease;
+		position: sticky;
+		top: 0;
+		z-index: 10;
+		backdrop-filter: saturate(180%) blur(8px);
+		-webkit-backdrop-filter: saturate(180%) blur(8px);
 	}
 
-	h2 a {
-		text-decoration: none;
-		/* 使用与首页一致的优雅渐变文字 */
-		background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		font-weight: 700;
-	}
 	nav {
+		max-width: var(--wide-width);
+		margin: 0 auto;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		max-width: 960px;
-		margin: 0 auto;
-		padding: 1em 0;
 	}
+
+	h2 {
+		margin: 0;
+		font-size: 1.2rem;
+		font-weight: 700;
+		letter-spacing: -0.01em;
+	}
+
+	h2 a {
+		color: var(--text-color);
+		text-decoration: none;
+		transition: color 0.2s ease;
+	}
+
+	h2 a:hover {
+		color: var(--accent-color);
+	}
+
+	.nav-links {
+		display: flex;
+		align-items: center;
+		gap: 1.5rem;
+	}
+
 	.internal-links {
 		display: flex;
-		gap: 1rem;
+		align-items: center;
+		gap: 1.25rem;
 	}
-	nav a {
-		padding: 0.5em 0.5em;
-		color: #4b5563;
-		border-bottom: 4px solid transparent;
+
+	/* HeaderLink 组件在导航栏中的外观 */
+	.internal-links :global(a) {
+		padding: 0.25rem 0;
+		color: var(--text-muted);
 		text-decoration: none;
+		font-size: 0.95rem;
 		font-weight: 500;
+		border-bottom: 2px solid transparent;
 		transition: all 0.2s ease;
 	}
-	nav a:hover,
-	nav a.active {
-		color: #4f46e5;
-		border-bottom-color: #4f46e5;
+
+	.internal-links :global(a:hover) {
+		color: var(--text-color);
+	}
+
+	/* 当前页面高亮样式 */
+	.internal-links :global(a.active) {
+		color: var(--text-color);
+		border-bottom-color: var(--accent-color);
+		font-weight: 600;
+	}
+
+	@media (max-width: 600px) {
+		header {
+			padding: 0.9rem 1rem;
+		}
+
+		h2 {
+			font-size: 1.05rem;
+		}
+
+		.nav-links {
+			gap: 1rem;
+		}
+
+		.internal-links {
+			gap: 0.85rem;
+		}
+
+		.internal-links :global(a) {
+			font-size: 0.9rem;
+		}
 	}
 </style>

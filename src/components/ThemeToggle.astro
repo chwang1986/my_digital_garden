@@ -1,0 +1,63 @@
+---
+/* src/components/ThemeToggle.astro */
+---
+
+<button id="theme-toggle" aria-label="Toggle theme">
+	<span class="sun-icon">☀️</span>
+	<span class="moon-icon">🌙</span>
+</button>
+
+<script>
+	const toggleBtn = document.getElementById('theme-toggle');
+
+	function setTheme(theme: 'light' | 'dark') {
+		if (theme === 'dark') {
+			document.documentElement.classList.add('dark');
+		} else {
+			document.documentElement.classList.remove('dark');
+		}
+		localStorage.setItem('theme', theme);
+	}
+
+	// 1. 初始化主题（优先使用 LocalStorage，其次跟随系统）
+	const savedTheme = localStorage.getItem('theme');
+	const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+	
+	if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+		setTheme('dark');
+	} else {
+		setTheme('light');
+	}
+
+	// 2. 绑定点击切换事件
+	toggleBtn?.addEventListener('click', () => {
+		const isDark = document.documentElement.classList.contains('dark');
+		setTheme(isDark ? 'light' : 'dark');
+	});
+</script>
+
+<style>
+	#theme-toggle {
+		background: none;
+		border: 1px solid var(--border-color);
+		border-radius: 8px;
+		padding: 0.4rem 0.6rem;
+		cursor: pointer;
+		font-size: 0.9rem;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		transition: border-color 0.2s ease;
+	}
+
+	#theme-toggle:hover {
+		border-color: var(--accent-color);
+	}
+
+	/* 根据模式显示对应的图标 */
+	.sun-icon { display: none; }
+	.moon-icon { display: inline; }
+
+	:global(html.dark) .sun-icon { display: inline; }
+	:global(html.dark) .moon-icon { display: none; }
+</style>

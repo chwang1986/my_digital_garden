@@ -16,139 +16,118 @@ const posts = (await getCollection('blog')).sort(
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<style>
-			/* 顶部个人头图与宣言 */
+			main {
+				max-width: var(--wide-width);
+				margin: 0 auto;
+				padding: 0 1.25rem;
+			}
+
 			.hero {
-				margin-bottom: 2.5rem;
-				padding-bottom: 2rem;
-				border-bottom: 1px dashed #e5e7eb;
+				padding: 4.5rem 0 3rem;
+				border-bottom: 1px solid var(--border-color);
 			}
 
-			/* 状态微调标签 */
-			.status-badge {
-				display: inline-flex;
-				align-items: center;
-				gap: 0.5rem;
-				padding: 0.25rem 0.75rem;
-				background-color: #f3f4f6;
-				border: 1px solid #e5e7eb;
-				border-radius: 9999px;
-				font-size: 0.85rem;
-				color: #4b5563;
-				margin-bottom: 1.25rem;
+			.eyebrow {
+				font-size: 0.8rem;
+				font-weight: 600;
+				letter-spacing: 0.18em;
+				text-transform: uppercase;
+				color: var(--primary-color);
+				margin-bottom: 1rem;
 			}
 
-			.status-dot {
-				width: 8px;
-				height: 8px;
-				background-color: #10b981;
-				border-radius: 50%;
-				display: inline-block;
-				box-shadow: 0 0 8px #10b981;
-			}
-
-			/* 新版标题字体：现代系统无衬线字体，高级利落 */
 			.title {
-				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 				font-size: 3rem;
 				font-weight: 800;
-				margin-bottom: 1rem;
-				background: linear-gradient(135deg, #3b82f6 0%, #6366f1 50%, #8b5cf6 100%);
-				-webkit-background-clip: text;
-				-webkit-text-fill-color: transparent;
+				margin: 0 0 1.1rem 0;
+				color: var(--text-main);
 				letter-spacing: -0.03em;
 				line-height: 1.1;
 			}
 
+			.title .accent {
+				color: var(--primary-color);
+			}
+
 			.intro-text {
-				font-size: 1.1rem;
+				font-size: 1.15rem;
 				line-height: 1.8;
-				color: #374151;
-				margin-bottom: 1rem;
-			}
-
-			/* 全新三卡片布局：去除围棋与大学，聚焦个人思考维度 */
-			.focus-grid {
-				display: grid;
-				grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-				gap: 1.25rem;
-				margin: 2.25rem 0 1rem 0;
-			}
-
-			.focus-card {
-				padding: 1.25rem 1.5rem;
-				background: #ffffff;
-				border: 1px solid #eaecf0;
-				border-radius: 12px;
-				box-shadow: 0 1px 3px rgba(16, 24, 40, 0.04);
-				transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-			}
-
-			.focus-card:hover {
-				transform: translateY(-3px);
-				box-shadow: 0 8px 16px -4px rgba(16, 24, 40, 0.08);
-				border-color: #cbd5e1;
-			}
-
-			.focus-card h3 {
-				font-size: 1.05rem;
-				font-weight: 600;
-				margin-top: 0;
-				margin-bottom: 0.4rem;
-				color: #0f172a;
-			}
-
-			.focus-card p {
-				font-size: 0.875rem;
-				color: #64748b;
+				color: var(--text-secondary);
+				max-width: 36rem;
 				margin: 0;
-				line-height: 1.5;
 			}
 
-			/* 文章列表部分 */
 			.recent-posts {
-				margin-top: 2.5rem;
+				padding: 3rem 0 1rem;
 			}
 
 			.recent-posts h2 {
-				font-size: 1.15rem;
+				font-size: 0.85rem;
 				font-weight: 600;
-				letter-spacing: 0.05em;
+				letter-spacing: 0.12em;
 				text-transform: uppercase;
-				color: #64748b;
-				margin-bottom: 1.5rem;
+				color: var(--text-secondary);
+				margin: 0 0 0.5rem;
 			}
 
 			.post-list {
-				list-style-type: none;
+				list-style: none;
 				padding: 0;
 				margin: 0;
 			}
 
 			.post-item {
-				margin-bottom: 1.25rem;
 				display: flex;
 				justify-content: space-between;
 				align-items: baseline;
+				gap: 1rem;
+				padding: 1rem 0;
+				border-bottom: 1px solid var(--border-color);
 			}
 
 			.post-item a {
-				font-size: 1.1rem;
-				text-decoration: none;
-				color: #0f172a;
+				font-size: 1.15rem;
 				font-weight: 500;
+				color: var(--text-main);
+				text-decoration: none;
 				transition: color 0.2s ease;
 			}
 
 			.post-item a:hover {
-				color: #4f46e5;
+				color: var(--primary-color);
 			}
 
 			.post-date {
-				font-size: 0.875rem;
-				color: #94a3b8;
-				font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-				white-space: nowrap;
-				margin-left: 1.5rem;
+				flex-shrink: 0;
+				font-size: 0.85rem;
+				color: var(--text-secondary);
+				font-family: var(--font-mono);
+			}
+
+			.view-all {
+				display: inline-block;
+				margin-top: 1.75rem;
+				font-size: 0.95rem;
+				font-weight: 600;
+				color: var(--primary-color);
+				text-decoration: none;
+			}
+
+			.view-all:hover {
+				color: var(--primary-strong);
+			}
+
+			@media (max-width: 600px) {
+				.hero {
+					padding: 3rem 0 2rem;
+				}
+				.title {
+					font-size: 2.25rem;
+				}
+				.post-item {
+					flex-direction: column;
+					gap: 0.25rem;
+				}
 			}
 		</style>
 	</head>
@@ -156,35 +135,13 @@ const posts = (await getCollection('blog')).sort(
 		<Header />
 		<main>
 			<section class="hero">
-				<!-- 动态状态指示器 -->
-				<div class="status-badge">
-					<span class="status-dot"></span>
-					<span>状态：记录技术实践与随笔思考</span>
-				</div>
-
-				<h1 class="title">Wang's Notes</h1>
+				<p class="eyebrow">数字花园 · Digital Garden</p>
+				<h1 class="title">Wang's <span class="accent">Notes</span></h1>
 				<p class="intro-text">
-					这里是个人笔记空间。我在此记录日常技术实践、碎片化的逻辑思考以及关于效率与系统的随笔。
+					这里记录技术实践、碎片化的逻辑思考，以及关于效率与系统的随笔。
 				</p>
-
-				<!-- 重新设计的卡片：完全聚焦于“随笔与技术笔记”的主题 -->
-				<div class="focus-grid">
-					<div class="focus-card">
-						<h3>技术 & 实践</h3>
-						<p>架构选型、代码踩坑与工程落地沉淀</p>
-					</div>
-					<div class="focus-card">
-						<h3>思考 & 随笔</h3>
-						<p>生活观察、逻辑片段与不设限的随记</p>
-					</div>
-					<div class="focus-card">
-						<h3>系统 & 效率</h3>
-						<p>工作流打造、小工具与数字资产积累</p>
-					</div>
-				</div>
 			</section>
 
-			<!-- 文章列表 -->
 			<section class="recent-posts">
 				<h2>最新随笔 & 笔记</h2>
 				<ul class="post-list">
@@ -199,6 +156,7 @@ const posts = (await getCollection('blog')).sort(
 						))
 					}
 				</ul>
+				<a class="view-all" href="/blog">查看全部文章 →</a>
 			</section>
 		</main>
 		<Footer />
