@@ -2,7 +2,7 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION, SITE_BRAND } from '../consts';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 ---
 
 <!doctype html>
@@ -24,7 +24,7 @@ import { SITE_TITLE, SITE_DESCRIPTION, SITE_BRAND } from '../consts';
 
 			.about-title {
 				font-size: 3rem;
-				font-weight: 800;
+				font-weight: 600;
 				letter-spacing: -0.02em;
 				line-height: 1.15;
 				margin: 0 0 1.1rem;
@@ -126,9 +126,9 @@ import { SITE_TITLE, SITE_DESCRIPTION, SITE_BRAND } from '../consts';
 		<Header />
 		<main>
 			<section class="hero">
-				<h1 class="about-title">关于 <span class="accent">{SITE_BRAND}</span></h1>
+				<h1 class="about-title">关于 <span class="accent">Wang's Notes</span></h1>
 				<p class="about-intro">
-					欢迎来到 <strong>{SITE_BRAND}</strong>。这是一个采用 Astro 构建的轻量级数字花园，旨在分享我的想法和一些笔记。
+					欢迎来到 <strong>Wang's Notes</strong>。这是一个采用 Astro 构建的轻量级数字花园，旨在分享我的想法和一些笔记。
 				</p>
 			</section>
 
