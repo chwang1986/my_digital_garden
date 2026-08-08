@@ -1,6 +1,6 @@
 ---
-import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
@@ -15,12 +15,12 @@ const posts = (await getCollection('blog')).sort(
 <!doctype html>
 <html lang="zh-CN">
 	<head>
-		<BaseHead title={`文章 - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+		<BaseHead title={`随笔 - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
 		<style>
 			main {
 				max-width: var(--wide-width);
 				margin: 0 auto;
-				padding: 3rem 1.25rem 1rem;
+				padding: 3.5rem 1.25rem 1rem;
 			}
 
 			.page-head {
@@ -28,7 +28,7 @@ const posts = (await getCollection('blog')).sort(
 			}
 
 			.page-head h1 {
-				font-size: 2.25rem;
+				font-size: 2.6rem;
 				font-weight: 800;
 				letter-spacing: -0.02em;
 				margin: 0 0 0.5rem;
@@ -38,70 +38,118 @@ const posts = (await getCollection('blog')).sort(
 			.page-head p {
 				margin: 0;
 				color: var(--text-secondary);
+				font-size: 1.15rem;
 			}
 
-			ul {
-				display: grid;
-				grid-template-columns: repeat(2, 1fr);
-				gap: 2rem;
+			.post-list {
 				list-style: none;
 				margin: 0;
 				padding: 0;
+				display: flex;
+				flex-direction: column;
+				gap: 0.5rem;
 			}
 
-			ul li {
-				transition: transform 0.2s ease;
-			}
-
-			ul li:hover {
-				transform: translateY(-4px);
-			}
-
-			ul li a {
-				display: block;
+			.post-item {
+				display: flex;
+				gap: 1.25rem;
+				align-items: stretch;
+				padding: 0.9rem;
+				border-radius: 16px;
+				border: 1px solid transparent;
 				text-decoration: none;
+				transition:
+					background 0.25s ease,
+					border-color 0.25s ease,
+					transform 0.25s ease;
 			}
 
-			.thumb {
-				width: 100%;
-				aspect-ratio: 16 / 9;
-				object-fit: cover;
+			.post-item:hover {
+				background: color-mix(in srgb, var(--primary-soft) 12%, transparent);
+				border-color: color-mix(in srgb, var(--primary-color) 22%, transparent);
+				transform: translateY(-2px);
+			}
+
+			.post-thumb {
+				width: 116px;
+				height: 116px;
+				flex-shrink: 0;
 				border-radius: 12px;
-				background: var(--gray-gradient);
-				transition: box-shadow 0.2s ease;
+				overflow: hidden;
+				background: color-mix(in srgb, var(--primary-soft) 28%, var(--background-body));
 			}
 
-			ul li a:hover .thumb {
-				box-shadow: var(--box-shadow);
+			.post-thumb :global(img) {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				display: block;
+				transition: transform 0.4s ease;
 			}
 
-			.title {
-				margin: 0.85rem 0 0.35rem;
-				font-size: 1.2rem;
-				font-weight: 700;
-				line-height: 1.35;
+			.post-item:hover .post-thumb :global(img) {
+				transform: scale(1.05);
+			}
+
+			.post-body {
+				flex: 1;
+				min-width: 0;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+			}
+
+			.post-title {
+				font-size: 1.15rem;
+				font-weight: 650;
+				line-height: 1.4;
+				margin: 0 0 0.4rem;
 				color: var(--text-main);
-				transition: color 0.2s ease;
+				display: -webkit-box;
+				-webkit-line-clamp: 2;
+				-webkit-box-orient: vertical;
+				overflow: hidden;
 			}
 
-			ul li a:hover .title {
+			.post-item:hover .post-title {
 				color: var(--primary-color);
 			}
 
-			.date {
-				margin: 0;
-				font-size: 0.85rem;
+			.post-excerpt {
+				font-size: 0.92rem;
+				line-height: 1.55;
+				margin: 0 0 0.5rem;
 				color: var(--text-secondary);
-				font-family: var(--font-mono);
+				display: -webkit-box;
+				-webkit-line-clamp: 2;
+				-webkit-box-orient: vertical;
+				overflow: hidden;
 			}
 
-			@media (max-width: 720px) {
-				ul {
-					grid-template-columns: 1fr;
-					gap: 1.75rem;
-				}
+			.post-meta {
+				font-size: 0.8rem;
+				color: var(--text-secondary);
+				font-family: var(--font-mono);
+				margin-top: auto;
+			}
+
+			@media (max-width: 600px) {
 				main {
-					padding-top: 2rem;
+					padding-top: 2.5rem;
+				}
+				.page-head h1 {
+					font-size: 2rem;
+				}
+				.post-item {
+					gap: 0.9rem;
+					padding: 0.75rem;
+				}
+				.post-thumb {
+					width: 84px;
+					height: 84px;
+				}
+				.post-title {
+					font-size: 1.05rem;
 				}
 			}
 		</style>
@@ -110,21 +158,28 @@ const posts = (await getCollection('blog')).sort(
 		<Header />
 		<main>
 			<header class="page-head">
-				<h1>文章</h1>
-				<p>技术笔记与随笔合集。</p>
+				<h1>随笔</h1>
+				<p>技术笔记与思考合集。</p>
 			</header>
-			<ul>
+			<ul class="post-list">
 				{
 					posts.map((post) => (
 						<li>
-							<a href={`/blog/${post.id}/`}>
-								{post.data.heroImage && (
-									<Image class="thumb" width={720} height={405} src={post.data.heroImage} alt="" />
-								)}
-								<h2 class="title">{post.data.title}</h2>
-								<p class="date">
-									<FormattedDate date={post.data.pubDate} />
-								</p>
+							<a class="post-item" href={`/blog/${post.id}/`}>
+								<div class="post-thumb">
+									{post.data.heroImage && (
+										<Image src={post.data.heroImage} alt="" width={232} height={232} />
+									)}
+								</div>
+								<div class="post-body">
+									<h3 class="post-title">{post.data.title}</h3>
+									{post.data.description && (
+										<p class="post-excerpt">{post.data.description}</p>
+									)}
+									<span class="post-meta">
+										<FormattedDate date={post.data.pubDate} />
+									</span>
+								</div>
 							</a>
 						</li>
 					))

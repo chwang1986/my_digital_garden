@@ -40,18 +40,23 @@
 	#theme-toggle {
 		background: none;
 		border: 1px solid var(--border-color);
-		border-radius: 8px;
-		padding: 0.4rem 0.6rem;
+		border-radius: 999px;
+		padding: 0.4rem 0.7rem;
 		cursor: pointer;
-		font-size: 0.9rem;
+		font-size: 0.95rem;
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		transition: border-color 0.2s ease;
+		transition:
+			border-color 0.2s ease,
+			background-color 0.2s ease,
+			box-shadow 0.2s ease;
 	}
 
 	#theme-toggle:hover {
 		border-color: var(--accent-color);
+		background-color: color-mix(in srgb, var(--primary-soft) 16%, transparent);
+		box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-soft) 18%, transparent);
 	}
 
 	/* 根据模式显示对应的图标 */

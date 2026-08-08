@@ -22,17 +22,8 @@ import { SITE_TITLE, SITE_DESCRIPTION, SITE_BRAND } from '../consts';
 				border-bottom: 1px solid var(--border-color);
 			}
 
-			.eyebrow {
-				font-size: 0.8rem;
-				font-weight: 600;
-				letter-spacing: 0.18em;
-				text-transform: uppercase;
-				color: var(--primary-color);
-				margin: 0 0 1rem;
-			}
-
 			.about-title {
-				font-size: 2.8rem;
+				font-size: 3rem;
 				font-weight: 800;
 				letter-spacing: -0.02em;
 				line-height: 1.15;
@@ -45,11 +36,11 @@ import { SITE_TITLE, SITE_DESCRIPTION, SITE_BRAND } from '../consts';
 			}
 
 			.about-intro {
-				font-size: 1.15rem;
-				line-height: 1.8;
+				font-size: 1.2rem;
+				line-height: 1.85;
 				color: var(--text-secondary);
 				margin: 0;
-				max-width: 36rem;
+				max-width: 38rem;
 			}
 
 			.prose {
@@ -126,7 +117,7 @@ import { SITE_TITLE, SITE_DESCRIPTION, SITE_BRAND } from '../consts';
 					padding-top: 3rem;
 				}
 				.about-title {
-					font-size: 2.1rem;
+					font-size: 2.5rem;
 				}
 			}
 		</style>
@@ -135,7 +126,6 @@ import { SITE_TITLE, SITE_DESCRIPTION, SITE_BRAND } from '../consts';
 		<Header />
 		<main>
 			<section class="hero">
-				<p class="eyebrow">关于 · About</p>
 				<h1 class="about-title">关于 <span class="accent">{SITE_BRAND}</span></h1>
 				<p class="about-intro">
 					欢迎来到 <strong>{SITE_BRAND}</strong>。这是一个采用 Astro 构建的轻量级数字花园，旨在分享我的想法和一些笔记。

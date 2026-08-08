@@ -1,57 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap');
+
 :root {
-  /* ===== Brand palette (calm digital-garden teal) ===== */
-  --background-body: #ffffff;
-  --text-main: #2b2f31;
-  --text-secondary: #6b7280;
-  --primary-color: #4a8a96;
-  --primary-strong: #3a6f79;
+  /* ===== Brand palette: warm earthy (2026 土黄/赭石) ===== */
+  --background-body: #fbf5ea; /* 暖奶油纸感，告别灰白 */
+  --surface: #ffffff; /* 卡片：暖白 */
+  --surface-2: #f6eedd; /* 浅暖色块 */
+  --text-main: #2c2620; /* 暖墨色 */
+  --text-secondary: #7a6f5c; /* 暖灰褐 */
+  --primary-color: #b5832b; /* 深赭石，奶油底上可读 */
+  --primary-soft: #d8b86a; /* 淡土黄，填充/光晕 */
+  --primary-strong: #956a18;
+  --accent-2: #b5613a; /* 陶土色，暖调科技点缀 */
+
+  --brand-gradient: linear-gradient(120deg, #b5832b 0%, #c7943b 50%, #b5613a 100%);
+  --on-accent: #fbf5ea;
 
   /* ===== Typography ===== */
-  /* --font-atkinson is provided at runtime by @astrojs/fonts (self-hosted) */
+  /* --font-atkinson 由 @astrojs/fonts 在运行时注入（自托管） */
   --font-body: var(--font-atkinson), system-ui, -apple-system, 'Segoe UI', Roboto,
     'Helvetica Neue', Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  --font-display: 'Georgia', 'Songti SC', 'Noto Serif SC', serif;
+  --font-display: 'Quicksand', var(--font-atkinson), system-ui, 'PingFang SC',
+    'Microsoft YaHei', sans-serif; /* 圆体，可爱感 */
+  --font-mono: 'SF Mono', ui-monospace, 'JetBrains Mono', Menlo, monospace;
 
   /* ===== Layout ===== */
-  --content-width: 720px; /* comfortable reading width */
-  --wide-width: 960px; /* page chrome: header / footer / home grid */
+  --content-width: 720px; /* 舒适阅读宽 */
+  --wide-width: 960px; /* 页壳：顶栏 / 页脚 / 首页栅格 */
 
-  /* ===== Code ===== */
-  --code-bg: #f3f4f6;
+  /* ===== Surfaces / code ===== */
+  --border-color: #ece0cc; /* 暖棕边 */
+  --card-bg: #ffffff;
+  --code-bg: #f3e9d6;
+  --gray-gradient: linear-gradient(180deg, #fbf5ea, #f6eedd);
 
-  /* ===== Compat aliases (components inherited from the default Astro template) ===== */
+  /* ===== 柔和暖阴影 ===== */
+  --shadow-sm: 0 2px 10px -3px rgba(120, 90, 30, 0.12);
+  --shadow-md: 0 14px 34px -14px rgba(120, 90, 30, 0.22);
+  --shadow-glow: 0 16px 40px -16px color-mix(in srgb, var(--primary-soft) 55%, transparent);
+  --box-shadow: 0 14px 34px -14px rgba(120, 90, 30, 0.22);
+
+  /* ===== 兼容别名（继承默认 Astro 模板的组件） ===== */
   --text-color: var(--text-main);
   --text-muted: var(--text-secondary);
   --accent-color: var(--primary-color);
-  --border-color: #e5e7eb;
   --bg-color: var(--background-body);
-  --card-bg: #ffffff;
-  --font-mono: 'SF Mono', ui-monospace, Menlo, monospace;
-  --gray: 107, 111, 114;
-  --gray-dark: 43, 47, 49;
-  --black: 43, 47, 49;
-  --accent: 74, 138, 150;
-  --box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-  --gray-gradient: linear-gradient(180deg, #ffffff, #f4f6f7);
+  --font-mono: 'SF Mono', ui-monospace, 'JetBrains Mono', Menlo, monospace;
+  --gray: 122, 111, 92;
+  --gray-dark: 44, 38, 32;
+  --black: 44, 38, 32;
+  --accent: 181, 131, 43;
   --theme-accent: var(--primary-color);
   --theme-code-inline-bg: transparent;
   --theme-code-inline-text: var(--text-secondary);
 }
 
 :root.dark {
-  --background-body: #1b1d1e;
-  --text-main: #e8eaeb;
-  --text-secondary: #9aa0a3;
-  --primary-color: #6fb3c0;
-  --primary-strong: #8fcad5;
-  --border-color: #2c2f31;
-  --card-bg: #232627;
-  --code-bg: #2a2d2e;
-  --gray: 154, 160, 163;
-  --gray-dark: 232, 234, 235;
-  --black: 232, 234, 235;
-  --gray-gradient: linear-gradient(180deg, #1b1d1e, #141617);
-  --box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  --background-body: #1e1a14; /* 暖近黑褐，非冷灰蓝 */
+  --surface: #29241b;
+  --surface-2: #322c21;
+  --text-main: #f4ecdd; /* 暖奶油字 */
+  --text-secondary: #bcad90; /* 提亮，暗色可读 */
+  --primary-color: #e0b463; /* 亮赭石，暗色发光 */
+  --primary-soft: #c99a4a;
+  --primary-strong: #efcb83;
+  --accent-2: #e0976c;
+
+  --brand-gradient: linear-gradient(120deg, #e0b463 0%, #eac582 50%, #e0976c 100%);
+  --on-accent: #1e1a14;
+
+  --border-color: #3a3326;
+  --card-bg: #29241b;
+  --code-bg: #211c15;
+  --gray-gradient: linear-gradient(180deg, #1e1a14, #26211a);
+
+  --shadow-sm: 0 2px 10px -3px rgba(0, 0, 0, 0.45);
+  --shadow-md: 0 14px 34px -14px rgba(0, 0, 0, 0.55);
+  --shadow-glow: 0 16px 40px -16px color-mix(in srgb, var(--primary-soft) 45%, transparent);
+  --box-shadow: 0 14px 34px -14px rgba(0, 0, 0, 0.55);
+
+  --gray: 188, 173, 144;
+  --gray-dark: 244, 236, 221;
+  --black: 244, 236, 221;
+  --accent: 224, 180, 99;
 }
 
 html {
@@ -74,9 +104,17 @@ html {
 body {
   margin: 0;
   font-family: var(--font-body);
-  font-size: 17px;
-  line-height: 1.7;
+  font-size: 18px;
+  line-height: 1.75;
   background-color: var(--background-body);
+  /* 顶部暖光晕：科技 + 暖萌 */
+  background-image: radial-gradient(
+    1200px 420px at 50% -12%,
+    color-mix(in srgb, var(--primary-soft) 12%, transparent),
+    transparent 70%
+  );
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   color: var(--text-main);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -88,32 +126,33 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-body);
+  font-family: var(--font-display);
   font-weight: 700;
   line-height: 1.25;
   margin: 0 0 0.5em 0;
+  letter-spacing: -0.01em;
 }
 
 h1 {
-  font-size: 2.2rem;
+  font-size: 2.6rem;
   margin: 0 0 0.6em 0;
 }
 
 h2 {
-  font-size: 1.6rem;
+  font-size: 1.7rem;
   margin: 1.8em 0 0.6em;
 }
 
 h3 {
-  font-size: 1.3rem;
+  font-size: 1.4rem;
 }
 
 h4 {
-  font-size: 1.15rem;
+  font-size: 1.2rem;
 }
 
 h5 {
-  font-size: 1.05rem;
+  font-size: 1.1rem;
 }
 
 h6 {
@@ -123,9 +162,9 @@ h6 {
 p,
 ul,
 ol {
-  font-size: 1.0625rem;
-  line-height: 1.75;
-  margin: 1.1em 0;
+  font-size: 1.125rem;
+  line-height: 1.8;
+  margin: 1.2em 0;
 }
 
 ol,
@@ -150,18 +189,18 @@ a:hover {
   color: var(--primary-color);
 }
 
-/* Charca-style inline link highlight */
+/* Charca 风格内联链接高亮（暖色版） */
 p a {
   text-decoration: none;
-  box-shadow: inset 0 -0.12em 0 var(--primary-color);
+  box-shadow: inset 0 -0.12em 0 color-mix(in srgb, var(--primary-color) 35%, transparent);
   transition:
     box-shadow 0.2s ease-in-out,
     color 0.2s ease-in-out;
 }
 
 p a:hover {
-  box-shadow: inset 0 -1.4em 0 var(--primary-color);
-  color: #fff;
+  box-shadow: inset 0 -1.5em 0 var(--primary-color);
+  color: var(--on-accent);
 }
 
 img {
@@ -174,7 +213,7 @@ hr {
   border: 0;
   height: 10px;
   margin: 40px auto;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg width='20' height='10'  viewBox='0 0 20 10' xmlns='http://www.w3.org/2000/svg' fill-rule='evenodd' clip-rule='evenodd' stroke-miterlimit='10'%3e%3cpath fill='none' d='M0 0h20v10H0z'/%3e%3cclipPath id='a'%3e%3cpath d='M0 0h20v10H0z'/%3e%3c/clipPath%3e%3cg clip-path='url(%23a)'%3e%3cpath d='M20 7.384c-4.999-.001-5-4.768-9.999-4.768C5 2.616 5 7.384 0 7.384' fill='none' stroke-width='3' stroke='%234A8A96'/%3e%3c/g%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg width='20' height='10'  viewBox='0 0 20 10' xmlns='http://www.w3.org/2000/svg' fill-rule='evenodd' clip-rule='evenodd' stroke-miterlimit='10'%3e%3cpath fill='none' d='M0 0h20v10H0z'/%3e%3cclipPath id='a'%3e%3cpath d='M0 0h20v10H0z'/%3e%3c/clipPath%3e%3cg clip-path='url(%23a)'%3e%3cpath d='M20 7.384c-4.999-.001-5-4.768-9.999-4.768C5 2.616 5 7.384 0 7.384' fill='none' stroke-width='3' stroke='%23B5832B'/%3e%3c/g%3e%3c/svg%3e");
 }
 
 code {
@@ -182,16 +221,17 @@ code {
   font-size: calc(1em - 2px);
   color: var(--text-main);
   padding: 0.2em 0.4em;
-  border-radius: 4px;
+  border-radius: 6px;
   background-color: var(--code-bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 pre {
-  border-radius: 8px !important;
+  border-radius: 14px !important;
   margin: 1.2em 0 !important;
   padding: 1.2em;
+  box-shadow: var(--shadow-sm);
 }
 
 pre code {
@@ -201,7 +241,7 @@ pre code {
 
 blockquote {
   border-left: 4px solid var(--primary-color);
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   font-style: italic;
   margin: 2rem 0;
   padding-left: 1.5rem;
@@ -221,7 +261,7 @@ figure {
 table {
   border-collapse: collapse;
   font-family: var(--font-body);
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   margin: 2em 0;
   width: 100%;
 }
@@ -244,11 +284,11 @@ td {
 }
 
 .content h1 {
-  font-size: 2.4rem;
+  font-size: 2.9rem;
   margin: 1em 0;
 }
 
-/* ===== Theme toggle widget ===== */
+/* ===== 主题切换控件 ===== */
 .theme-toggle {
   display: inline-flex;
   align-items: center;
@@ -274,7 +314,7 @@ td {
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0.5;
+  opacity: 0.6;
   cursor: pointer;
 }
 
@@ -295,21 +335,21 @@ input[name='theme-toggle'] {
 
 @media (max-width: 1020px) {
   h1 {
-    font-size: 1.9rem;
+    font-size: 2.2rem;
   }
   .content h1 {
-    font-size: 2rem;
+    font-size: 2.4rem;
   }
 }
 
 @media (max-width: 480px) {
   body {
-    font-size: 16px;
+    font-size: 17px;
   }
   p,
   ul,
   ol {
-    font-size: 1rem;
-    margin: 1em 0;
+    font-size: 1.05rem;
+    margin: 1.1em 0;
   }
 }
