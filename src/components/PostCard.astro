@@ -22,9 +22,9 @@ const p = post.data;
 	</a>
 	<div class="post-card-body">
 		{
-			p.category && (
-				<a class="post-card-cat" href={`/categories/${encodeURIComponent(p.category)}/`}>
-					{p.category}
+			p.theme && (
+				<a class="post-card-theme" href={`/themes/${encodeURIComponent(p.theme)}/`}>
+					{p.theme}
 				</a>
 			)
 		}
@@ -114,7 +114,7 @@ const p = post.data;
 		overflow: hidden;
 	}
 
-	.post-card-cat {
+	.post-card-theme {
 		align-self: flex-start;
 		font-family: var(--font-mono);
 		font-size: 0.72rem;
@@ -130,7 +130,7 @@ const p = post.data;
 			color 0.2s ease;
 	}
 
-	.post-card-cat:hover {
+	.post-card-theme:hover {
 		background: var(--primary-color);
 		color: var(--on-accent);
 	}

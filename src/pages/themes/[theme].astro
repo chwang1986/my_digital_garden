@@ -10,23 +10,23 @@ import { SITE_TITLE } from '../../consts';
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
 	const set = new Set<string>();
-	for (const p of posts) if (p.data.category) set.add(p.data.category);
-	return [...set].map((category) => ({
-		params: { category },
+	for (const p of posts) if (p.data.theme) set.add(p.data.theme);
+	return [...set].map((theme) => ({
+		params: { theme },
 		props: {
-			category,
-			posts: sortPosts(posts.filter((p) => p.data.category === category)),
+			theme,
+			posts: sortPosts(posts.filter((p) => p.data.theme === theme)),
 		},
 	}));
 }
 
-const { category, posts } = Astro.props;
+const { theme, posts } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="zh-CN">
 	<head>
-		<BaseHead title={`${category} - ${SITE_TITLE}`} description={`分类「${category}」下的文章`} />
+		<BaseHead title={`${theme} - ${SITE_TITLE}`} description={`主题「${theme}」下的文章`} />
 		<style>
 			main {
 				max-width: var(--wide-width);
@@ -101,8 +101,8 @@ const { category, posts } = Astro.props;
 		<Header />
 		<main>
 			<header class="page-head">
-				<a class="back" href="/categories">← 全部分类</a>
-				<h1><span class="mark">▍</span>{category}</h1>
+				<a class="back" href="/themes">← 全部主题</a>
+				<h1><span class="mark">▍</span>{theme}</h1>
 			</header>
 			<ul class="post-list">
 				{

@@ -8,15 +8,15 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
 const posts = await getCollection('blog');
 const counts = new Map<string, number>();
 for (const p of posts) {
-	if (p.data.category) counts.set(p.data.category, (counts.get(p.data.category) ?? 0) + 1);
+	if (p.data.theme) counts.set(p.data.theme, (counts.get(p.data.theme) ?? 0) + 1);
 }
-const categories = [...counts.entries()].sort((a, b) => b[1] - a[1]);
+const themes = [...counts.entries()].sort((a, b) => b[1] - a[1]);
 ---
 
 <!doctype html>
 <html lang="zh-CN">
 	<head>
-		<BaseHead title={`分类 - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+		<BaseHead title={`主题 - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
 		<style>
 			main {
 				max-width: var(--wide-width);
@@ -37,12 +37,12 @@ const categories = [...counts.entries()].sort((a, b) => b[1] - a[1]);
 				color: var(--text-secondary);
 				font-size: 1.15rem;
 			}
-			.cat-cloud {
+			.theme-cloud {
 				display: flex;
 				flex-wrap: wrap;
 				gap: 0.75rem;
 			}
-			.cat-cloud a {
+			.theme-cloud a {
 				display: inline-flex;
 				align-items: baseline;
 				gap: 0.4rem;
@@ -56,11 +56,11 @@ const categories = [...counts.entries()].sort((a, b) => b[1] - a[1]);
 					background 0.2s ease,
 					color 0.2s ease;
 			}
-			.cat-cloud a:hover {
+			.theme-cloud a:hover {
 				background: var(--primary-color);
 				color: var(--on-accent);
 			}
-			.cat-cloud .count {
+			.theme-cloud .count {
 				font-family: var(--font-mono);
 				font-size: 0.78rem;
 				opacity: 0.7;
@@ -76,21 +76,21 @@ const categories = [...counts.entries()].sort((a, b) => b[1] - a[1]);
 		<Header />
 		<main>
 			<header class="page-head">
-				<h1>分类</h1>
-				<p>按内容种类归档，点进去看同一类文章。</p>
+				<h1>主题</h1>
+				<p>按主题归档，点进去看同一主题下的文章。</p>
 			</header>
 			{
-				categories.length > 0 ? (
-					<div class="cat-cloud">
-						{categories.map(([c, n]) => (
-							<a href={`/categories/${encodeURIComponent(c)}/`}>
+				themes.length > 0 ? (
+					<div class="theme-cloud">
+						{themes.map(([c, n]) => (
+							<a href={`/themes/${encodeURIComponent(c)}/`}>
 								{c}
 								<span class="count">{n}</span>
 							</a>
 						))}
 					</div>
 				) : (
-					<p>还没有分类。</p>
+					<p>还没有主题。</p>
 				)
 			}
 		</main>
