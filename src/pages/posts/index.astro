@@ -1,0 +1,130 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { sortPosts } from '../../utils/sort-posts';
+import { SITE_TITLE } from '../../consts';
+
+const posts = sortPosts(await getCollection('blog'));
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={`列表 - ${SITE_TITLE}`} description="全部文章：仅列标题与主题。" />
+		<style>
+			main {
+				max-width: var(--wide-width);
+				margin: 0 auto;
+				padding: 3.5rem 1.25rem 1rem;
+			}
+
+			.page-head {
+				margin-bottom: 2.5rem;
+			}
+
+			.page-head h1 {
+				font-size: 2.4rem;
+				font-weight: 800;
+				letter-spacing: -0.02em;
+				margin: 0 0 0.5rem;
+				color: var(--text-main);
+			}
+
+			.page-head p {
+				margin: 0;
+				color: var(--text-secondary);
+				font-size: 1.05rem;
+			}
+
+			.post-list {
+				list-style: none;
+				margin: 0;
+				padding: 0;
+				border-top: 1px solid var(--border-color);
+			}
+
+			.post-item {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: 1.5rem;
+				padding: 1rem 0.25rem;
+				border-bottom: 1px solid var(--border-color);
+			}
+
+			.post-item:hover .post-title {
+				color: var(--primary-color);
+			}
+
+			.post-title {
+				font-size: 1.1rem;
+				font-weight: 600;
+				line-height: 1.4;
+				color: var(--text-main);
+				text-decoration: none;
+			}
+
+			.post-title:hover {
+				text-decoration: underline;
+			}
+
+			.post-theme {
+				flex-shrink: 0;
+				font-family: var(--font-mono);
+				font-size: 0.8rem;
+				letter-spacing: 0.02em;
+				color: var(--primary-color);
+				text-decoration: none;
+				padding: 0.18rem 0.6rem;
+				border-radius: 99em;
+				background: color-mix(in srgb, var(--primary-soft) 55%, transparent);
+				border: 1px solid color-mix(in srgb, var(--primary-color) 28%, transparent);
+				transition:
+					background 0.2s ease,
+					color 0.2s ease;
+			}
+
+			.post-theme:hover {
+				background: var(--primary-color);
+				color: var(--on-accent);
+			}
+
+			@media (max-width: 480px) {
+				.post-item {
+					flex-direction: column;
+					align-items: flex-start;
+					gap: 0.4rem;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<header class="page-head">
+				<h1>列表</h1>
+				<p>全部文章，只列标题与主题。</p>
+			</header>
+			<ul class="post-list">
+				{
+					posts.map((post) => {
+						const theme = post.data.theme ?? '随笔';
+						return (
+							<li class="post-item">
+								<a class="post-title" href={`/blog/${post.id}/`}>
+									{post.data.title}
+								</a>
+								<a class="post-theme" href={`/themes/${encodeURIComponent(theme)}/`}>
+									{theme}
+								</a>
+							</li>
+						);
+					})
+				}
+			</ul>
+		</main>
+		<Footer />
+	</body>
+</html>
