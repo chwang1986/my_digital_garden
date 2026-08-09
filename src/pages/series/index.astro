@@ -1,0 +1,121 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
+import { seriesMeta } from '../../data/series';
+
+const posts = await getCollection('blog');
+const map = new Map<string, number>();
+for (const p of posts) {
+	if (p.data.series) map.set(p.data.series, (map.get(p.data.series) ?? 0) + 1);
+}
+const seriesList = [...map.entries()].sort((a, b) => b[1] - a[1]);
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={`系列 - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+		<style>
+			main {
+				max-width: var(--wide-width);
+				margin: 0 auto;
+				padding: 3.5rem 1.25rem 1rem;
+			}
+			.page-head {
+				margin-bottom: 2.5rem;
+			}
+			.page-head h1 {
+				font-size: 2.6rem;
+				font-weight: 800;
+				letter-spacing: -0.02em;
+				margin: 0 0 0.5rem;
+			}
+			.page-head p {
+				margin: 0;
+				color: var(--text-secondary);
+				font-size: 1.15rem;
+			}
+			.series-list {
+				display: grid;
+				grid-template-columns: repeat(2, 1fr);
+				gap: 1.25rem;
+			}
+			.series-card {
+				display: block;
+				text-decoration: none;
+				color: var(--text-main);
+				border: 1px solid var(--border-color);
+				border-radius: 14px;
+				padding: 1.4rem 1.5rem;
+				background: var(--card-bg);
+				transition:
+					border-color 0.2s ease,
+					transform 0.2s ease,
+					box-shadow 0.2s ease;
+			}
+			.series-card:hover {
+				border-color: color-mix(in srgb, var(--primary-color) 45%, transparent);
+				transform: translateY(-2px);
+				box-shadow: 0 8px 24px -16px color-mix(in srgb, var(--primary-color) 60%, transparent);
+			}
+			.series-card h2 {
+				margin: 0 0 0.5rem;
+				font-size: 1.35rem;
+				font-weight: 700;
+				display: flex;
+				align-items: baseline;
+				gap: 0.6rem;
+			}
+			.series-card .count {
+				font-family: var(--font-mono);
+				font-size: 0.8rem;
+				font-weight: 500;
+				color: var(--primary-color);
+			}
+			.series-card p {
+				margin: 0;
+				font-size: 0.95rem;
+				line-height: 1.6;
+				color: var(--text-secondary);
+			}
+			@media (max-width: 760px) {
+				.series-list {
+					grid-template-columns: 1fr;
+				}
+				.page-head h1 {
+					font-size: 2rem;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<header class="page-head">
+				<h1>系列</h1>
+				<p>同一个主题下的有序连续篇，按学习路径一篇篇读下去。</p>
+			</header>
+			{
+				seriesList.length > 0 ? (
+					<div class="series-list">
+						{seriesList.map(([name, n]) => (
+							<a class="series-card" href={`/series/${encodeURIComponent(name)}/`}>
+								<h2>
+									{name}
+									<span class="count">{n} 篇</span>
+								</h2>
+								<p>{seriesMeta[name]?.description ?? '一个有序的连续篇。'}</p>
+							</a>
+						))}
+					</div>
+				) : (
+					<p>还没有系列。</p>
+				)
+			}
+		</main>
+		<Footer />
+	</body>
+</html>
