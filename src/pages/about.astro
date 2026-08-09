@@ -66,50 +66,72 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				margin: 0 0 1.5rem;
 			}
 
-			.guide-list {
-				line-height: 1.8;
+			.topics {
+				list-style: none;
+				padding: 0;
+				margin: 0 0 1.5rem;
+			}
+
+			.topics li {
+				display: flex;
+				gap: 0.75rem;
+				align-items: baseline;
+				padding: 0.6rem 0;
+				border-bottom: 1px solid var(--border-color);
 				color: var(--text-secondary);
-				padding-left: 1.25rem;
 			}
 
-			.guide-list li {
-				margin-bottom: 0.5rem;
+			.topics li:last-child {
+				border-bottom: none;
 			}
 
-			code {
-				background-color: var(--code-bg);
-				padding: 0.2rem 0.4rem;
-				border-radius: 4px;
-				font-size: 0.9em;
+			.topics .t-title {
 				color: var(--text-main);
+				font-weight: 600;
+				flex-shrink: 0;
+				min-width: 6.5rem;
+			}
+
+			.stack {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.6rem;
+				margin: 0 0 1.5rem;
+			}
+
+			.stack span {
 				font-family: var(--font-mono);
-			}
-
-			.card-box {
-				background-color: var(--card-bg);
-				border: 1px solid var(--border-color);
-				border-radius: 12px;
-				padding: 1.25rem 1.4rem;
-				margin-top: 1.75rem;
-			}
-
-			.card-box p {
-				margin: 0 0 0.75rem 0;
-				line-height: 1.7;
+				font-size: 0.82rem;
 				color: var(--text-secondary);
+				padding: 0.35rem 0.75rem;
+				border: 1px solid var(--border-color);
+				border-radius: 999px;
 			}
 
-			.card-box p:last-child {
-				margin-bottom: 0;
-			}
-
-			.card-box a {
+			.find-link {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.5rem;
 				color: var(--primary-color);
 				text-decoration: none;
+				font-weight: 600;
+				border: 1px solid var(--primary-color);
+				padding: 0.55rem 1.1rem;
+				border-radius: 999px;
+				transition:
+					background 0.2s ease,
+					color 0.2s ease;
 			}
 
-			.card-box a:hover {
-				text-decoration: underline;
+			.find-link:hover {
+				background: var(--primary-color);
+				color: var(--on-accent);
+			}
+
+			.find-link svg {
+				width: 15px;
+				height: 15px;
+				fill: currentColor;
 			}
 
 			@media (max-width: 600px) {
@@ -128,41 +150,43 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 			<section class="hero">
 				<h1 class="about-title">关于 <span class="accent">Wang's Notes</span></h1>
 				<p class="about-intro">
-					欢迎来到 <strong>Wang's Notes</strong>。这是一个采用 Astro 构建的轻量级数字花园，旨在分享我的想法和一些笔记。
+					我是一名工程师，习惯把做过的事、踩过的坑和想通的逻辑写下来。这里是我存放这些文字的地方——一个用
+					Astro 构建、内容全部进 Git 的数字花园。
 				</p>
 			</section>
 
 			<article class="prose">
-				<h2 class="section-title">站点开发与配置指南</h2>
+				<h2 class="section-title">我写什么</h2>
 				<p class="lead">
-					本站继承了 Astro 极简博客底座的核心优势。以下是开发与维护这个工程的关键指引：
+					聚焦在工程实践本身，以及支撑实践的那套思考方式：
 				</p>
-
-				<h3 class="section-title">1. 关键代码入口</h3>
-				<ul class="guide-list">
-					<li><strong>首页编辑：</strong> 对应 <code>src/pages/index.astro</code> 文件，控制首页视觉与随笔列表。</li>
-					<li><strong>导航与页脚：</strong> 分别在 <code>src/components/Header.astro</code> 和 <code>src/components/Footer.astro</code> 中自定义全局结构。</li>
-					<li><strong>文章笔记库：</strong> 所有随笔与技术笔记存放在 <code>src/content/blog/</code> 目录下（使用标准 Markdown 格式）。</li>
-					<li><strong>文章布局：</strong> 随笔的详细排版风格可通过 <code>src/layouts/BlogPost.astro</code> 进行深度调整。</li>
+				<ul class="topics">
+					<li><span class="t-title">效率系统</span><span>笔记方法、工具选型，以及如何让知识真正属于自己。</span></li>
+					<li><span class="t-title">软件构建</span><span>从选型到部署，记录把想法落地的全过程。</span></li>
+					<li><span class="t-title">可追溯性</span><span>用 Git 与版本化思维管理写作、配置与决策。</span></li>
 				</ul>
 
-				<h3 class="section-title">2. 生态与扩展性</h3>
-				<p class="lead">
-					项目已在配置文件 <code>astro.config.mjs</code> 中完成了基础设施构建。根据未来需求，可通过 <a href="https://astro.build/integrations" target="_blank" rel="noopener">Astro Integrations</a> 自由拓展工具链：
-				</p>
-				<ul class="guide-list">
-					<li>引入 <strong>Tailwind CSS</strong> 进行快速样式构建。</li>
-					<li>按需无缝挂载 <strong>React / Vue</strong> 独立交互组件。</li>
-				</ul>
-
-				<div class="card-box">
-					<p>
-						📚 <strong>开发者文档与资源：</strong> 如需探究更多底层特性，可随时查阅 <a href="https://docs.astro.build/" target="_blank" rel="noopener">Astro 官方文档</a> 或加入 <a href="https://astro.build/chat" target="_blank" rel="noopener">Discord 官方社区</a> 交流讨论。
-					</p>
-					<p>
-						🎨 想要更有个性的博客模板？推荐参考 <a href="https://github.com/Charca/astro-blog-template" target="_blank" rel="noopener">astro-blog-template</a> by <a href="https://twitter.com/Charca" target="_blank" rel="noopener">Maxi Ferreira</a>。
-					</p>
+				<h2 class="section-title">技术栈</h2>
+				<p class="lead">本站是一套极简静态工程：</p>
+				<div class="stack">
+					<span>Astro</span>
+					<span>TypeScript</span>
+					<span>Markdown / MDX</span>
+					<span>GitHub</span>
+					<span>Vercel</span>
+					<span>Push 即部署</span>
 				</div>
+
+				<h2 class="section-title">如何找到我</h2>
+				<p class="lead">欢迎在 X 上交流，或订阅 RSS 跟进更新。</p>
+				<a class="find-link" href="https://x.com/chwang1986" target="_blank" rel="noopener noreferrer">
+					<svg viewBox="0 0 24 24" aria-hidden="true"
+						><path
+							d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+						></path></svg
+					>
+					<span>在 X 上关注 @chwang1986</span>
+				</a>
 			</article>
 		</main>
 		<Footer />

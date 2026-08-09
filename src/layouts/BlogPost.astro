@@ -6,23 +6,76 @@ import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 
-type Props = CollectionEntry<'blog'>['data'];
+type Props = CollectionEntry<'blog'>['data'] & {
+	readingTime?: string;
+	prev?: CollectionEntry<'blog'> | null;
+	next?: CollectionEntry<'blog'> | null;
+};
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, readingTime, prev, next } = Astro.props;
 
 const slug = Astro.url.pathname.split('/').filter(Boolean)[1] ?? '';
 const ogImage = `/og/${slug}`;
+
+const publishedISO = pubDate.toISOString();
+const jsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'Article',
+	headline: title,
+	description: description,
+	datePublished: publishedISO,
+	dateModified: (updatedDate ?? pubDate).toISOString(),
+	author: { '@type': 'Person', name: 'Wang' },
+	publisher: { '@type': 'Organization', name: 'Wang’s Notes' },
+	mainEntityOfPage: Astro.url.toString(),
+	image: new URL(ogImage, Astro.site).toString(),
+};
 ---
 
 <html lang="zh-CN">
 	<head>
-		<BaseHead title={title} description={description} ogImage={ogImage} />
+		<BaseHead
+			title={title}
+			description={description}
+			ogImage={ogImage}
+			ogType="article"
+			publishedTime={publishedISO}
+		/>
+		<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 		<style>
+			/* 阅读进度条 */
+			.progress {
+				position: fixed;
+				top: 0;
+				left: 0;
+				height: 3px;
+				width: 0;
+				background: var(--primary-color);
+				z-index: 30;
+				transition: width 0.1s linear;
+			}
+
 			main {
 				width: 100%;
 				max-width: var(--wide-width);
 				margin: 0 auto;
 				padding: 2.5rem 1.25rem 1rem;
+			}
+
+			.back-link {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.4rem;
+				font-size: 0.9rem;
+				font-weight: 500;
+				color: var(--text-secondary);
+				text-decoration: none;
+				margin-bottom: 1.5rem;
+				transition: color 0.2s ease;
+			}
+
+			.back-link:hover {
+				color: var(--primary-color);
 			}
 
 			.hero-image {
@@ -63,6 +116,13 @@ const ogImage = `/og/${slug}`;
 				color: var(--text-main);
 			}
 
+			.reading-time {
+				margin-top: 0.9rem;
+				font-family: var(--font-mono);
+				font-size: 0.82rem;
+				color: var(--primary-color);
+			}
+
 			.last-updated-on {
 				font-style: italic;
 				color: var(--text-secondary);
@@ -78,13 +138,151 @@ const ogImage = `/og/${slug}`;
 				background: var(--primary-color);
 				border-radius: 2px;
 			}
+
+			/* 代码块复制按钮 */
+			.prose :global(pre) {
+				position: relative;
+			}
+
+			.copy-btn {
+				position: absolute;
+				top: 0.7rem;
+				right: 0.7rem;
+				z-index: 2;
+				display: inline-flex;
+				align-items: center;
+				gap: 0.35rem;
+				padding: 0.3rem 0.6rem;
+				font-size: 0.75rem;
+				font-family: var(--font-mono);
+				color: var(--text-secondary);
+				background: color-mix(in srgb, var(--surface) 80%, transparent);
+				border: 1px solid var(--border-color);
+				border-radius: 7px;
+				cursor: pointer;
+				opacity: 0;
+				transition:
+					opacity 0.2s ease,
+					color 0.2s ease,
+					border-color 0.2s ease;
+			}
+
+			.prose :global(pre):hover .copy-btn {
+				opacity: 1;
+			}
+
+			.copy-btn:hover {
+				color: var(--primary-color);
+				border-color: var(--primary-color);
+			}
+
+			.copy-btn.copied {
+				color: var(--primary-color);
+				border-color: var(--primary-color);
+			}
+
+			.share {
+				max-width: var(--content-width);
+				margin: 3rem auto 0;
+				padding-top: 1.75rem;
+				border-top: 1px solid var(--border-color);
+				text-align: center;
+			}
+
+			.share a {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.5rem;
+				color: var(--primary-color);
+				font-size: 0.95rem;
+				text-decoration: none;
+				transition: opacity 0.2s ease;
+			}
+
+			.share a:hover {
+				opacity: 0.72;
+			}
+
+			.share svg {
+				width: 16px;
+				height: 16px;
+				fill: currentColor;
+			}
+
+			/* 上一篇 / 下一篇 */
+			.pager {
+				max-width: var(--content-width);
+				margin: 2.5rem auto 0;
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 1rem;
+			}
+
+			.pager a {
+				display: flex;
+				flex-direction: column;
+				gap: 0.3rem;
+				padding: 1rem 1.1rem;
+				border: 1px solid var(--border-color);
+				border-radius: 14px;
+				text-decoration: none;
+				color: var(--text-main);
+				transition:
+					border-color 0.2s ease,
+					background 0.2s ease;
+			}
+
+			.pager a:hover {
+				border-color: var(--primary-color);
+				background: color-mix(in srgb, var(--primary-soft) 10%, transparent);
+			}
+
+			.pager .dir {
+				font-size: 0.78rem;
+				font-family: var(--font-mono);
+				color: var(--primary-color);
+				letter-spacing: 0.05em;
+			}
+
+			.pager .pt {
+				font-size: 0.95rem;
+				font-weight: 600;
+				line-height: 1.4;
+			}
+
+			.pager .next {
+				text-align: right;
+			}
+
+			.pager .empty {
+				border: none;
+				background: none;
+				pointer-events: none;
+			}
+
+			@media (max-width: 600px) {
+				.pager {
+					grid-template-columns: 1fr;
+				}
+				.pager .next {
+					text-align: left;
+				}
+			}
 		</style>
 	</head>
 
 	<body>
+		<div class="progress" id="progress"></div>
 		<Header />
 		<main>
 			<article>
+				<a class="back-link" href="/blog">
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+						<path d="M15 18l-6-6 6-6" />
+					</svg>
+					返回随笔
+				</a>
+
 				<div class="hero-image">
 					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
 				</div>
@@ -101,12 +299,88 @@ const ogImage = `/og/${slug}`;
 							}
 						</p>
 						<h1>{title}</h1>
+						{readingTime && <p class="reading-time">{readingTime}</p>}
 						<hr class="divider" />
 					</div>
 					<slot />
 				</div>
+
+				<nav class="pager" aria-label="文章导航">
+					{
+						prev ? (
+							<a class="prev" href={`/blog/${prev.id}/`}>
+								<span class="dir">← 上一篇</span>
+								<span class="pt">{prev.data.title}</span>
+							</a>
+						) : (
+							<span class="empty" />
+						)
+					}
+					{
+						next ? (
+							<a class="next" href={`/blog/${next.id}/`}>
+								<span class="dir">下一篇 →</span>
+								<span class="pt">{next.data.title}</span>
+							</a>
+						) : (
+							<span class="empty" />
+						)
+					}
+				</nav>
+
+				<div class="share">
+					<a
+						href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(Astro.url)}&text=${encodeURIComponent(title)}`}
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						<svg viewBox="0 0 24 24" aria-hidden="true"
+							><path
+								d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+							></path></svg
+						>
+						<span>分享到 X</span>
+					</a>
+				</div>
 			</article>
 		</main>
 		<Footer />
+
+		<script>
+			// 阅读进度条
+			const progress = document.getElementById('progress');
+			const onScroll = () => {
+				const h = document.documentElement;
+				const scrolled = h.scrollTop;
+				const height = h.scrollHeight - h.clientHeight;
+				const pct = height > 0 ? (scrolled / height) * 100 : 0;
+				if (progress) progress.style.width = pct + '%';
+			};
+			document.addEventListener('scroll', onScroll, { passive: true });
+			onScroll();
+
+			// 代码块复制按钮
+			document.querySelectorAll('pre').forEach((pre) => {
+				const btn = document.createElement('button');
+				btn.className = 'copy-btn';
+				btn.type = 'button';
+				btn.textContent = '复制';
+				btn.addEventListener('click', async () => {
+					const code = pre.querySelector('code')?.innerText ?? pre.innerText;
+					try {
+						await navigator.clipboard.writeText(code);
+						btn.textContent = '已复制';
+						btn.classList.add('copied');
+						setTimeout(() => {
+							btn.textContent = '复制';
+							btn.classList.remove('copied');
+						}, 1500);
+					} catch {
+						btn.textContent = '失败';
+					}
+				});
+				pre.appendChild(btn);
+			});
+		</script>
 	</body>
 </html>
