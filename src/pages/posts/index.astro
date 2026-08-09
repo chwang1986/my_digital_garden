@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
 import { sortPosts } from '../../utils/sort-posts';
 import { SITE_TITLE } from '../../consts';
 
@@ -12,7 +13,7 @@ const posts = sortPosts(await getCollection('blog'));
 <!doctype html>
 <html lang="zh-CN">
 	<head>
-		<BaseHead title={`列表 - ${SITE_TITLE}`} description="全部文章：仅列标题与主题。" />
+		<BaseHead title={`全部文章 - ${SITE_TITLE}`} description="全部文章：标题、主题、时间与标签。" />
 		<style>
 			main {
 				max-width: var(--wide-width);
@@ -22,6 +23,18 @@ const posts = sortPosts(await getCollection('blog'));
 
 			.page-head {
 				margin-bottom: 2.5rem;
+			}
+
+			.page-head .back {
+				display: inline-block;
+				font-size: 0.85rem;
+				color: var(--text-secondary);
+				text-decoration: none;
+				margin-bottom: 0.8rem;
+			}
+
+			.page-head .back:hover {
+				color: var(--primary-color);
 			}
 
 			.page-head h1 {
@@ -46,38 +59,60 @@ const posts = sortPosts(await getCollection('blog'));
 			}
 
 			.post-item {
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-				gap: 1.5rem;
-				padding: 1rem 0.25rem;
+				padding: 1.1rem 0.25rem;
 				border-bottom: 1px solid var(--border-color);
+				transition:
+					background 0.2s ease,
+					padding 0.2s ease;
 			}
 
-			.post-item:hover .post-title {
-				color: var(--primary-color);
+			.post-item:hover {
+				background: color-mix(in srgb, var(--primary-soft) 10%, transparent);
+				padding-left: 0.6rem;
+			}
+
+			.post-main {
+				display: flex;
+				flex-direction: column;
+				gap: 0.45rem;
 			}
 
 			.post-title {
-				font-size: 1.1rem;
+				font-size: 1.12rem;
 				font-weight: 600;
 				line-height: 1.4;
 				color: var(--text-main);
 				text-decoration: none;
 			}
 
+			.post-item:hover .post-title {
+				color: var(--primary-color);
+			}
+
 			.post-title:hover {
 				text-decoration: underline;
 			}
 
-			.post-theme {
-				flex-shrink: 0;
+			.post-meta {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				gap: 0.5rem;
+				font-size: 0.82rem;
+				color: var(--text-secondary);
 				font-family: var(--font-mono);
-				font-size: 0.8rem;
-				letter-spacing: 0.02em;
+			}
+
+			.post-meta .dot {
+				color: var(--border-color);
+			}
+
+			.post-meta .theme {
+				font-family: var(--font-mono);
+				font-size: 0.78rem;
 				color: var(--primary-color);
 				text-decoration: none;
-				padding: 0.18rem 0.6rem;
+				padding: 0.12rem 0.55rem;
 				border-radius: 99em;
 				background: color-mix(in srgb, var(--primary-soft) 55%, transparent);
 				border: 1px solid color-mix(in srgb, var(--primary-color) 28%, transparent);
@@ -86,16 +121,33 @@ const posts = sortPosts(await getCollection('blog'));
 					color 0.2s ease;
 			}
 
-			.post-theme:hover {
+			.post-meta .theme:hover {
+				background: var(--primary-color);
+				color: var(--on-accent);
+			}
+
+			.post-meta .tag {
+				font-family: var(--font-mono);
+				font-size: 0.76rem;
+				color: var(--primary-color);
+				text-decoration: none;
+				padding: 0.12rem 0.5rem;
+				border-radius: 99em;
+				background: color-mix(in srgb, var(--primary-soft) 50%, transparent);
+				border: 1px solid color-mix(in srgb, var(--primary-color) 24%, transparent);
+				transition:
+					background 0.2s ease,
+					color 0.2s ease;
+			}
+
+			.post-meta .tag:hover {
 				background: var(--primary-color);
 				color: var(--on-accent);
 			}
 
 			@media (max-width: 480px) {
-				.post-item {
-					flex-direction: column;
-					align-items: flex-start;
-					gap: 0.4rem;
+				.post-main {
+					gap: 0.35rem;
 				}
 			}
 		</style>
@@ -104,8 +156,9 @@ const posts = sortPosts(await getCollection('blog'));
 		<Header />
 		<main>
 			<header class="page-head">
-				<h1>列表</h1>
-				<p>全部文章，只列标题与主题。</p>
+				<a class="back" href="/themes">← 按主题浏览</a>
+				<h1>全部文章</h1>
+				<p>标题、主题、时间与标签，一张清单看全部。</p>
 			</header>
 			<ul class="post-list">
 				{
@@ -113,12 +166,17 @@ const posts = sortPosts(await getCollection('blog'));
 						const theme = post.data.theme ?? '随笔';
 						return (
 							<li class="post-item">
-								<a class="post-title" href={`/blog/${post.id}/`}>
-									{post.data.title}
-								</a>
-								<a class="post-theme" href={`/themes/${encodeURIComponent(theme)}/`}>
-									{theme}
-								</a>
+								<div class="post-main">
+									<a class="post-title" href={`/blog/${post.id}/`}>{post.data.title}</a>
+									<div class="post-meta">
+										<FormattedDate date={post.data.pubDate} />
+										<span class="dot">·</span>
+										<a class="theme" href={`/themes/${encodeURIComponent(theme)}/`}>{theme}</a>
+										{post.data.tags.map((t) => (
+											<a class="tag" href={`/tags/${encodeURIComponent(t)}/`}>{t}</a>
+										))}
+									</div>
+								</div>
 							</li>
 						);
 					})

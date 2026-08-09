@@ -62,37 +62,66 @@ const { theme, posts } = Astro.props;
 				border-top: 1px solid var(--border-color);
 			}
 			.post-item {
-				display: flex;
-				align-items: baseline;
-				justify-content: space-between;
-				gap: 1.5rem;
 				padding: 1.1rem 0.25rem;
 				border-bottom: 1px solid var(--border-color);
-				text-decoration: none;
-				color: var(--text-main);
 				transition:
-					color 0.2s ease,
+					background 0.2s ease,
 					padding 0.2s ease;
 			}
 			.post-item:hover {
-				color: var(--primary-color);
+				background: color-mix(in srgb, var(--primary-soft) 10%, transparent);
 				padding-left: 0.6rem;
+			}
+			.post-main {
+				display: flex;
+				flex-direction: column;
+				gap: 0.45rem;
 			}
 			.post-title {
 				font-size: 1.15rem;
 				font-weight: 600;
 				line-height: 1.4;
+				color: var(--text-main);
+				text-decoration: none;
+			}
+			.post-item:hover .post-title {
+				color: var(--primary-color);
+			}
+			.post-title:hover {
+				text-decoration: underline;
 			}
 			.post-meta {
-				flex-shrink: 0;
-				font-size: 0.85rem;
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				gap: 0.5rem;
+				font-size: 0.82rem;
 				color: var(--text-secondary);
 				font-family: var(--font-mono);
 			}
+			.post-meta .dot {
+				color: var(--border-color);
+			}
+			.post-meta .tag {
+				font-family: var(--font-mono);
+				font-size: 0.76rem;
+				color: var(--primary-color);
+				text-decoration: none;
+				padding: 0.12rem 0.5rem;
+				border-radius: 99em;
+				background: color-mix(in srgb, var(--primary-soft) 50%, transparent);
+				border: 1px solid color-mix(in srgb, var(--primary-color) 24%, transparent);
+				transition:
+					background 0.2s ease,
+					color 0.2s ease;
+			}
+			.post-meta .tag:hover {
+				background: var(--primary-color);
+				color: var(--on-accent);
+			}
 			@media (max-width: 480px) {
-				.post-item {
-					flex-direction: column;
-					gap: 0.3rem;
+				.post-main {
+					gap: 0.35rem;
 				}
 			}
 		</style>
@@ -107,13 +136,17 @@ const { theme, posts } = Astro.props;
 			<ul class="post-list">
 				{
 					posts.map((post) => (
-						<li>
-							<a class="post-item" href={`/blog/${post.id}/`}>
-								<span class="post-title">{post.data.title}</span>
-								<span class="post-meta">
+						<li class="post-item">
+							<div class="post-main">
+								<a class="post-title" href={`/blog/${post.id}/`}>{post.data.title}</a>
+								<div class="post-meta">
 									<FormattedDate date={post.data.pubDate} />
-								</span>
-							</a>
+									<span class="dot">·</span>
+									{post.data.tags.map((t) => (
+										<a class="tag" href={`/tags/${encodeURIComponent(t)}/`}>{t}</a>
+									))}
+								</div>
+							</div>
 						</li>
 					))
 				}

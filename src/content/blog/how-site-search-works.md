@@ -2,6 +2,7 @@
 title: '这个站点的文章搜索是怎么实现的'
 description: '聊清楚用什么工具搜、怎么在页面上发起搜索，以及这套全文搜索在背后是怎么搭起来的——一个没有数据库的纯静态站点方案。'
 pubDate: '2026-08-09'
+heroImage: '../../assets/hero-search.png'
 theme: '自建blog平台'
 tags: ['搜索', 'Pagefind', 'Astro', '静态站点']
 ---
