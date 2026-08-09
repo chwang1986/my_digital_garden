@@ -84,8 +84,8 @@ export default defineConfig({
   --primary-soft: #9cc3b0;     /* 主色浅版，hover 用 */
   --primary-strong: #244c3b;   /* 主色深版 */
 
-  --font-display: 'Fraunces', 'Noto Serif SC', Georgia, serif; /* 标题 */
-  --font-body: var(--font-atkinson), system-ui, sans-serif;    /* 正文 */
+  --font-display: var(--font-atkinson), 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif; /* 标题（与正文同族，统一无衬线） */
+  --font-body: var(--font-atkinson), 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;    /* 正文 */
 
   --content-width: 720px;      /* 阅读宽度 */
   --border-color: #e7e0d2;     /* 分隔线 */
@@ -101,7 +101,7 @@ export default defineConfig({
 | 主色 / 强调色（链接、按钮） | `--primary-color` |
 | 页面背景 | `--background-body` |
 | 正文文字颜色 | `--text-main` |
-| 标题字体（衬线/无衬线切换） | `--font-display` |
+| 标题字体（与正文同族，统一无衬线） | `--font-display` |
 | 正文字体 | `--font-body` |
 | 阅读区宽度 | `--content-width` |
 | 分隔线 / 边框 | `--border-color` |
@@ -115,7 +115,7 @@ export default defineConfig({
 变量解决"换色换字"，但"感觉"靠克制。调了好几轮，我留下几条自己信得过的：
 
 - 只留一个强调色。我的墨绿 `#356b54`，其余全是黑白灰。彩色光晕、彩色阴影一律删，一加就显得廉价。
-- 字体就两套。标题一套，正文一套，层级靠字号和留白拉开，不靠堆颜色。想要更"技术"一点，标题也换成无衬线，用等宽排标签。
+- 字体就一套。标题和正文用同一个无衬线字体族，层级靠字号和留白拉开，不靠堆颜色。标签、元信息用等宽排，更有技术感。
 - 留白当结构用。能用 margin 和栅格留出呼吸感，就少画线。真的要分隔才画一条细线，比如引用块左边那道。
 - 装饰能删就删。技术感光晕、花哨分隔线、拟物阴影，都拿掉。一道 1px 细线够了。
 - 小地方最显用心：顶部阅读进度条、文章末尾的返回链接和上下篇、代码块复制按钮、元信息用等宽字体排。这些成本都很低。
