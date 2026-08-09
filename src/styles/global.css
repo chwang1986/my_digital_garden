@@ -11,10 +11,11 @@
 
   /* ===== Typography ===== */
   /* --font-atkinson 由 @astrojs/fonts 在运行时注入（自托管，正文用） */
-  --font-body: var(--font-atkinson), system-ui, -apple-system, 'Segoe UI', Roboto,
-    'Helvetica Neue', Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  /* 标题：衬线（出版物气质），英文 Fraunces + 中文 Noto Serif SC */
-  --font-display: 'Fraunces', 'Noto Serif SC', Georgia, 'Songti SC', serif;
+  /* 正文：全无衬线，统一质感，避免中西文行内衬线/无衬线混排 */
+  --font-body: var(--font-atkinson), 'PingFang SC', 'Microsoft YaHei', system-ui,
+    -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  /* 标题：与正文同一套无衬线，全站统一质感 */
+  --font-display: var(--font-body);
   --font-mono: 'SF Mono', ui-monospace, 'JetBrains Mono', Menlo, monospace;
 
   /* ===== Layout ===== */
@@ -78,12 +79,13 @@ html {
 body {
   margin: 0;
   font-family: var(--font-body);
-  font-size: 18px;
-  line-height: 1.75;
+  font-size: 20px;
+  line-height: 1.85;
   background-color: var(--background-body);
   color: var(--text-main);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 h1,
@@ -128,9 +130,10 @@ h6 {
 p,
 ul,
 ol {
-  font-size: 1.125rem;
-  line-height: 1.8;
-  margin: 1.2em 0;
+  font-size: 1.25rem;
+  line-height: 1.9;
+  margin: 1.5em 0;
+  text-wrap: pretty;
 }
 
 ol,
@@ -216,7 +219,8 @@ pre code {
 
 blockquote {
   border-left: 4px solid var(--primary-color);
-  font-size: 1.2rem;
+  font-size: 1.3rem;
+  line-height: 1.85;
   font-style: italic;
   margin: 2rem 0;
   padding-left: 1.5rem;
@@ -236,7 +240,7 @@ figure {
 table {
   border-collapse: collapse;
   font-family: var(--font-body);
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   margin: 2em 0;
   width: 100%;
 }
@@ -319,12 +323,12 @@ input[name='theme-toggle'] {
 
 @media (max-width: 480px) {
   body {
-    font-size: 17px;
+    font-size: 18px;
   }
   p,
   ul,
   ol {
-    font-size: 1.05rem;
-    margin: 1.1em 0;
+    font-size: 1.1rem;
+    margin: 1.3em 0;
   }
 }

@@ -40,16 +40,6 @@ const ogImageURL = ogImage ? new URL(ogImage, Astro.site) : new URL('/og/default
 	})();
 </script>
 
-<!-- 衬线标题字体：提前建立连接，避免 @import 的渲染阻塞 -->
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link
-	rel="stylesheet"
-	href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Noto+Serif+SC:wght@500;600;700&display=swap"
-	media="print"
-	onload="this.media='all'"
-/>
-
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
 <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png" />
