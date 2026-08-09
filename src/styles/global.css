@@ -262,6 +262,37 @@ td {
   width: 100%;
 }
 
+/* ===== 归档页通用页头（themes / series / tags / posts / blog / 分页页共用） =====
+   提取自各页重复的 .page-head 作用域样式；各页仅保留自身差异覆盖。 */
+.page-head {
+  margin-bottom: 2.5rem;
+}
+
+.page-head .back {
+  display: inline-block;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  margin-bottom: 0.8rem;
+}
+
+.page-head .back:hover {
+  color: var(--primary-color);
+}
+
+.page-head h1 {
+  font-size: 2.4rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.page-head h1 .mark,
+.page-head h1 .hash {
+  color: var(--primary-color);
+}
+
 .content h1 {
   font-size: 2.9rem;
   margin: 1em 0;
