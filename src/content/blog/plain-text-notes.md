@@ -5,7 +5,7 @@ pubDate: '2026-08-05'
 heroImage: '../../assets/hero-1-record.png'
 series: '数字花园构建笔记'
 order: 1
-theme: '笔记方法'
+theme: '自建blog平台'
 tags: ['笔记', '纯文本', '记录方法']
 ---
 

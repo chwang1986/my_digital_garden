@@ -5,7 +5,7 @@ pubDate: '2026-08-06'
 heroImage: '../../assets/hero-2-share.png'
 series: '数字花园构建笔记'
 order: 2
-theme: '建站技术'
+theme: '自建blog平台'
 tags: ['Git', '写作', '分享']
 ---
 

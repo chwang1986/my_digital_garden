@@ -5,7 +5,7 @@ pubDate: '2026-08-08'
 heroImage: '../../assets/hero-4-tune.png'
 series: '数字花园构建笔记'
 order: 4
-theme: '建站技术'
+theme: '自建blog平台'
 tags: ['Astro', 'CSS', '主题', '性能']
 ---
 
