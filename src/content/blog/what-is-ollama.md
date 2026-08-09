@@ -4,6 +4,8 @@ description: '一个能在自己电脑上跑大语言模型的开源工具，以
 pubDate: '2026-08-09'
 heroImage: '../../assets/hero-ollama.png'
 theme: 'ollama的使用'
+series: 'Ollama 实战'
+order: 1
 tags: ['Ollama', '本地大模型', 'AI 工具']
 ---
 
