@@ -17,12 +17,5 @@ export const seriesMeta: Record<string, SeriesMeta> = {
 	'Ollama 实战': {
 		description:
 			'面向想在自己电脑上跑大模型的普通开发者与爱好者，用最少的背景知识和命令，把 Ollama 从「听说过」真正用到「跑通、接进自己的应用」——全程本地、离线、数据可控。',
-		plan: [
-			'怎么装 Ollama',
-			'常用命令与模型管理',
-			'在终端 / 应用里调用',
-			'用 Ollama 搭一个本地助手',
-			'（可选）进阶：Modelfile、量化与显存取舍',
-		],
 	},
 };
