@@ -1,23 +1,29 @@
 ---
 import { getCollection } from 'astro:content';
-import BaseHead from '../../components/BaseHead.astro';
-import Footer from '../../components/Footer.astro';
-import Header from '../../components/Header.astro';
-import PostCard from '../../components/PostCard.astro';
-import Pagination from '../../components/Pagination.astro';
-import { sortPosts } from '../../utils/sort-posts';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+import BaseHead from '../../../components/BaseHead.astro';
+import Footer from '../../../components/Footer.astro';
+import Header from '../../../components/Header.astro';
+import PostCard from '../../../components/PostCard.astro';
+import Pagination from '../../../components/Pagination.astro';
+import { sortPosts } from '../../../utils/sort-posts';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../../consts';
 
-const all = sortPosts(await getCollection('blog'));
-const pageSize = 12;
-const posts = all.slice(0, pageSize);
-const last = Math.max(1, Math.ceil(all.length / pageSize));
+export async function getStaticPaths({ paginate }) {
+	const all = sortPosts(await getCollection('blog'));
+	// 第 1 页由 /blog/ 承载，这里只生成第 2 页起
+	return paginate(all, { pageSize: 12 }).slice(1);
+}
+
+const page = Astro.props.page;
+const posts = page.data;
+const current = page.current;
+const last = page.last;
 ---
 
 <!doctype html>
 <html lang="zh-CN">
 	<head>
-		<BaseHead title={`随笔 - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+		<BaseHead title={`随笔 - 第 ${current} 页 - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
 		<style>
 			main {
 				max-width: var(--wide-width);
@@ -76,7 +82,7 @@ const last = Math.max(1, Math.ceil(all.length / pageSize));
 			<div class="post-list">
 				{posts.map((post) => <PostCard post={post} />)}
 			</div>
-			<Pagination current={1} last={last} baseHref="/blog/page/" firstHref="/blog/" />
+			<Pagination current={current} last={last} baseHref="/blog/page/" firstHref="/blog/" />
 		</main>
 		<Footer />
 	</body>

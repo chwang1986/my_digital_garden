@@ -3,6 +3,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import PostCard from '../components/PostCard.astro';
+import Pagination from '../components/Pagination.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
@@ -11,8 +12,10 @@ import { readingTime } from '../utils/reading-time';
 import { sortPosts } from '../utils/sort-posts';
 
 const posts = sortPosts(await getCollection('blog'));
-
+const pageSize = 12;
 const [featured, ...rest] = posts;
+const gridPosts = rest.slice(0, pageSize - 1);
+const last = Math.max(1, Math.ceil(posts.length / pageSize));
 ---
 
 <!doctype html>
@@ -271,8 +274,9 @@ const [featured, ...rest] = posts;
 					<a class="view-all" href="/blog">查看归档 →</a>
 				</div>
 				<div class="post-list">
-					{rest.map((post) => <PostCard post={post} />)}
+					{gridPosts.map((post) => <PostCard post={post} />)}
 				</div>
+				<Pagination current={1} last={last} baseHref="/page/" firstHref="/" />
 			</section>
 		</main>
 		<Footer />
