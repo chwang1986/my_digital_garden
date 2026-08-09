@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 200" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">
+  <rect width="920" height="200" fill="#FAF6EE"/>
+  <defs>
+    <marker id="a" markerWidth="9" markerHeight="9" refX="6" refY="4" orient="auto">
+      <path d="M0 0 L8 4 L0 8 z" fill="#6f6657"/>
+    </marker>
+  </defs>
+  <g font-size="14" text-anchor="middle">
+    <rect x="20" y="72" width="150" height="56" rx="10" fill="#356b54"/>
+    <text x="95" y="105" fill="#FAF6EE">本地 Astro</text>
+    <path d="M178 100 H208" stroke="#6f6657" stroke-width="2" marker-end="url(#a)"/>
+    <rect x="218" y="82" width="112" height="36" rx="18" fill="#9cc3b0"/>
+    <text x="274" y="105" fill="#244c3b">git push</text>
+    <path d="M340 100 H362" stroke="#6f6657" stroke-width="2" marker-end="url(#a)"/>
+    <rect x="372" y="72" width="150" height="56" rx="10" fill="#356b54"/>
+    <text x="447" y="105" fill="#FAF6EE">GitHub</text>
+    <path d="M530 100 H552" stroke="#6f6657" stroke-width="2" marker-end="url(#a)"/>
+    <rect x="562" y="72" width="150" height="56" rx="10" fill="#356b54"/>
+    <text x="637" y="105" fill="#FAF6EE">Vercel 构建</text>
+    <path d="M720 100 H742" stroke="#6f6657" stroke-width="2" marker-end="url(#a)"/>
+    <rect x="752" y="72" width="148" height="56" rx="10" fill="#244c3b"/>
+    <text x="826" y="105" fill="#FAF6EE">线上站点</text>
+  </g>
+</svg>

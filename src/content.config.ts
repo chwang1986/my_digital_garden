@@ -14,6 +14,11 @@ const blog = defineCollection({
 			pubDate: z.coerce.date(),
 			updatedDate: z.coerce.date().optional(),
 			heroImage: z.optional(image()),
+			// 系列与顺序：同一 series 内按 order 升序排列
+			series: z.string().optional(),
+			order: z.number().optional(),
+			// 标签：用于归档与标签页
+			tags: z.array(z.string()).default([]),
 		}),
 });
 

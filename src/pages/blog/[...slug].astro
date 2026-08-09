@@ -2,28 +2,50 @@
 import { type CollectionEntry, getCollection, render } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
 import { readingTime } from '../../utils/reading-time';
+import { sortPosts } from '../../utils/sort-posts';
 
 export async function getStaticPaths() {
-	const posts = await getCollection('blog');
-	const sorted = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-	return sorted.map((post, i) => ({
-		params: { slug: post.id },
-		props: {
-			post,
-			readingTime: readingTime(post.body),
-			prev: i < sorted.length - 1 ? sorted[i + 1] : null,
-			next: i > 0 ? sorted[i - 1] : null,
-		},
-	}));
+	const all = await getCollection('blog');
+	const sorted = sortPosts(all);
+	// 系列内导航始终按 order 升序（1→5），与列表的时间流无关
+	const bySeries = new Map<string, CollectionEntry<'blog'>[]>();
+	for (const p of all) {
+		if (p.data.series) {
+			if (!bySeries.has(p.data.series)) bySeries.set(p.data.series, []);
+			bySeries.get(p.data.series)!.push(p);
+		}
+	}
+	for (const arr of bySeries.values()) {
+		arr.sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
+	}
+	return sorted.map((post) => {
+		const sibs = post.data.series ? bySeries.get(post.data.series) ?? [] : [];
+		const idx = sibs.findIndex((p) => p.id === post.id);
+		const prev = idx > 0 ? sibs[idx - 1] : null;
+		const next = idx >= 0 && idx < sibs.length - 1 ? sibs[idx + 1] : null;
+		return {
+			params: { slug: post.id },
+			props: {
+				post,
+				readingTime: readingTime(post.body),
+				prev,
+				next,
+				series: post.data.series ?? null,
+				order: post.data.order ?? null,
+			},
+		};
+	});
 }
 type Props = {
 	post: CollectionEntry<'blog'>;
 	readingTime: string;
 	prev: CollectionEntry<'blog'> | null;
 	next: CollectionEntry<'blog'> | null;
+	series?: string | null;
+	order?: number | null;
 };
 
-const { post, readingTime, prev, next } = Astro.props;
+const { post, readingTime, prev, next, series, order } = Astro.props;
 const { Content } = await render(post);
 ---
 

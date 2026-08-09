@@ -1,0 +1,6 @@
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Wang's Notes (ink)">
+  <rect width="256" height="256" rx="56" fill="#0f1c16"/>
+  <path d="M44 72 L88 184 L128 80 L168 184 L212 72"
+        fill="none" stroke="#6fcf97" stroke-width="30"
+        stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

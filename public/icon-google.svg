@@ -1,0 +1,7 @@
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Wang's Notes (multicolor)">
+  <rect width="256" height="256" rx="56" fill="#ffffff"/>
+  <path d="M44 72 L88 184"     fill="none" stroke="#4285F4" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M88 184 L128 80"    fill="none" stroke="#EA4335" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M128 80 L168 184"   fill="none" stroke="#FBBC05" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M168 184 L212 72"   fill="none" stroke="#34A853" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

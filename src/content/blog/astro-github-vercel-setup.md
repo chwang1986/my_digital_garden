@@ -1,9 +1,14 @@
 ---
-title: '从零搭建个人数字花园：Astro+GitHub+Vercel实战记录'
+title: '数字花园构建笔记（三）：我选这个平台，它给我什么'
 description: '记录如何从选型、本地环境搭建，实现代码Push即自动部署的全流程。'
-pubDate: '2026-08-08'
-heroImage: '../../assets/blog-placeholder-about.jpg'
+pubDate: '2026-08-07'
+heroImage: '../../assets/hero-3-platform.png'
+series: '数字花园构建笔记'
+order: 3
+tags: ['Astro', 'GitHub', 'Vercel', '部署']
 ---
+
+这是系列的第三篇。前面两篇讲了记录和分享，这篇说清楚我为什么选 Astro + GitHub + Vercel 这套——它到底给了我什么。
 
 在尝试过几个服务托管方案后，我决定重新搭建一个低成本、低运维负担、响应毫秒级、且完全免费的静态个人站点。
 
@@ -11,13 +16,25 @@ heroImage: '../../assets/blog-placeholder-about.jpg'
 
 ---
 
+## 0. 这篇你能做到什么
+
+跟着走完，你会拥有：
+
+- 一个本地能跑的 Astro 博客（`npm run dev` 就能预览）
+- 代码托管在 GitHub，用 SSH 免密推送
+- 每次 `git push` 自动部署到 Vercel，线上立刻更新
+
+前置条件：装好 Node.js（LTS）、有一个 GitHub 账号。Vercel 用 GitHub 登录即可，不用单独准备。整个过程大概半小时。
+
+![部署流程：本地 Astro → git push → GitHub → Vercel 构建 → 线上站点](/diagrams/deploy.svg)
+
 ## 1.为什么选择这个技术栈？
 
-在工程选型上，我的核心诉求是：**低成本、不休眠、高可读性、未来可扩展**。
+在工程选型上，我最在意的几点是：**低成本、不休眠、高可读性、未来可扩展**。
 
 - **Astro：** 工程化实现群岛架构（Islands Architecture），页面不包含交互组件时(没有JavaScript)。绝大多数内容直接输出静态HTML，首屏体验优异；交互组件（如Leaflet地图）可作为独立“岛屿”按需隔离挂载。
 - **GitHub：** 作为版本控制中心与内容资产的唯一仓库。
-- **Vercel：** 绑定 GitHub 后，每次`git push`会在20秒内自动完成编译和边缘网络（CDN）部署，彻底告别服务器休眠与手动运维。
+- **Vercel：** 绑定 GitHub 后，每次`git push`会在20秒内自动完成编译和 CDN 部署，不用再管服务器休眠和手动运维。
 
 ---
 
@@ -72,4 +89,15 @@ git push -u origin main
 git add .
 git commit -m "docs: 发布新文章"
 git push
+```
+
+---
+
+## 6. 常用命令
+
+```bash
+npm run dev      # 本地预览，http://localhost:4321
+npm run build    # 构建静态文件到 dist/
+npm run preview  # 本地预览构建结果
+git add . && git commit -m "docs: 新文章" && git push  # 一键发布
 ```

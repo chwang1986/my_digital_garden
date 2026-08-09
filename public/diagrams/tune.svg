@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 260" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">
+  <rect width="920" height="260" fill="#FAF6EE"/>
+  <g stroke="#6f6657" stroke-width="2" fill="none">
+    <path d="M180 62 C320 80 320 110 458 124"/>
+    <path d="M740 62 C600 80 600 110 462 124"/>
+    <path d="M180 198 C320 180 320 152 458 138"/>
+    <path d="M740 198 C600 180 600 152 462 138"/>
+  </g>
+  <rect x="358" y="100" width="204" height="60" rx="10" fill="#356b54"/>
+  <text x="460" y="135" fill="#FAF6EE" font-size="14" text-anchor="middle">global.css 变量</text>
+  <g font-size="13" text-anchor="middle">
+    <rect x="60" y="40" width="120" height="44" rx="8" fill="#9cc3b0"/>
+    <text x="120" y="67" fill="#244c3b">首页</text>
+    <rect x="740" y="40" width="120" height="44" rx="8" fill="#9cc3b0"/>
+    <text x="800" y="67" fill="#244c3b">文章页</text>
+    <rect x="60" y="176" width="120" height="44" rx="8" fill="#9cc3b0"/>
+    <text x="120" y="203" fill="#244c3b">关于</text>
+    <rect x="740" y="176" width="120" height="44" rx="8" fill="#9cc3b0"/>
+    <text x="800" y="203" fill="#244c3b">404</text>
+  </g>
+</svg>

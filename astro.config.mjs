@@ -8,6 +8,16 @@ import { defineConfig, fontProviders } from 'astro/config';
 export default defineConfig({
 	site: 'https://my-digital-garden-topaz-five.vercel.app',
 	integrations: [mdx(), sitemap()],
+	markdown: {
+		shikiConfig: {
+			// 双主题：跟随站点 .dark 切换，避免代码块在白天模式下深底深字看不见
+			themes: {
+				light: 'github-light',
+				dark: 'github-dark',
+			},
+			wrap: true,
+		},
+	},
 	fonts: [
 		{
 			provider: fontProviders.local(),

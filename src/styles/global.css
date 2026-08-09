@@ -200,9 +200,18 @@ pre {
   box-shadow: var(--shadow-sm);
 }
 
+/* 代码块内的文字交给 shiki 上色（含双主题变量），不要再被上面的通用 code 规则覆盖成深字 */
 pre code {
   padding: 0;
   background: none;
+  color: inherit;
+}
+
+/* 暗色模式：让 shiki 双主题跟随站点 .dark 类切换 */
+:root.dark .astro-code,
+:root.dark .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
 }
 
 blockquote {

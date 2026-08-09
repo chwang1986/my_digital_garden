@@ -2,15 +2,15 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import PostCard from '../components/PostCard.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import FormattedDate from '../components/FormattedDate.astro';
 import { readingTime } from '../utils/reading-time';
+import { sortPosts } from '../utils/sort-posts';
 
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
+const posts = sortPosts(await getCollection('blog'));
 
 const [featured, ...rest] = posts;
 ---
@@ -184,47 +184,17 @@ const [featured, ...rest] = posts;
 				color: var(--primary-strong);
 			}
 
+			/* 小红书式：竖向卡片网格（左→右按时间流） */
 			.post-list {
-				list-style: none;
-				margin: 0;
-				padding: 0;
-				border-top: 1px solid var(--border-color);
-			}
-
-			.post-item {
-				display: flex;
-				align-items: baseline;
-				justify-content: space-between;
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
 				gap: 1.5rem;
-				padding: 1.1rem 0.25rem;
-				border-bottom: 1px solid var(--border-color);
-				text-decoration: none;
-				color: var(--text-main);
-				transition:
-					color 0.2s ease,
-					padding 0.2s ease;
 			}
 
-			.post-item:hover {
-				color: var(--primary-color);
-				padding-left: 0.6rem;
-			}
-
-			.post-title {
-				font-size: 1.15rem;
-				font-weight: 600;
-				line-height: 1.4;
-			}
-
-			.post-item:hover .post-title {
-				color: var(--primary-color);
-			}
-
-			.post-meta {
-				flex-shrink: 0;
-				font-size: 0.85rem;
-				color: var(--text-secondary);
-				font-family: var(--font-mono);
+			@media (max-width: 900px) {
+				.post-list {
+					grid-template-columns: repeat(2, 1fr);
+				}
 			}
 
 			@media (max-width: 720px) {
@@ -254,11 +224,6 @@ const [featured, ...rest] = posts;
 			@media (max-width: 480px) {
 				.statement {
 					font-size: 1.7rem;
-				}
-				.post-item {
-					flex-direction: column;
-					gap: 0.3rem;
-					padding: 1rem 0.25rem;
 				}
 			}
 		</style>
@@ -305,20 +270,9 @@ const [featured, ...rest] = posts;
 					<h2>全部随笔</h2>
 					<a class="view-all" href="/blog">查看归档 →</a>
 				</div>
-				<ul class="post-list">
-					{
-						rest.map((post) => (
-							<li>
-								<a class="post-item" href={`/blog/${post.id}/`}>
-									<span class="post-title">{post.data.title}</span>
-									<span class="post-meta">
-										<FormattedDate date={post.data.pubDate} />
-									</span>
-								</a>
-							</li>
-						))
-					}
-				</ul>
+				<div class="post-list">
+					{rest.map((post) => <PostCard post={post} />)}
+				</div>
 			</section>
 		</main>
 		<Footer />
