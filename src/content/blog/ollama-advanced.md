@@ -5,7 +5,7 @@ pubDate: '2026-08-09'
 heroImage: '../../assets/hero-ollama.png'
 theme: 'ollama的使用'
 series: 'Ollama 实战'
-order: 6
+order: 7
 tags: ['Ollama', 'Modelfile', '量化', '进阶']
 ---
 

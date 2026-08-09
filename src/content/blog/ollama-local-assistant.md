@@ -5,7 +5,7 @@ pubDate: '2026-08-09'
 heroImage: '../../assets/hero-ollama.png'
 theme: 'ollama的使用'
 series: 'Ollama 实战'
-order: 5
+order: 6
 tags: ['Ollama', 'Open WebUI', '本地助手']
 ---
 

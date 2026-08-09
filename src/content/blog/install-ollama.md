@@ -5,7 +5,7 @@ pubDate: '2026-08-09'
 heroImage: '../../assets/hero-ollama.png'
 theme: 'ollama的使用'
 series: 'Ollama 实战'
-order: 2
+order: 3
 tags: ['Ollama', '安装', '本地大模型']
 ---
 
