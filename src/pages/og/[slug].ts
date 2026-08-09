@@ -6,7 +6,7 @@ import satori from 'satori';
 import { Resvg } from '@resvg/resvg-js';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
 
-const OG_HOST = 'my-digital-garden-topaz-five.vercel.app';
+// 域名在 GET 中由 Astro.site 取得，避免硬编码
 const CREAM = '#FBF5EA';
 const GREEN = '#356b54';
 const INK = '#2c2620';
@@ -33,9 +33,9 @@ export const getStaticPaths = async () => {
 	];
 };
 
-function textCard(title: string, tagline: string, isDefault: boolean) {
+function textCard(title: string, tagline: string, isDefault: boolean, host: string) {
 	const brand = 'Wang’s Notes';
-	const footerLeft = isDefault ? '技术随笔 · 系统思考' : tagline;
+	const footerLeft = isDefault ? '技术笔记 · 系统思考' : tagline;
 	return {
 		type: 'div',
 		props: {
@@ -125,7 +125,7 @@ function textCard(title: string, tagline: string, isDefault: boolean) {
 						},
 						children: [
 							{ type: 'span', props: { children: footerLeft } },
-							{ type: 'span', props: { children: OG_HOST } },
+							{ type: 'span', props: { children: host } },
 						],
 					},
 				},
@@ -134,7 +134,7 @@ function textCard(title: string, tagline: string, isDefault: boolean) {
 	};
 }
 
-async function photoCard(title: string, heroSrc: string) {
+async function photoCard(title: string, heroSrc: string, host: string) {
 	// satori 仅能解码 PNG/JPEG，故用 sharp 把构建产物(webp)转成 png 再内联
 	const png = sharp(`${process.cwd()}/dist${heroSrc}`).png();
 	const buf = await png.toBuffer();
@@ -222,7 +222,7 @@ async function photoCard(title: string, heroSrc: string) {
 										color: 'rgba(250,246,238,0.82)',
 										marginTop: '18px',
 									},
-									children: OG_HOST,
+									children: host,
 								},
 							},
 						],
@@ -233,29 +233,30 @@ async function photoCard(title: string, heroSrc: string) {
 	};
 }
 
-export const GET: APIRoute = async ({ props }) => {
+export const GET: APIRoute = async ({ props, site }) => {
 	const { title, description, heroSrc, default: isDefault } = props as {
 		title: string;
 		description: string;
 		heroSrc?: string | null;
 		default?: boolean;
 	};
+	const host = site?.host ?? 'my-digital-garden-topaz-five.vercel.app';
 
 	const noto = fs.readFileSync(`${process.cwd()}/public/fonts/NotoSansSC-Regular.otf`);
 	const atkinsonRegular = fs.readFileSync(`${process.cwd()}/src/assets/fonts/atkinson-regular.woff`);
 	const atkinsonBold = fs.readFileSync(`${process.cwd()}/src/assets/fonts/atkinson-bold.woff`);
 
-	const tagline = description ? truncate(description, 30) : '技术随笔 · 系统思考';
+	const tagline = description ? truncate(description, 30) : '技术笔记 · 系统思考';
 
 	let tree: object;
 	try {
 		if (heroSrc) {
-			tree = await photoCard(title, heroSrc);
+			tree = await photoCard(title, heroSrc, host);
 		} else {
-			tree = textCard(title, tagline, !!isDefault);
+			tree = textCard(title, tagline, !!isDefault, host);
 		}
 	} catch {
-		tree = textCard(title, tagline, !!isDefault);
+		tree = textCard(title, tagline, !!isDefault, host);
 	}
 
 	const svg = await satori(tree, {
