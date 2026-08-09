@@ -13,9 +13,10 @@ type Props = CollectionEntry<'blog'>['data'] & {
 	tags?: string[];
 	series?: string | null;
 	order?: number | null;
+	headings?: { depth: number; text: string; slug: string }[];
 };
 
-const { title, description, pubDate, updatedDate, heroImage, readingTime, prev, next, tags = [], series = null, order = null } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, readingTime, prev, next, tags = [], series = null, order = null, headings = [] } = Astro.props;
 
 const slug = Astro.url.pathname.split('/').filter(Boolean)[1] ?? '';
 const ogImage = `/og/${slug}`;
@@ -174,7 +175,13 @@ const jsonLd = {
 
 			.last-updated-on {
 				font-style: italic;
+				color: var(--text-secondary);
+				font-size: 0.9rem;
 				margin-left: 0.4rem;
+			}
+
+			.share {
+				margin: 0;
 			}
 
 			.share a {
@@ -197,30 +204,6 @@ const jsonLd = {
 				fill: currentColor;
 			}
 
-			.tag {
-				font-size: 0.75rem;
-				font-family: var(--font-mono);
-				color: var(--primary-color);
-				text-decoration: none;
-				padding: 0.18rem 0.6rem;
-				border: 1px solid color-mix(in srgb, var(--primary-color) 35%, transparent);
-				border-radius: 99em;
-				transition:
-					background 0.2s ease,
-					color 0.2s ease;
-			}
-
-			.tag:hover {
-				background: var(--primary-color);
-				color: var(--on-accent);
-			}
-
-			.last-updated-on {
-				font-style: italic;
-				color: var(--text-secondary);
-				font-size: 0.9rem;
-				margin-left: 0.4rem;
-			}
 
 			.divider {
 				width: 3rem;
@@ -273,10 +256,6 @@ const jsonLd = {
 				border-color: var(--primary-color);
 			}
 
-			.share {
-				margin: 0;
-			}
-
 			/* 正文末尾 AI 生成声明 */
 			.ai-byline {
 				margin: 2.5rem 0 0;
@@ -287,6 +266,138 @@ const jsonLd = {
 				font-size: 0.8rem;
 				letter-spacing: 0.05em;
 				color: color-mix(in srgb, var(--text-secondary) 72%, var(--primary-color));
+			}
+
+			/* 文章末尾 CTA */
+			.post-cta {
+				margin: 1.5rem 0 0;
+				padding: 1rem 1.1rem;
+				background: color-mix(in srgb, var(--primary-soft) 14%, transparent);
+				border: 1px solid color-mix(in srgb, var(--primary-color) 18%, var(--border-color));
+				border-radius: 12px;
+				text-align: center;
+			}
+
+			.post-cta p {
+				margin: 0;
+				font-size: 0.95rem;
+				line-height: 1.7;
+				color: var(--text-secondary);
+			}
+
+			.post-cta a {
+				color: var(--primary-color);
+				text-decoration: none;
+				font-weight: 600;
+			}
+
+			.post-cta a:hover {
+				text-decoration: underline;
+				color: var(--primary-color);
+				box-shadow: none;
+			}
+
+			/* 目录 (ToC) */
+			.toc {
+				margin: 1.2rem 0 2rem;
+				padding: 0.9rem 1.1rem;
+				background: color-mix(in srgb, var(--surface) 80%, transparent);
+				border: 1px solid var(--border-color);
+				border-radius: 12px;
+			}
+
+			.toc summary {
+				font-family: var(--font-display);
+				font-size: 1rem;
+				font-weight: 600;
+				color: var(--text-main);
+				cursor: pointer;
+				list-style: none;
+			}
+
+			.toc summary::-webkit-details-marker { display: none; }
+
+			.toc summary::before {
+				content: '§';
+				margin-right: 0.6rem;
+				color: var(--primary-color);
+				font-family: var(--font-mono);
+			}
+
+			.toc nav {
+				display: flex;
+				flex-direction: column;
+				gap: 0.25rem;
+				margin-top: 0.7rem;
+				padding-left: 0.3rem;
+				border-left: 2px solid color-mix(in srgb, var(--primary-color) 28%, transparent);
+			}
+
+			.toc-item, .toc-sub {
+				font-size: 0.92rem;
+				line-height: 1.6;
+				color: var(--text-secondary);
+				text-decoration: none;
+				transition: color 0.15s ease;
+			}
+
+			.toc-item:hover, .toc-sub:hover { color: var(--primary-color); }
+
+			.toc-sub {
+				font-size: 0.85rem;
+				padding-left: 1.2rem;
+			}
+
+			/* 代码块语言标签 */
+			.prose :global(pre[data-lang])::before {
+				content: attr(data-lang);
+				position: absolute;
+				top: 0.5rem;
+				left: 0.75rem;
+				z-index: 1;
+				font-family: var(--font-mono);
+				font-size: 0.7rem;
+				letter-spacing: 0.04em;
+				color: var(--text-secondary);
+				opacity: 0.55;
+			}
+
+			.prose :global(pre[data-lang]) {
+				padding-top: 1.8rem;
+			}
+
+			/* 回到顶部按钮 */
+			.back-to-top {
+				position: fixed;
+				bottom: 1.8rem;
+				right: 1.8rem;
+				z-index: 20;
+				width: 40px;
+				height: 40px;
+				border-radius: 50%;
+				border: 1px solid var(--border-color);
+				background: var(--surface);
+				color: var(--text-secondary);
+				cursor: pointer;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				opacity: 0;
+				visibility: hidden;
+				transform: translateY(8px);
+				transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease, color 0.2s ease, border-color 0.2s ease;
+				box-shadow: var(--shadow-sm);
+			}
+
+			.back-to-top:hover {
+				color: var(--primary-color);
+				border-color: var(--primary-color);
+			}
+
+			.back-to-top.visible {
+				opacity: 1;
+				visibility: visible;
+				transform: translateY(0);
 			}
 
 			/* 上一篇 / 下一篇 */
@@ -418,8 +529,25 @@ const jsonLd = {
 						</div>
 						<hr class="divider" />
 					</div>
+
+					{
+						headings.length > 1 && (
+							<details class="toc">
+								<summary>目录</summary>
+								<nav>
+									{headings.map((h) => (
+										<a href={`#${h.slug}`} class={h.depth === 3 ? 'toc-sub' : 'toc-item'}>{h.text}</a>
+									))}
+								</nav>
+							</details>
+						)
+					}
 				<slot />
 				<p class="ai-byline">人工智能生成 · 人机协同创造</p>
+
+				<div class="post-cta">
+					<p>如果这篇对你有启发，欢迎 <a href="https://twitter.com/intent/tweet?url={encodeURIComponent(Astro.url)}&text={encodeURIComponent(title)}" target="_blank" rel="noopener noreferrer">分享到 X</a>，或 <a href="/blog">浏览更多随笔</a>。</p>
+				</div>
 			</div>
 
 				<nav class="pager" aria-label="文章导航">
@@ -446,6 +574,13 @@ const jsonLd = {
 				</nav>
 			</article>
 		</main>
+
+		<button class="back-to-top" id="back-to-top" aria-label="回到顶部" type="button">
+			<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+				<path d="M18 15l-6-6-6 6"/>
+			</svg>
+		</button>
+
 		<Footer />
 
 		<script>
@@ -482,6 +617,23 @@ const jsonLd = {
 					}
 				});
 				pre.appendChild(btn);
+			});
+
+			// 回到顶部按钮
+			const backToTop = document.getElementById('back-to-top');
+			if (backToTop) {
+				document.addEventListener('scroll', () => {
+					backToTop.classList.toggle('visible', document.documentElement.scrollTop > 400);
+				}, { passive: true });
+				backToTop.addEventListener('click', () => {
+					window.scrollTo({ top: 0, behavior: 'smooth' });
+				});
+			}
+
+			// 代码块语言标签
+			document.querySelectorAll('pre[class*="language-"]').forEach((pre) => {
+				const cls = pre.className.match(/language-(\w+)/);
+				if (cls) pre.setAttribute('data-lang', cls[1]);
 			});
 		</script>
 	</body>

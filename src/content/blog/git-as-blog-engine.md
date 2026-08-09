@@ -1,5 +1,5 @@
 ---
-title: '数字花园构建笔记（二）：我想分享，所以把写作变成文章'
+title: '我想分享，所以把写作变成文章'
 description: '部署只是结果。真正重要的是：把每一次写作都变成一次可回滚、可审计的提交。'
 pubDate: '2026-08-06'
 heroImage: '../../assets/hero-2-share.png'
@@ -70,7 +70,7 @@ git revert <commit-hash>   # 撤销某次发布，并留下撤销记录
 ---
 title: '数字花园构建笔记（二）：我想分享，所以把写作变成文章'
 pubDate: '2026-08-05'
-heroImage: '../../assets/blog-placeholder-5.jpg'
+heroImage: '../../assets/hero-2-share.png'
 ---
 ```
 

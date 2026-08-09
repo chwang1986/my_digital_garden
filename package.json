@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "postbuild": "npx pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -19,5 +20,8 @@
     "reading-time": "^1.5.0",
     "satori": "^0.29.0",
     "sharp": "^0.35.0"
+  },
+  "devDependencies": {
+    "pagefind": "^1.5.2"
   }
 }

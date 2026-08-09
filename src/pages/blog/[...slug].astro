@@ -46,9 +46,10 @@ type Props = {
 };
 
 const { post, readingTime, prev, next, series, order } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+const tocHeadings = headings.filter(h => h.depth >= 2 && h.depth <= 3);
 ---
 
-<BlogPost {...post.data} readingTime={readingTime} prev={prev} next={next}>
+<BlogPost {...post.data} readingTime={readingTime} prev={prev} next={next} headings={tocHeadings}>
 	<Content />
 </BlogPost>

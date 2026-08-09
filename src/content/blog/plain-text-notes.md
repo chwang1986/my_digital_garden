@@ -1,5 +1,5 @@
 ---
-title: '数字花园构建笔记（一）：我想记录，所以先搞定笔记的方法'
+title: '我想记录，所以先搞定笔记的方法'
 description: '从 Notion、飞书到纯 Markdown 文件，我为什么需要一个"内容真正属于自己"的笔记方式。'
 pubDate: '2026-08-05'
 heroImage: '../../assets/hero-1-record.png'

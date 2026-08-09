@@ -1,10 +1,11 @@
 ---
+import type { CollectionEntry } from 'astro:content';
 import { Image } from 'astro:assets';
 import FormattedDate from './FormattedDate.astro';
 import { readingTime } from '../utils/reading-time';
 
 interface Props {
-	post: any;
+	post: CollectionEntry<'blog'>;
 }
 
 const { post } = Astro.props;

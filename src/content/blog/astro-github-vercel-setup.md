@@ -1,5 +1,5 @@
 ---
-title: '数字花园构建笔记（三）：我选这个平台，它给我什么'
+title: '我选这个平台，它给我什么'
 description: '记录如何从选型、本地环境搭建，实现代码Push即自动部署的全流程。'
 pubDate: '2026-08-07'
 heroImage: '../../assets/hero-3-platform.png'
