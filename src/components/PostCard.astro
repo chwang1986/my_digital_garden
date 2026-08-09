@@ -21,6 +21,13 @@ const p = post.data;
 		}
 	</a>
 	<div class="post-card-body">
+		{
+			p.category && (
+				<a class="post-card-cat" href={`/categories/${encodeURIComponent(p.category)}/`}>
+					{p.category}
+				</a>
+			)
+		}
 		<h3 class="post-card-title">
 			<a href={`/blog/${post.id}/`}>{p.title}</a>
 		</h3>
@@ -105,6 +112,27 @@ const p = post.data;
 		-webkit-line-clamp: 2;
 		-webkit-box-orient: vertical;
 		overflow: hidden;
+	}
+
+	.post-card-cat {
+		align-self: flex-start;
+		font-family: var(--font-mono);
+		font-size: 0.72rem;
+		letter-spacing: 0.04em;
+		color: var(--primary-color);
+		text-decoration: none;
+		padding: 0.18rem 0.6rem;
+		border-radius: 99em;
+		background: color-mix(in srgb, var(--primary-soft) 55%, transparent);
+		border: 1px solid color-mix(in srgb, var(--primary-color) 28%, transparent);
+		transition:
+			background 0.2s ease,
+			color 0.2s ease;
+	}
+
+	.post-card-cat:hover {
+		background: var(--primary-color);
+		color: var(--on-accent);
 	}
 
 	.post-card-title a {

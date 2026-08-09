@@ -1,0 +1,124 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import { sortPosts } from '../../utils/sort-posts';
+import { SITE_TITLE } from '../../consts';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog');
+	const set = new Set<string>();
+	for (const p of posts) if (p.data.category) set.add(p.data.category);
+	return [...set].map((category) => ({
+		params: { category },
+		props: {
+			category,
+			posts: sortPosts(posts.filter((p) => p.data.category === category)),
+		},
+	}));
+}
+
+const { category, posts } = Astro.props;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={`${category} - ${SITE_TITLE}`} description={`分类「${category}」下的文章`} />
+		<style>
+			main {
+				max-width: var(--wide-width);
+				margin: 0 auto;
+				padding: 3.5rem 1.25rem 1rem;
+			}
+			.page-head {
+				margin-bottom: 2.5rem;
+			}
+			.page-head .back {
+				display: inline-block;
+				font-size: 0.85rem;
+				color: var(--text-secondary);
+				text-decoration: none;
+				margin-bottom: 0.8rem;
+			}
+			.page-head .back:hover {
+				color: var(--primary-color);
+			}
+			.page-head h1 {
+				font-size: 2.4rem;
+				font-weight: 800;
+				letter-spacing: -0.02em;
+				margin: 0;
+			}
+			.page-head h1 .mark {
+				color: var(--primary-color);
+			}
+			.post-list {
+				list-style: none;
+				margin: 0;
+				padding: 0;
+				border-top: 1px solid var(--border-color);
+			}
+			.post-item {
+				display: flex;
+				align-items: baseline;
+				justify-content: space-between;
+				gap: 1.5rem;
+				padding: 1.1rem 0.25rem;
+				border-bottom: 1px solid var(--border-color);
+				text-decoration: none;
+				color: var(--text-main);
+				transition:
+					color 0.2s ease,
+					padding 0.2s ease;
+			}
+			.post-item:hover {
+				color: var(--primary-color);
+				padding-left: 0.6rem;
+			}
+			.post-title {
+				font-size: 1.15rem;
+				font-weight: 600;
+				line-height: 1.4;
+			}
+			.post-meta {
+				flex-shrink: 0;
+				font-size: 0.85rem;
+				color: var(--text-secondary);
+				font-family: var(--font-mono);
+			}
+			@media (max-width: 480px) {
+				.post-item {
+					flex-direction: column;
+					gap: 0.3rem;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<header class="page-head">
+				<a class="back" href="/categories">← 全部分类</a>
+				<h1><span class="mark">▍</span>{category}</h1>
+			</header>
+			<ul class="post-list">
+				{
+					posts.map((post) => (
+						<li>
+							<a class="post-item" href={`/blog/${post.id}/`}>
+								<span class="post-title">{post.data.title}</span>
+								<span class="post-meta">
+									<FormattedDate date={post.data.pubDate} />
+								</span>
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</main>
+		<Footer />
+	</body>
+</html>

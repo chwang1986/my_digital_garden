@@ -5,6 +5,7 @@ pubDate: '2026-08-09'
 heroImage: '../../assets/hero-5-write.png'
 series: '数字花园构建笔记'
 order: 5
+category: '写作方法'
 tags: ['写作', '习惯']
 ---
 

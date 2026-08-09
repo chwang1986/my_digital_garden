@@ -5,6 +5,7 @@ pubDate: '2026-08-07'
 heroImage: '../../assets/hero-3-platform.png'
 series: '数字花园构建笔记'
 order: 3
+category: '建站技术'
 tags: ['Astro', 'GitHub', 'Vercel', '部署']
 ---
 
