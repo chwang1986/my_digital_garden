@@ -9,7 +9,15 @@ order: 2
 tags: ['Ollama', '安装', '本地大模型']
 ---
 
-装之前先说一句：Ollama 是把整个模型下载到你机器上跑的，所以先看自己内存够不够。7B 量级的模型大概吃 4–5GB 内存，14B 要 8GB 以上，再大就更吃力。用 Apple 芯片的 Mac（M1/M2/M3）体验最好，因为能直接走 GPU。
+装之前先说一句：Ollama 是把整个模型下载到你机器上跑的，所以先看自己内存够不够。7B 量级的模型大概吃 4–5GB 内存，14B 要 8GB 以上，再大就更吃力。用 Apple 芯片的 Mac（M1/M2/M3）体验最好，因为能直接用苹果芯片的算力来跑模型，速度更快。
+
+下面用到的命令都要在"终端"里敲（macOS 按 Cmd+空格 搜 Terminal；Windows 搜 PowerShell；Linux 一般叫终端）。如果你平时没怎么碰过，不用慌，跟着一步步复制粘贴就行。
+
+## 这篇文章的目标
+
+- 把 Ollama 装到你的电脑上（macOS / Windows / Linux 任选一种）；
+- 确认装好了——`ollama --version` 能打出版本号；
+- 跑通第一个模型，进入对话、再退出来。
 
 ## macOS
 
@@ -22,7 +30,7 @@ tags: ['Ollama', '安装', '本地大模型']
 
 ## Windows
 
-同样去 ollama.com 下 exe 安装，或者用 winget：
+同样去 ollama.com 下 exe 安装，或者用系统自带的应用商店命令：
 
 ```bash
 winget install Ollama.Ollama
