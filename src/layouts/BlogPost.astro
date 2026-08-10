@@ -676,6 +676,26 @@ const jsonLd = {
 				const cls = pre.className.match(/language-(\w+)/);
 				if (cls) pre.setAttribute('data-lang', cls[1]);
 			});
+
+			// 代码块折叠：把 .prose 里的每个 pre 包进 <details>，长代码默认收起
+			document.querySelectorAll('.prose pre').forEach((pre) => {
+				const cls = pre.className.match(/language-(\w+)/);
+				const lang = cls ? cls[1] : 'code';
+				const lines = (pre.innerText.match(/\n/g) || []).length + 1;
+				const wrap = document.createElement('details');
+				wrap.className = 'code-fold';
+				const summary = document.createElement('summary');
+				summary.innerHTML = `<span class="lbl">代码 · ${lang}</span><span class="chev">展开</span>`;
+				pre.replaceWith(wrap);
+				wrap.appendChild(summary);
+				wrap.appendChild(pre);
+				if (lines <= 4) wrap.open = true;
+				const chev = summary.querySelector('.chev');
+				chev.textContent = wrap.open ? '收起' : '展开';
+				summary.addEventListener('toggle', () => {
+					chev.textContent = wrap.open ? '收起' : '展开';
+				});
+			});
 		</script>
 	</body>
 </html>

@@ -237,6 +237,77 @@ figure {
   margin: 0 0 3em 0;
 }
 
+/* 文章内代码块折叠：把 <pre> 包进 <details>，默认收起长代码 */
+.prose details.code-fold {
+  margin: 1.2em 0;
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
+}
+
+.prose details.code-fold > summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  user-select: none;
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
+}
+
+.prose details.code-fold > summary::-webkit-details-marker {
+  display: none;
+}
+
+.prose details.code-fold > summary:hover {
+  color: var(--primary-color);
+}
+
+.prose details.code-fold > summary .chev {
+  opacity: 0.7;
+  font-size: 0.78rem;
+}
+
+.prose details.code-fold > pre {
+  margin: 0 !important;
+  border-radius: 0 !important;
+  border-top: 1px solid var(--border-color);
+  padding-top: 1.1em !important;
+}
+
+/* 折叠后不显示 shiki 顶部的语言标签，避免和摘要重复 */
+.prose details.code-fold > pre[data-lang]::before {
+  display: none;
+}
+
+/* 文章内图片 */
+.prose img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.6em auto;
+  border-radius: 14px;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.prose figure img {
+  margin: 0;
+}
+
+.prose figure figcaption {
+  margin-top: 0.6rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
 table {
   border-collapse: collapse;
   font-family: var(--font-body);
