@@ -1,6 +1,6 @@
 ---
 title: AI 词典
-description: 一份按 A–Z 排列的 AI 常用缩写与术语速查。点词条跳转，看完可返回顶部。涵盖大语言模型、训练优化、推理部署与本地硬件等常见概念。
+description: 一份按 A–Z 排列的 AI 常用缩写与术语速查。点词条跳转，看完可返回顶部。涵盖模型架构、训练优化、推理部署、检索与智能体、本地硬件等常见概念。
 pubDate: 2026-08-10
 theme: 字典
 tags: ["AI", "术语", "词典"]
@@ -11,22 +11,22 @@ tags: ["AI", "术语", "词典"]
 下面按首字母 A–Z 排列，中英文并列。点词条跳转至释义，每条末尾可返回此处。
 
 <nav class="glossary-index" aria-label="词条索引">
-  <div class="gi-section"><div class="gi-letter">A</div><div class="gi-terms"><a href="#agent">Agent（智能体）</a></div></div>
-  <div class="gi-section"><div class="gi-letter">C</div><div class="gi-terms"><a href="#context-window">Context Window（上下文窗口）</a></div></div>
-  <div class="gi-section"><div class="gi-letter">D</div><div class="gi-terms"><a href="#distillation">Distillation（蒸馏）</a></div></div>
+  <div class="gi-section"><div class="gi-letter">A</div><div class="gi-terms"><a href="#agent">Agent（智能体）</a> <a href="#attention">Attention（注意力机制）</a></div></div>
+  <div class="gi-section"><div class="gi-letter">C</div><div class="gi-terms"><a href="#cnn">CNN（卷积神经网络）</a> <a href="#context-window">Context Window（上下文窗口）</a></div></div>
+  <div class="gi-section"><div class="gi-letter">D</div><div class="gi-terms"><a href="#diffusion-model">Diffusion Model（扩散模型）</a> <a href="#distillation">Distillation（蒸馏）</a></div></div>
   <div class="gi-section"><div class="gi-letter">E</div><div class="gi-terms"><a href="#embedding">Embedding（嵌入）</a></div></div>
   <div class="gi-section"><div class="gi-letter">F</div><div class="gi-terms"><a href="#fine-tuning">Fine-tuning（微调）</a> <a href="#function-calling">Function Calling（工具调用）</a></div></div>
-  <div class="gi-section"><div class="gi-letter">G</div><div class="gi-terms"><a href="#gpt">GPT</a> <a href="#gpu">GPU</a></div></div>
+  <div class="gi-section"><div class="gi-letter">G</div><div class="gi-terms"><a href="#gan">GAN（生成对抗网络）</a> <a href="#gpt">GPT</a> <a href="#gpu">GPU</a></div></div>
   <div class="gi-section"><div class="gi-letter">H</div><div class="gi-terms"><a href="#hallucination">Hallucination（幻觉）</a></div></div>
   <div class="gi-section"><div class="gi-letter">I</div><div class="gi-terms"><a href="#inference">Inference（推理）</a></div></div>
   <div class="gi-section"><div class="gi-letter">K</div><div class="gi-terms"><a href="#kv-cache">KV Cache</a></div></div>
   <div class="gi-section"><div class="gi-letter">L</div><div class="gi-terms"><a href="#llm">LLM（大语言模型）</a> <a href="#lora">LoRA（低秩适配）</a></div></div>
-  <div class="gi-section"><div class="gi-letter">M</div><div class="gi-terms"><a href="#mcp">MCP</a> <a href="#moe">MoE（混合专家）</a> <a href="#multimodal">Multimodal（多模态）</a></div></div>
-  <div class="gi-section"><div class="gi-letter">P</div><div class="gi-terms"><a href="#prompt">Prompt（提示词）</a></div></div>
+  <div class="gi-section"><div class="gi-letter">M</div><div class="gi-terms"><a href="#mcp">MCP</a> <a href="#moe">MoE（混合专家）</a> <a href="#multi-agent-system">Multi-Agent System（多智能体系统）</a> <a href="#multimodal">Multimodal（多模态）</a></div></div>
+  <div class="gi-section"><div class="gi-letter">P</div><div class="gi-terms"><a href="#prompt">Prompt（提示词）</a> <a href="#prompt-engineering">Prompt Engineering（提示词工程）</a></div></div>
   <div class="gi-section"><div class="gi-letter">Q</div><div class="gi-terms"><a href="#quantization">Quantization（量化）</a></div></div>
-  <div class="gi-section"><div class="gi-letter">R</div><div class="gi-terms"><a href="#rag">RAG（检索增强生成）</a> <a href="#rlhf">RLHF（人类反馈强化学习）</a></div></div>
+  <div class="gi-section"><div class="gi-letter">R</div><div class="gi-terms"><a href="#rag">RAG（检索增强生成）</a> <a href="#rlhf">RLHF（人类反馈强化学习）</a> <a href="#rnn">RNN（循环神经网络）</a></div></div>
   <div class="gi-section"><div class="gi-letter">T</div><div class="gi-terms"><a href="#temperature">Temperature（温度）</a> <a href="#token">Token（词元）</a> <a href="#transformer">Transformer（变换器）</a></div></div>
-  <div class="gi-section"><div class="gi-letter">V</div><div class="gi-terms"><a href="#vram">VRAM（显存）</a></div></div>
+  <div class="gi-section"><div class="gi-letter">V</div><div class="gi-terms"><a href="#vector-database">Vector Database（向量数据库）</a> <a href="#vram">VRAM（显存）</a></div></div>
 </nav>
 
 ---
@@ -36,7 +36,25 @@ tags: ["AI", "术语", "词典"]
 能自主调用工具、执行多步任务的人工智能程序，不限于对话。
 
 - 你会碰到：各类「能帮你办事」的助手；本博客用到的 WorkBuddy 即属此类
-- 相关：[MCP](#mcp)、[Function Calling](#function-calling)
+- 相关：[MCP](#mcp)、[Function Calling](#function-calling)、[Multi-Agent System](#multi-agent-system)
+
+[↑ 返回词条列表](#terms)
+
+<h2 id="attention">Attention（注意力机制）</h2>
+
+让模型在处理信息时动态聚焦到最相关的部分，并赋予不同位置不同的权重。它是 Transformer 的核心，也广泛用于视觉、语音等领域。
+
+- 你会碰到：理解 Transformer、RAG 检索排序背后的原理
+- 相关：[Transformer](#transformer)、[Embedding](#embedding)
+
+[↑ 返回词条列表](#terms)
+
+<h2 id="cnn">CNN（卷积神经网络）</h2>
+
+一种擅长处理图像等网格结构数据的神经网络，靠卷积核提取局部特征、权值共享来减少参数量。
+
+- 你会碰到：图像分类、人脸识别、医学影像分析
+- 相关：[Transformer](#transformer)（ViT 将注意力用于图像）、[RNN](#rnn)
 
 [↑ 返回词条列表](#terms)
 
@@ -46,6 +64,15 @@ tags: ["AI", "术语", "词典"]
 
 - 你会碰到：长文档总结、多轮对话中「前面的内容记不住了」
 - 相关：[Token](#token)、[Inference](#inference)
+
+[↑ 返回词条列表](#terms)
+
+<h2 id="diffusion-model">Diffusion Model（扩散模型）</h2>
+
+通过逐步加噪再学习去噪来生成数据的模型，已成为 Stable Diffusion、DALL·E 等文生图技术的基础。
+
+- 你会碰到：AI 绘画、图像编辑
+- 相关：[GAN](#gan)
 
 [↑ 返回词条列表](#terms)
 
@@ -62,7 +89,7 @@ tags: ["AI", "术语", "词典"]
 把文字、图片等转成一组数字向量，使语义相近的内容在向量空间中彼此靠近。
 
 - 你会碰到：语义搜索、[RAG](#rag) 的检索阶段
-- 相关：[RAG](#rag)
+- 相关：[RAG](#rag)、[Vector Database](#vector-database)
 
 [↑ 返回词条列表](#terms)
 
@@ -70,7 +97,7 @@ tags: ["AI", "术语", "词典"]
 
 在已有模型基础上，用特定领域的数据继续训练，使其更适配某项任务。
 
-- 相关：[LoRA](#lora)、[Distillation](#distillation)
+- 相关：[LoRA](#lora)、[Distillation](#distillation)、[RLHF](#rlhf)
 
 [↑ 返回词条列表](#terms)
 
@@ -79,6 +106,15 @@ tags: ["AI", "术语", "词典"]
 让模型以结构化方式调用外部函数或 API，从而获取实时数据或执行操作。
 
 - 相关：[Agent](#agent)、[MCP](#mcp)
+
+[↑ 返回词条列表](#terms)
+
+<h2 id="gan">GAN（生成对抗网络）</h2>
+
+由生成器与判别器对抗训练的生成模型：生成器努力造出逼真数据骗过判别器，判别器则努力分辨真假。
+
+- 你会碰到：图像生成、风格转换、数据增强
+- 相关：[Diffusion Model](#diffusion-model)
 
 [↑ 返回词条列表](#terms)
 
@@ -157,6 +193,15 @@ tags: ["AI", "术语", "词典"]
 
 [↑ 返回词条列表](#terms)
 
+<h2 id="multi-agent-system">Multi-Agent System（多智能体系统）</h2>
+
+由多个分工不同的 AI 智能体协作完成复杂任务的系统，通过消息传递与协调共享结果。
+
+- 你会碰到：自动化软件开发、多角色研究助手
+- 相关：[Agent](#agent)、[MCP](#mcp)
+
+[↑ 返回词条列表](#terms)
+
 <h2 id="multimodal">Multimodal（多模态）</h2>
 
 模型可同时处理文本、图像、音频等多种输入或输出。
@@ -171,7 +216,16 @@ tags: ["AI", "术语", "词典"]
 你给模型的输入指令，用以引导其输出。
 
 - 你会碰到：写清需求、加示例、限定格式，都属于提示词工程
-- 相关：[Temperature](#temperature)
+- 相关：[Temperature](#temperature)、[Prompt Engineering](#prompt-engineering)
+
+[↑ 返回词条列表](#terms)
+
+<h2 id="prompt-engineering">Prompt Engineering（提示词工程）</h2>
+
+通过设计输入提示来引导模型输出更准、更有用的技术，无需改动模型参数。常见做法有零样本、少样本、思维链等。
+
+- 你会碰到：想让模型稳定按格式、按步骤作答时
+- 相关：[Prompt](#prompt)、[Temperature](#temperature)
 
 [↑ 返回词条列表](#terms)
 
@@ -188,7 +242,7 @@ tags: ["AI", "术语", "词典"]
 先检索相关资料，再让模型作答，用外部知识补足模型自身记忆。
 
 - 你会碰到：带「引用来源」的问答系统
-- 相关：[Embedding](#embedding)、[Hallucination](#hallucination)
+- 相关：[Embedding](#embedding)、[Hallucination](#hallucination)、[Vector Database](#vector-database)
 
 [↑ 返回词条列表](#terms)
 
@@ -200,11 +254,20 @@ tags: ["AI", "术语", "词典"]
 
 [↑ 返回词条列表](#terms)
 
+<h2 id="rnn">RNN（循环神经网络）</h2>
+
+一种处理序列数据的网络，通过隐藏状态在前后时间步间传递信息，从而捕捉时序依赖。LSTM、GRU 是其常见变体。
+
+- 你会碰到：语音识别、机器翻译、时间序列预测
+- 相关：[Transformer](#transformer)、[CNN](#cnn)
+
+[↑ 返回词条列表](#terms)
+
 <h2 id="temperature">Temperature（温度）</h2>
 
 控制输出随机性的参数。值越高越发散，越低越确定。
 
-- 相关：[Prompt](#prompt)
+- 相关：[Prompt](#prompt)、[Prompt Engineering](#prompt-engineering)
 
 [↑ 返回词条列表](#terms)
 
@@ -221,7 +284,16 @@ tags: ["AI", "术语", "词典"]
 
 当前大语言模型普遍采用的基础神经网络架构，以注意力机制为核心。
 
-- 相关：[GPT](#gpt)、[LLM](#llm)、[MoE](#moe)
+- 相关：[GPT](#gpt)、[LLM](#llm)、[MoE](#moe)、[Attention](#attention)
+
+[↑ 返回词条列表](#terms)
+
+<h2 id="vector-database">Vector Database（向量数据库）</h2>
+
+专门存储与检索高维向量的数据库，用近似最近邻搜索在海量向量中快速找相似项。
+
+- 你会碰到：搭建 RAG、语义搜索时作为知识库底座
+- 相关：[Embedding](#embedding)、[RAG](#rag)
 
 [↑ 返回词条列表](#terms)
 
