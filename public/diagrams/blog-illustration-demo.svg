@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 240" width="360" height="240" role="img" aria-label="笔记本与一盆小绿植的扁平插画">
+  <rect x="40" y="70" width="120" height="120" rx="10" fill="#cfe3d8" stroke="#356b54" stroke-width="2"/>
+  <rect x="160" y="70" width="120" height="120" rx="10" fill="#cfe3d8" stroke="#356b54" stroke-width="2"/>
+  <line x1="160" y1="70" x2="160" y2="190" stroke="#356b54" stroke-width="3"/>
+  <rect x="55" y="95" width="90" height="7" rx="3" fill="#8fc4ab"/>
+  <rect x="55" y="112" width="90" height="7" rx="3" fill="#8fc4ab"/>
+  <rect x="55" y="129" width="70" height="7" rx="3" fill="#8fc4ab"/>
+  <rect x="175" y="95" width="90" height="7" rx="3" fill="#8fc4ab"/>
+  <rect x="175" y="112" width="90" height="7" rx="3" fill="#8fc4ab"/>
+  <rect x="175" y="129" width="64" height="7" rx="3" fill="#8fc4ab"/>
+  <path d="M270 182 L330 182 L322 226 L278 226 Z" fill="#356b54"/>
+  <rect x="266" y="172" width="68" height="13" rx="6" fill="#6fa389"/>
+  <line x1="300" y1="172" x2="300" y2="128" stroke="#356b54" stroke-width="4" stroke-linecap="round"/>
+  <ellipse cx="282" cy="144" rx="22" ry="11" fill="#6fa389" transform="rotate(-35 282 144)"/>
+  <ellipse cx="320" cy="139" rx="22" ry="11" fill="#8fc4ab" transform="rotate(35 320 139)"/>
+  <ellipse cx="300" cy="120" rx="16" ry="9" fill="#6fa389"/>
+  <path d="M150 42 Q150 52 160 52 Q150 52 150 62 Q150 52 140 52 Q150 52 150 42 Z" fill="#356b54"/>
+  <path d="M340 87 Q340 95 348 95 Q340 95 340 103 Q340 95 332 95 Q340 95 340 87 Z" fill="#356b54"/>
+  <path d="M250 52 Q250 58 256 58 Q250 58 250 64 Q250 58 244 58 Q250 58 250 52 Z" fill="#8fc4ab"/>
+</svg>

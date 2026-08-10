@@ -536,3 +536,38 @@ input[name='theme-toggle'] {
     padding: 0.6rem 1rem !important;
   }
 }
+
+/* ===== 文字特效工具类（卡通 / 花式文字） ===== */
+/* 渐变文字：背景裁成文字形状，字色透明；-webkit-text-fill-color 兼顾 Safari */
+.grad-text {
+  background: linear-gradient(100deg, var(--primary-color), #8fc4ab);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600;
+}
+/* 马克笔高亮：背景只覆盖底部一截，像荧光笔划过；color-mix 让它在暗色模式也不刺眼 */
+.mark {
+  background: linear-gradient(transparent 55%, color-mix(in srgb, var(--primary-color) 45%, transparent) 55%);
+  padding: 0 0.14em;
+  border-radius: 3px;
+}
+/* 空心描边文字 */
+.outline-text {
+  -webkit-text-stroke: 2px var(--text-main);
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+/* 融入版面的插画：去掉默认边框/阴影/圆角，透明背景直接坐在底色上，不再像贴纸 */
+.prose figure.art {
+  margin: 1.4em auto;
+  text-align: center;
+}
+.prose figure.art img {
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  margin: 0 auto;
+  max-width: 300px;
+}
