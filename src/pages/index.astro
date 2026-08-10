@@ -30,9 +30,36 @@ const last = Math.max(1, Math.ceil(posts.length / pageSize));
 			}
 
 			/* ===== 站点身份区（masthead） ===== */
+			/* 满幅 hero：用负 margin 突破 960px 内容栏，让聚光能横跨整个视口，
+			   避免鼠标靠近两侧时被窄栏裁出硬边；文字再用内层容器收回 960px */
 			.masthead {
-				padding: 5rem 0 3rem;
+				position: relative;
+				overflow: hidden;
+				margin-left: calc(50% - 50vw);
+				margin-right: calc(50% - 50vw);
+			}
+
+			.masthead-inner {
+				max-width: var(--wide-width);
+				margin: 0 auto;
+				padding: 5rem 1.25rem 3rem;
 				border-bottom: 1px solid var(--border-color);
+				position: relative;
+				z-index: 1;
+			}
+
+			/* 首页聚光：一团主题色柔光跟着鼠标走，融进背景 */
+			.masthead::after {
+				content: "";
+				position: absolute;
+				inset: 0;
+				z-index: 0;
+				pointer-events: none;
+				background: radial-gradient(
+					600px circle at var(--mx, 50%) var(--my, 50%),
+					color-mix(in srgb, var(--primary-color) 18%, transparent),
+					transparent 68%
+				);
 			}
 
 			.kicker {
@@ -235,11 +262,13 @@ const last = Math.max(1, Math.ceil(posts.length / pageSize));
 		<Header />
 		<main>
 			<section class="masthead">
-				<p class="kicker">Wang's Notes</p>
-				<h1 class="statement">把构建的过程，写成可追溯的笔记。</h1>
-				<p class="lede">
-					这里收录技术实践、本地 AI 与个人思考。每一篇都来自真实的工程实践，并记录它一路长成的轨迹。
-				</p>
+				<div class="masthead-inner">
+					<p class="kicker">Wang's Notes</p>
+					<h1 class="statement">把构建的过程，写成可追溯的笔记。</h1>
+					<p class="lede">
+						这里收录技术实践、本地 AI 与个人思考。每一篇都来自真实的工程实践，并记录它一路长成的轨迹。
+					</p>
+				</div>
 			</section>
 
 			{
@@ -280,5 +309,23 @@ const last = Math.max(1, Math.ceil(posts.length / pageSize));
 			</section>
 		</main>
 		<Footer />
+		<script>
+			const mast = document.querySelector('.masthead');
+			if (mast && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+				let raf = 0;
+				let px = 0, py = 0;
+				mast.addEventListener('pointermove', (e) => {
+					const r = mast.getBoundingClientRect();
+					px = e.clientX - r.left;
+					py = e.clientY - r.top;
+					if (!raf)
+						raf = requestAnimationFrame(() => {
+							mast.style.setProperty('--mx', px + 'px');
+							mast.style.setProperty('--my', py + 'px');
+							raf = 0;
+						});
+				});
+			}
+		</script>
 	</body>
 </html>
