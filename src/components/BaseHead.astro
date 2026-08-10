@@ -6,6 +6,7 @@ import type { ImageMetadata } from 'astro';
 import FallbackImage from '../assets/blog-placeholder-1.jpg';
 import { SITE_TITLE } from '../consts';
 import { Font } from 'astro:assets';
+import Analytics from '@vercel/analytics/astro';
 
 interface Props {
 	title: string;
@@ -76,3 +77,6 @@ const ogImageURL = ogImage ? new URL(ogImage, Astro.site) : new URL('/og/default
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content={ogImageURL} />
+
+<!-- Vercel Web Analytics（不种 cookie，隐私友好） -->
+<Analytics />

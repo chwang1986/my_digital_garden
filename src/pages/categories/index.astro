@@ -1,0 +1,268 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
+import { seriesMeta } from '../../data/series';
+
+const posts = await getCollection('blog');
+
+const themeCounts = new Map<string, number>();
+const seriesCounts = new Map<string, number>();
+const tagCounts = new Map<string, number>();
+for (const p of posts) {
+	if (p.data.theme) themeCounts.set(p.data.theme, (themeCounts.get(p.data.theme) ?? 0) + 1);
+	if (p.data.series) seriesCounts.set(p.data.series, (seriesCounts.get(p.data.series) ?? 0) + 1);
+	for (const t of p.data.tags) tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1);
+}
+const themes = [...themeCounts.entries()].sort((a, b) => b[1] - a[1]);
+const seriesList = [...seriesCounts.entries()].sort((a, b) => b[1] - a[1]);
+const tags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]);
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={`分类 - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+		<style>
+			main {
+				max-width: var(--wide-width);
+				margin: 0 auto;
+				padding: 3.5rem 1.25rem 1rem;
+			}
+			.page-head {
+				margin-bottom: 1.8rem;
+			}
+			.page-head h1 {
+				font-size: 2.6rem;
+				font-weight: 800;
+				letter-spacing: -0.02em;
+				margin: 0 0 0.5rem;
+			}
+			.page-head p {
+				margin: 0;
+				color: var(--text-secondary);
+				font-size: 1.15rem;
+			}
+
+			/* CSS-only tabs */
+			.tab-radio {
+				position: absolute;
+				width: 1px;
+				height: 1px;
+				opacity: 0;
+				pointer-events: none;
+			}
+			.tabs {
+				display: flex;
+				gap: 0.5rem;
+				margin-bottom: 2rem;
+				border-bottom: 1px solid var(--border-color);
+			}
+			.tabs label {
+				padding: 0.6rem 1.1rem;
+				font-size: 1rem;
+				font-weight: 500;
+				color: var(--text-secondary);
+				cursor: pointer;
+				border-bottom: 2px solid transparent;
+				margin-bottom: -1px;
+				transition:
+					color 0.2s ease,
+					border-color 0.2s ease;
+			}
+			.tabs label:hover {
+				color: var(--text-main);
+			}
+			#tab-theme:checked ~ .tabs label[for='tab-theme'],
+			#tab-series:checked ~ .tabs label[for='tab-series'],
+			#tab-tags:checked ~ .tabs label[for='tab-tags'] {
+				color: var(--text-main);
+				border-bottom-color: var(--primary-color);
+				font-weight: 600;
+			}
+
+			.panel {
+				display: none;
+			}
+			#tab-theme:checked ~ .panel-theme,
+			#tab-series:checked ~ .panel-series,
+			#tab-tags:checked ~ .panel-tags {
+				display: block;
+			}
+
+			.panel h2 {
+				font-size: 1.05rem;
+				font-weight: 600;
+				color: var(--text-secondary);
+				margin: 0 0 1rem;
+			}
+
+			/* 主题 / 标签 共用胶囊云 */
+			.cloud {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.75rem;
+			}
+			.cloud a {
+				display: inline-flex;
+				align-items: baseline;
+				gap: 0.4rem;
+				text-decoration: none;
+				color: var(--primary-color);
+				border: 1px solid color-mix(in srgb, var(--primary-color) 30%, transparent);
+				border-radius: 99em;
+				padding: 0.45rem 0.95rem;
+				font-size: 0.95rem;
+				transition:
+					background 0.2s ease,
+					color 0.2s ease;
+			}
+			.cloud a:hover {
+				background: var(--primary-color);
+				color: var(--on-accent);
+			}
+			.cloud .count {
+				font-family: var(--font-mono);
+				font-size: 0.78rem;
+				opacity: 0.7;
+			}
+
+			/* 系列卡片 */
+			.series-list {
+				display: grid;
+				grid-template-columns: repeat(2, 1fr);
+				gap: 1.25rem;
+			}
+			.series-card {
+				display: block;
+				text-decoration: none;
+				color: var(--text-main);
+				border: 1px solid var(--border-color);
+				border-radius: 14px;
+				padding: 1.4rem 1.5rem;
+				background: var(--card-bg);
+				transition:
+					border-color 0.2s ease,
+					transform 0.2s ease,
+					box-shadow 0.2s ease;
+			}
+			.series-card:hover {
+				border-color: color-mix(in srgb, var(--primary-color) 45%, transparent);
+				transform: translateY(-2px);
+				box-shadow: 0 8px 24px -16px color-mix(in srgb, var(--primary-color) 60%, transparent);
+			}
+			.series-card h3 {
+				margin: 0 0 0.5rem;
+				font-size: 1.35rem;
+				font-weight: 700;
+				display: flex;
+				align-items: baseline;
+				gap: 0.6rem;
+			}
+			.series-card .count {
+				font-family: var(--font-mono);
+				font-size: 0.8rem;
+				font-weight: 500;
+				color: var(--primary-color);
+			}
+			.series-card p {
+				margin: 0;
+				font-size: 0.95rem;
+				line-height: 1.6;
+				color: var(--text-secondary);
+			}
+
+			.empty {
+				color: var(--text-secondary);
+			}
+
+			@media (max-width: 760px) {
+				.series-list {
+					grid-template-columns: 1fr;
+				}
+				.page-head h1 {
+					font-size: 2rem;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<header class="page-head">
+				<h1>分类</h1>
+				<p>按主题、系列、标签三种方式浏览文章，挑一个看。</p>
+			</header>
+
+			<input class="tab-radio" type="radio" name="cat-tab" id="tab-theme" checked />
+			<input class="tab-radio" type="radio" name="cat-tab" id="tab-series" />
+			<input class="tab-radio" type="radio" name="cat-tab" id="tab-tags" />
+
+			<nav class="tabs">
+				<label for="tab-theme">主题</label>
+				<label for="tab-series">系列</label>
+				<label for="tab-tags">标签</label>
+			</nav>
+
+			<section class="panel panel-theme">
+				<h2>主题 · 按话题归档，每篇只属一个</h2>
+				{
+					themes.length > 0 ? (
+						<div class="cloud">
+							{themes.map(([c, n]) => (
+								<a href={`/themes/${encodeURIComponent(c)}/`}>
+									{c}
+									<span class="count">{n}</span>
+								</a>
+							))}
+						</div>
+					) : (
+						<p class="empty">还没有主题。</p>
+					)
+				}
+			</section>
+
+			<section class="panel panel-series">
+				<h2>系列 · 有序连续篇，按阅读顺序排</h2>
+				{
+					seriesList.length > 0 ? (
+						<div class="series-list">
+							{seriesList.map(([name, n]) => (
+								<a class="series-card" href={`/series/${encodeURIComponent(name)}/`}>
+									<h3>
+										{name}
+										<span class="count">{n} 篇</span>
+									</h3>
+									<p>{seriesMeta[name]?.description ?? '一个有序的连续篇。'}</p>
+								</a>
+							))}
+						</div>
+					) : (
+						<p class="empty">还没有系列。</p>
+					)
+				}
+			</section>
+
+			<section class="panel panel-tags">
+				<h2>标签 · 自由标记，可多个</h2>
+				{
+					tags.length > 0 ? (
+						<div class="cloud">
+							{tags.map(([t, n]) => (
+								<a href={`/tags/${encodeURIComponent(t)}/`}>
+									{t}
+									<span class="count">{n}</span>
+								</a>
+							))}
+						</div>
+					) : (
+						<p class="empty">还没有标签。</p>
+					)
+				}
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>

@@ -13,12 +13,6 @@ tags: ['Ollama', '安装', '本地大模型']
 
 下面用到的命令都要在"终端"里敲（macOS 按 Cmd+空格 搜 Terminal；Windows 搜 PowerShell；Linux 一般叫终端）。如果你平时没怎么碰过，不用慌，跟着一步步复制粘贴就行。
 
-## 这篇文章的目标
-
-- 把 Ollama 装到你的电脑上（macOS / Windows / Linux 任选一种）；
-- 确认装好了——`ollama --version` 能打出版本号；
-- 跑通第一个模型，进入对话、再退出来。
-
 ## macOS
 
 两种方式，随便挑：
