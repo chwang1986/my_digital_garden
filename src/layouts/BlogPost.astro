@@ -696,6 +696,23 @@ const jsonLd = {
 					chev.textContent = wrap.open ? '收起' : '展开';
 				});
 			});
+
+			// 文章内鼠标聚光演示：把光标在 .spotlight-demo 内的坐标写进 --mx/--my
+			if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+				document.querySelectorAll('.spotlight-demo').forEach((box) => {
+					let raf = 0;
+					box.addEventListener('pointermove', (e) => {
+						const r = box.getBoundingClientRect();
+						const x = e.clientX - r.left;
+						const y = e.clientY - r.top;
+						if (!raf) raf = requestAnimationFrame(() => {
+							box.style.setProperty('--mx', x + 'px');
+							box.style.setProperty('--my', y + 'px');
+							raf = 0;
+						});
+					});
+				});
+			}
 		</script>
 	</body>
 </html>
