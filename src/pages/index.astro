@@ -16,6 +16,21 @@ const pageSize = 12;
 const [featured, ...rest] = posts;
 const gridPosts = rest.slice(0, pageSize - 1);
 const last = Math.max(1, Math.ceil(posts.length / pageSize));
+
+// 主题 / 系列计数，用于首页「按桶浏览」入口
+const themeCounts = new Map<string, number>();
+const seriesCounts = new Map<string, number>();
+for (const post of posts) {
+	const t = post.data.theme || '随笔';
+	themeCounts.set(t, (themeCounts.get(t) ?? 0) + 1);
+	if (post.data.series) seriesCounts.set(post.data.series, (seriesCounts.get(post.data.series) ?? 0) + 1);
+}
+const themes = [...themeCounts.entries()]
+	.map(([name, count]) => ({ name, count }))
+	.sort((a, b) => b.count - a.count);
+const seriesList = [...seriesCounts.entries()]
+	.map(([name, count]) => ({ name, count }))
+	.sort((a, b) => b.count - a.count);
 ---
 
 <!doctype html>
@@ -214,6 +229,83 @@ const last = Math.max(1, Math.ceil(posts.length / pageSize));
 				color: var(--primary-strong);
 			}
 
+			/* ===== 按主题 / 系列浏览 ===== */
+			.browse {
+				padding: 2.75rem 0 1rem;
+				margin-top: 1rem;
+				border-top: 1px solid var(--border-color);
+			}
+
+			.browse-group + .browse-group {
+				margin-top: 1.75rem;
+			}
+
+			.browse-head {
+				display: flex;
+				align-items: baseline;
+				justify-content: space-between;
+				margin-bottom: 1.1rem;
+			}
+
+			.browse-head h2 {
+				font-size: 0.82rem;
+				font-weight: 600;
+				letter-spacing: 0.14em;
+				text-transform: uppercase;
+				color: var(--text-secondary);
+				margin: 0;
+			}
+
+			.browse-head .view-all {
+				font-size: 0.9rem;
+				font-weight: 600;
+				color: var(--primary-color);
+				text-decoration: none;
+			}
+
+			.browse-head .view-all:hover {
+				color: var(--primary-strong);
+			}
+
+			.browse-chips {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.6rem;
+			}
+
+			.chip {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.5rem;
+				text-decoration: none;
+				font-size: 0.92rem;
+				color: var(--text-main);
+				padding: 0.45rem 0.85rem;
+				border: 1px solid var(--border-color);
+				border-radius: 99em;
+				background: var(--surface);
+				transition:
+					border-color 0.2s ease,
+					background 0.2s ease,
+					color 0.2s ease,
+					transform 0.2s ease;
+			}
+
+			.chip:hover {
+				border-color: var(--primary-color);
+				color: var(--primary-color);
+				transform: translateY(-2px);
+			}
+
+			.chip .count {
+				font-family: var(--font-mono);
+				font-size: 0.72rem;
+				color: var(--text-secondary);
+				background: color-mix(in srgb, var(--primary-soft) 32%, transparent);
+				padding: 0.05rem 0.45rem;
+				border-radius: 99em;
+			}
+
 			/* 小红书式：竖向卡片网格（左→右按时间流） */
 			.post-list {
 				display: grid;
@@ -306,6 +398,44 @@ const last = Math.max(1, Math.ceil(posts.length / pageSize));
 					{gridPosts.map((post) => <PostCard post={post} />)}
 				</div>
 				<Pagination current={1} last={last} baseHref="/page/" firstHref="/" />
+			</section>
+
+			<section class="browse">
+				<div class="browse-group">
+					<div class="browse-head">
+						<h2>按主题浏览</h2>
+						<a class="view-all" href="/categories">全部分类 →</a>
+					</div>
+					<div class="browse-chips">
+						{
+							themes.map((t) => (
+								<a class="chip" href={`/themes/${encodeURIComponent(t.name)}/`}>
+									{t.name}
+									<span class="count">{t.count}</span>
+								</a>
+							))
+						}
+					</div>
+				</div>
+				{
+					seriesList.length > 0 && (
+						<div class="browse-group">
+							<div class="browse-head">
+								<h2>按系列浏览</h2>
+							</div>
+							<div class="browse-chips">
+								{
+									seriesList.map((s) => (
+										<a class="chip" href={`/series/${encodeURIComponent(s.name)}/`}>
+											{s.name}
+											<span class="count">{s.count}</span>
+										</a>
+									))
+								}
+							</div>
+						</div>
+					)
+				}
 			</section>
 		</main>
 		<Footer />
