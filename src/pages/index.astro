@@ -343,6 +343,12 @@ const seriesList = [...seriesCounts.entries()]
 				}
 			}
 
+			@media (max-width: 560px) {
+				.post-list {
+					grid-template-columns: 1fr; /* 手机上文章卡片单列，避免挤成两列 */
+				}
+			}
+
 			@media (max-width: 480px) {
 				.statement {
 					font-size: 1.7rem;
