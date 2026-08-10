@@ -365,6 +365,35 @@ td {
   border-bottom: 1px solid var(--border-color);
 }
 
+/* 文章内：AI 词典顶部索引，字母分节、蓝色条头 */
+.prose .glossary-index {
+  margin: 1.25rem 0 1.75rem;
+}
+.prose .glossary-index .gi-section {
+  margin-bottom: 0.7rem;
+}
+.prose .glossary-index .gi-letter {
+  display: block;
+  background: var(--primary-color);
+  color: var(--bg-color);
+  font-weight: 700;
+  padding: 0.25rem 0.7rem;
+  border-radius: 6px;
+  margin-bottom: 0.35rem;
+}
+.prose .glossary-index .gi-terms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.9rem;
+  padding-left: 0.2rem;
+}
+
+/* 锚点跳转时把标题往下推，避开顶部 sticky 导航栏（约 60px 高） */
+.prose h2[id],
+.prose h3[id] {
+  scroll-margin-top: 5rem;
+}
+
 .container {
   margin: 0 auto;
   max-width: var(--content-width);
