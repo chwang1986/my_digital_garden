@@ -121,4 +121,11 @@ import Search from './Search.astro';
 			font-size: 0.9rem;
 		}
 	}
+
+	/* 超窄屏（≤420px）：收起站名，给导航让出空间，避免顶栏挤换行 */
+	@media (max-width: 420px) {
+		h2 {
+			display: none;
+		}
+	}
 </style>

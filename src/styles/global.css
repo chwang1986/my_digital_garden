@@ -357,6 +357,13 @@ figure {
   padding-bottom: 0.3em;
 }
 
+/* 小屏上块级公式整体缩一点，更易容纳 */
+@media (max-width: 480px) {
+  .katex-display {
+    font-size: 0.85em;
+  }
+}
+
 table {
   border-collapse: collapse;
   font-family: var(--font-body);
@@ -513,5 +520,19 @@ input[name='theme-toggle'] {
   ol {
     font-size: 1.1rem;
     margin: 1.3em 0;
+  }
+}
+
+/* 触摸设备（手机/平板）：放大导航、标签、主题 chip 的点击区域，减少误触 */
+@media (hover: none) and (pointer: coarse) {
+  .internal-links a {
+    padding: 0.55rem 0.15rem !important;
+  }
+  .tag {
+    padding: 0.4rem 0.7rem !important;
+    font-size: 0.8rem !important;
+  }
+  .chip {
+    padding: 0.6rem 1rem !important;
   }
 }
