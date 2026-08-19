@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" width="640" height="480" role="img" aria-label="写作方法">
+  <rect width="640" height="480" fill="#f5f0e6"/>
+  <g fill="none" stroke="#8c7a3f" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="225" y1="205" x2="405" y2="205"/>
+    <line x1="225" y1="245" x2="405" y2="245"/>
+    <line x1="225" y1="285" x2="360" y2="285"/>
+    <path d="M432 172 L356 300"/>
+  </g>
+  <path d="M356 300 L348 314 L366 314 Z" fill="#8c7a3f"/>
+</svg>

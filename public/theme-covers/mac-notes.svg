@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" width="640" height="480" role="img" aria-label="Mac 新手笔记">
+  <rect width="640" height="480" fill="#eaf1f4"/>
+  <g fill="none" stroke="#3f6b80" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="195" y="160" width="250" height="150" rx="14"/>
+    <path d="M165 310 L475 310 L450 340 L190 340 Z"/>
+    <line x1="250" y1="325" x2="390" y2="325"/>
+  </g>
+</svg>

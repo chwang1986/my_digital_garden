@@ -16,10 +16,14 @@ order: 3
 
 Mac 上的包管理器，后面装软件、装环境都靠它。
 
-打开终端，粘贴这行回车：
+国内网络直接跑官方脚本经常卡在 `Connection reset by peer`，所以下面先给**国内镜像装法**（推荐），网络能连 GitHub 时再用官方脚本兜底。
+
+### 国内镜像装法（推荐，中国大陆适用）
+
+用 Gitee 上的 HomebrewCN 脚本，安装时选「中科大镜像源」：
 
 ```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+/bin/bash -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)"
 ```
 
 装完把 Homebrew 加进环境变量（Apple 芯片）：
@@ -29,7 +33,37 @@ echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
 eval "$(/opt/homebrew/bin/brew shellenv)"
 ```
 
-验证：运行 `brew --version`，能看到版本号就算好了。
+验证一下：
+
+```bash
+brew --version
+brew doctor
+```
+
+少量无关警告可忽略，重点看有没有 ERROR。
+
+> ⚠️ HomebrewCN 写进环境变量只对**新克隆的仓库**生效，已经下载的仓库不会自动切换源。手动改一下，否则后面 `brew update` 还是走 GitHub：
+> ```bash
+> git -C "$(brew --repo)" remote set-url origin https://mirrors.ustc.edu.cn/git/homebrew/brew.git
+> git -C "$(brew --repo)" remote -v
+> ```
+> 看到 origin 是中科大（ustc.edu.cn）地址就对。
+
+顺手装几个基础依赖，后面编译 Python、解压模型都用得上：
+
+```bash
+brew install git wget htop cmake openssl ffmpeg xz
+```
+
+其中 `xz` 是给后面可能自己编译 Python 用的，能避免 lzma 模块缺失报错。
+
+### 官方脚本（网络能连 GitHub 时用）
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+装完同样把 Homebrew 加进环境变量（上面那两行 `echo ... >> ~/.zprofile` 和 `eval ...`），再 `brew --version` 验证。
 
 ## 第二步：装 Python
 

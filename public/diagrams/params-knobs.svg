@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 300" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">
+  <rect width="920" height="300" fill="#FAF6EE"/>
+  <text x="460" y="34" font-size="15" fill="#244c3b" text-anchor="middle">参数 = 神经元之间连接的强度，像 270 亿个旋钮</text>
+  <g stroke="#6f6657" stroke-width="1" opacity="0.45">
+    <line x1="140" y1="90" x2="460" y2="80"/>
+    <line x1="140" y1="90" x2="460" y2="140"/>
+    <line x1="140" y1="90" x2="460" y2="200"/>
+    <line x1="140" y1="90" x2="460" y2="260"/>
+    <line x1="140" y1="150" x2="460" y2="80"/>
+    <line x1="140" y1="150" x2="460" y2="140"/>
+    <line x1="140" y1="150" x2="460" y2="200"/>
+    <line x1="140" y1="150" x2="460" y2="260"/>
+    <line x1="140" y1="210" x2="460" y2="80"/>
+    <line x1="140" y1="210" x2="460" y2="140"/>
+    <line x1="140" y1="210" x2="460" y2="200"/>
+    <line x1="140" y1="210" x2="460" y2="260"/>
+    <line x1="140" y1="270" x2="460" y2="80"/>
+    <line x1="140" y1="270" x2="460" y2="140"/>
+    <line x1="140" y1="270" x2="460" y2="200"/>
+    <line x1="140" y1="270" x2="460" y2="260"/>
+    <line x1="460" y1="80" x2="790" y2="170"/>
+    <line x1="460" y1="140" x2="790" y2="170"/>
+    <line x1="460" y1="200" x2="790" y2="170"/>
+    <line x1="460" y1="260" x2="790" y2="170"/>
+  </g>
+  <g fill="#9cc3b0" stroke="#356b54" stroke-width="2">
+    <circle cx="140" cy="90" r="14"/>
+    <circle cx="140" cy="150" r="14"/>
+    <circle cx="140" cy="210" r="14"/>
+    <circle cx="140" cy="270" r="14"/>
+    <circle cx="460" cy="80" r="14"/>
+    <circle cx="460" cy="140" r="14"/>
+    <circle cx="460" cy="200" r="14"/>
+    <circle cx="460" cy="260" r="14"/>
+  </g>
+  <circle cx="790" cy="170" r="18" fill="#356b54"/>
+  <g stroke="#356b54" stroke-width="2" fill="#FAF6EE">
+    <circle cx="460" cy="80" r="9"/><line x1="460" y1="80" x2="466" y2="74"/>
+    <circle cx="460" cy="140" r="9"/><line x1="460" y1="140" x2="466" y2="134"/>
+    <circle cx="460" cy="200" r="9"/><line x1="460" y1="200" x2="466" y2="194"/>
+  </g>
+  <text x="140" y="292" font-size="12" fill="#6f6657" text-anchor="middle">输入层</text>
+  <text x="790" y="208" font-size="12" fill="#6f6657" text-anchor="middle">输出</text>
+  <text x="300" y="292" font-size="12" fill="#6f6657">○ 小圆点 = 旋钮（连接强度，训练时反复拧动）</text>
+</svg>

@@ -9,6 +9,7 @@ import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import FormattedDate from '../components/FormattedDate.astro';
 import { readingTime } from '../utils/reading-time';
+import { themeCover } from '../utils/theme-cover';
 import { sortPosts } from '../utils/sort-posts';
 
 const posts = sortPosts(await getCollection('blog'));
@@ -373,11 +374,13 @@ const seriesList = [...seriesCounts.entries()]
 				featured && (
 					<section class="featured">
 						<a class="featured-link" href={`/blog/${featured.id}/`}>
-							<div class="featured-thumb">
-								{featured.data.heroImage && (
-									<Image src={featured.data.heroImage} alt="" width={600} height={400} />
-								)}
-							</div>
+						<div class="featured-thumb">
+							{featured.data.heroImage ? (
+								<Image src={featured.data.heroImage} alt="" width={600} height={400} />
+							) : (
+								<img src={themeCover(featured.data.theme)} alt="" width={600} height={400} loading="lazy" />
+							)}
+						</div>
 							<div class="featured-body">
 								<p class="featured-tag">最新发布</p>
 								<h2 class="featured-title">{featured.data.title}</h2>

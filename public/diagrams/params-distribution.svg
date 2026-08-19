@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 320" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">
+  <rect width="920" height="320" fill="#FAF6EE"/>
+  <text x="460" y="34" font-size="15" fill="#244c3b" text-anchor="middle">一个 Transformer 模块里的参数分布</text>
+  <rect x="250" y="64" width="420" height="216" rx="10" fill="none" stroke="#356b54" stroke-width="2"/>
+  <text x="460" y="84" font-size="12" fill="#6f6657" text-anchor="middle">Transformer 模块（堆叠 N 层）</text>
+  <rect x="290" y="96" width="340" height="46" rx="6" fill="#9cc3b0"/>
+  <text x="300" y="118" font-size="13" fill="#244c3b">注意力层：Q / K / V / O 投影矩阵</text>
+  <text x="610" y="118" font-size="11" fill="#244c3b" text-anchor="end">≈ 1/3</text>
+  <rect x="290" y="152" width="340" height="46" rx="6" fill="#356b54"/>
+  <text x="300" y="174" font-size="13" fill="#FAF6EE">前馈网络 FFN（两个线性层）</text>
+  <text x="610" y="174" font-size="11" fill="#FAF6EE" text-anchor="end">≈ 2/3</text>
+  <rect x="290" y="208" width="340" height="40" rx="6" fill="#9cc3b0"/>
+  <text x="300" y="232" font-size="13" fill="#244c3b">层归一化 LayerNorm（缩放 + 偏移）</text>
+  <text x="610" y="232" font-size="11" fill="#244c3b" text-anchor="end">量很小</text>
+  <text x="460" y="300" font-size="12" fill="#6f6657" text-anchor="middle">嵌入层 Embedding：词向量矩阵，大小随词表走</text>
+</svg>

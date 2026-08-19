@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" width="640" height="480" role="img" aria-label="随笔">
+  <rect width="640" height="480" fill="#eef3ea"/>
+  <g fill="none" stroke="#356b54" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M320 155 C 385 205 385 320 322 352 C 300 320 270 250 320 155 Z"/>
+    <line x1="322" y1="180" x2="322" y2="345"/>
+    <path d="M322 230 L300 215"/>
+    <path d="M322 265 L298 252"/>
+    <path d="M322 300 L302 290"/>
+  </g>
+</svg>

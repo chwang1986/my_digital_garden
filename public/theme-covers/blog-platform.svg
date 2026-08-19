@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" width="640" height="480" role="img" aria-label="自建 blog 平台">
+  <rect width="640" height="480" fill="#e8f1ef"/>
+  <g fill="none" stroke="#2f7a6b" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="180" y="160" width="280" height="175" rx="18"/>
+    <line x1="180" y1="205" x2="460" y2="205"/>
+  </g>
+  <g fill="#2f7a6b">
+    <circle cx="208" cy="183" r="7"/>
+    <circle cx="230" cy="183" r="7"/>
+    <circle cx="252" cy="183" r="7"/>
+  </g>
+  <text x="320" y="292" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="58" font-weight="700" text-anchor="middle" fill="#2f7a6b">&lt;/&gt;</text>
+</svg>

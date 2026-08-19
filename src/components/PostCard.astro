@@ -3,6 +3,7 @@ import type { CollectionEntry } from 'astro:content';
 import { Image } from 'astro:assets';
 import FormattedDate from './FormattedDate.astro';
 import { readingTime } from '../utils/reading-time';
+import { themeCover } from '../utils/theme-cover';
 
 interface Props {
 	post: CollectionEntry<'blog'>;
@@ -15,8 +16,10 @@ const p = post.data;
 <article class="post-card">
 	<a class="post-card-media" href={`/blog/${post.id}/`} aria-label={p.title}>
 		{
-			p.heroImage && (
+			p.heroImage ? (
 				<Image src={p.heroImage} alt="" width={640} height={480} />
+			) : (
+				<img src={themeCover(p.theme)} alt="" width={640} height={480} loading="lazy" />
 			)
 		}
 	</a>
