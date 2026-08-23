@@ -2,23 +2,18 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import PostCard from '../components/PostCard.astro';
-import Pagination from '../components/Pagination.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import { getCollection } from 'astro:content';
-import { Image } from 'astro:assets';
 import FormattedDate from '../components/FormattedDate.astro';
 import { readingTime } from '../utils/reading-time';
-import { themeCover } from '../utils/theme-cover';
 import { sortPosts } from '../utils/sort-posts';
 
 const posts = sortPosts(await getCollection('blog'));
-const pageSize = 12;
 const [featured, ...rest] = posts;
-const gridPosts = rest.slice(0, pageSize - 1);
-const last = Math.max(1, Math.ceil(posts.length / pageSize));
+// 首页只突出最近文章：头条 1 篇 + 下方精简列表 3 篇
+const recent = rest.slice(0, 3);
 
-// 主题 / 系列计数，用于首页「按桶浏览」入口
+// 主题 / 系列计数
 const themeCounts = new Map<string, number>();
 const seriesCounts = new Map<string, number>();
 for (const post of posts) {
@@ -45,220 +40,314 @@ const seriesList = [...seriesCounts.entries()]
 				padding: 0 1.25rem;
 			}
 
-			/* ===== 站点身份区（masthead） ===== */
-			/* 满幅 hero：用负 margin 突破 960px 内容栏，让聚光能横跨整个视口，
-			   避免鼠标靠近两侧时被窄栏裁出硬边；文字再用内层容器收回 960px */
-			.masthead {
+			/* ===== Hero：聚焦文字，弱化装饰 ===== */
+			.hero {
 				position: relative;
-				overflow: hidden;
-				margin-left: calc(50% - 50vw);
-				margin-right: calc(50% - 50vw);
-			}
-
-			.masthead-inner {
-				max-width: var(--wide-width);
-				margin: 0 auto;
-				padding: 5rem 1.25rem 3rem;
+				padding: 4rem 0 3rem;
 				border-bottom: 1px solid var(--border-color);
-				position: relative;
-				z-index: 1;
 			}
 
-			/* 首页聚光：一团主题色柔光跟着鼠标走，融进背景 */
-			.masthead::after {
-				content: "";
-				position: absolute;
-				inset: 0;
-				z-index: 0;
-				pointer-events: none;
-				background: radial-gradient(
-					600px circle at var(--mx, 50%) var(--my, 50%),
-					color-mix(in srgb, var(--primary-color) 18%, transparent),
-					transparent 68%
-				);
-			}
-
-			.kicker {
+			.hero-kicker {
 				font-family: var(--font-mono);
-				font-size: 0.8rem;
+				font-size: 0.78rem;
 				font-weight: 500;
-				letter-spacing: 0.22em;
+				letter-spacing: 0.15em;
 				text-transform: uppercase;
 				color: var(--primary-color);
 				margin: 0 0 1.4rem;
+				display: inline-flex;
+				align-items: center;
+				gap: 0.5rem;
 			}
 
-			.statement {
-				font-size: 2.6rem;
-				font-weight: 600;
-				line-height: 1.18;
-				letter-spacing: -0.02em;
-				margin: 0 0 1.3rem;
+			.hero-kicker .pulse {
+				width: 7px;
+				height: 7px;
+				border-radius: 50%;
+				background: var(--primary-color);
+				box-shadow: 0 0 0 0 var(--glow);
+				animation: pulse 2.2s ease-out infinite;
+			}
+
+			@keyframes pulse {
+				0% {
+					box-shadow: 0 0 0 0 var(--glow);
+				}
+				70% {
+					box-shadow: 0 0 0 7px transparent;
+				}
+				100% {
+					box-shadow: 0 0 0 0 transparent;
+				}
+			}
+
+			.hero-title {
+				font-size: 3.2rem;
+				font-weight: 800;
+				line-height: 1.12;
+				letter-spacing: -0.025em;
+				margin: 0 0 1.2rem;
 				color: var(--text-main);
-				max-width: 18ch;
+				max-width: 16ch;
 			}
 
-			.lede {
+			.hero-lede {
 				font-size: 1.15rem;
-				line-height: 1.75;
+				line-height: 1.7;
 				color: var(--text-secondary);
 				margin: 0;
 				max-width: 34rem;
 			}
 
-			/* ===== 精选首篇 ===== */
+			/* ===== 头条（最新一篇，做主角） ===== */
 			.featured {
-				padding: 3rem 0 1rem;
+				padding: 2.75rem 0 1rem;
 			}
 
 			.featured-link {
-				display: flex;
-				gap: 2rem;
-				align-items: stretch;
+				position: relative;
+				display: block;
 				text-decoration: none;
 				color: var(--text-main);
-				border-radius: 20px;
-				padding: 1.25rem;
-				border: 1px solid transparent;
+				border-radius: 16px;
+				border: 1px solid var(--border-color);
+				background: var(--surface);
 				transition:
-					background 0.25s ease,
-					border-color 0.25s ease;
+					transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+					box-shadow 0.28s ease,
+					border-color 0.28s ease;
+			}
+
+			.featured-link::after {
+				content: "";
+				position: absolute;
+				inset: -1px;
+				border-radius: inherit;
+				padding: 1px;
+				background: linear-gradient(
+					120deg,
+					transparent 30%,
+					var(--primary-color),
+					var(--primary-2),
+					transparent 70%
+				);
+				background-size: 220% 220%;
+				-webkit-mask:
+					linear-gradient(#fff 0 0) content-box,
+					linear-gradient(#fff 0 0);
+				-webkit-mask-composite: xor;
+				mask-composite: exclude;
+				opacity: 0;
+				transition: opacity 0.3s ease;
+				pointer-events: none;
 			}
 
 			.featured-link:hover {
-				background: color-mix(in srgb, var(--primary-soft) 12%, transparent);
-				border-color: color-mix(in srgb, var(--primary-color) 22%, transparent);
+				transform: translateY(-3px);
+				box-shadow: var(--glow-sm);
+				border-color: transparent;
 			}
 
-			.featured-thumb {
-				width: 300px;
-				flex-shrink: 0;
-				border-radius: 14px;
-				overflow: hidden;
-				background: color-mix(in srgb, var(--primary-soft) 28%, var(--background-body));
+			.featured-link:hover::after {
+				opacity: 1;
+				animation: border-flow 2.4s linear infinite;
 			}
 
-			.featured-thumb :global(img) {
-				width: 100%;
-				height: 100%;
-				object-fit: cover;
-				display: block;
-				transition: transform 0.4s ease;
-			}
-
-			.featured-link:hover .featured-thumb :global(img) {
-				transform: scale(1.04);
+			@keyframes border-flow {
+				0% {
+					background-position: 0% 50%;
+				}
+				100% {
+					background-position: 220% 50%;
+				}
 			}
 
 			.featured-body {
-				flex: 1;
-				min-width: 0;
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
+				padding: 1.8rem 1.9rem 2rem;
 			}
 
 			.featured-tag {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.4rem;
 				font-family: var(--font-mono);
-				font-size: 0.78rem;
-				letter-spacing: 0.12em;
+				font-size: 0.72rem;
+				letter-spacing: 0.1em;
 				text-transform: uppercase;
 				color: var(--primary-color);
-				margin: 0 0 0.9rem;
+				margin: 0 0 0.8rem;
+			}
+
+			.featured-tag::before {
+				content: "";
+				width: 6px;
+				height: 6px;
+				border-radius: 50%;
+				background: var(--primary-color);
 			}
 
 			.featured-title {
-				font-size: 1.7rem;
-				font-weight: 700;
-				line-height: 1.3;
-				margin: 0 0 0.7rem;
+				font-size: 2.3rem;
+				font-weight: 800;
+				line-height: 1.25;
+				letter-spacing: -0.02em;
+				margin: 0 0 0.8rem;
 				color: var(--text-main);
+				background: linear-gradient(
+					100deg,
+					var(--text-main) 0%,
+					var(--text-main) 55%,
+					var(--primary-strong) 100%
+				);
+				-webkit-background-clip: text;
+				background-clip: text;
+				color: transparent;
+				-webkit-text-fill-color: transparent;
 			}
 
 			.featured-excerpt {
-				font-size: 1rem;
-				line-height: 1.65;
+				font-size: 1.08rem;
+				line-height: 1.8;
 				color: var(--text-secondary);
-				margin: 0 0 1rem;
+				margin: 0 0 1.2rem;
 				display: -webkit-box;
-				-webkit-line-clamp: 2;
+				-webkit-line-clamp: 3;
 				-webkit-box-orient: vertical;
 				overflow: hidden;
 			}
 
 			.featured-date {
-				margin-top: auto;
 				font-family: var(--font-mono);
-				font-size: 0.85rem;
+				font-size: 0.8rem;
 				color: var(--text-secondary);
 			}
 
 			.featured-date .dot {
-				margin: 0 0.45rem;
+				margin: 0 0.4rem;
 				opacity: 0.6;
 			}
 
-			/* ===== 其余列表 ===== */
+			/* ===== 最近文章：单列精简列表，突出标题 ===== */
 			.recent-posts {
-				padding: 2.5rem 0 1rem;
+				padding: 2.75rem 0 1rem;
 			}
 
 			.recent-posts-head {
 				display: flex;
 				align-items: baseline;
 				justify-content: space-between;
-				margin-bottom: 1.2rem;
+				margin-bottom: 1.4rem;
 			}
 
 			.recent-posts-head h2 {
-				font-size: 0.82rem;
-				font-weight: 600;
-				letter-spacing: 0.14em;
+				font-size: 0.78rem;
+				font-weight: 700;
+				letter-spacing: 0.16em;
 				text-transform: uppercase;
-				color: var(--text-secondary);
+				color: var(--primary-color);
 				margin: 0;
 			}
 
 			.recent-posts-head .view-all {
-				font-size: 0.9rem;
+				font-size: 0.85rem;
 				font-weight: 600;
-				color: var(--primary-color);
+				color: var(--text-secondary);
 				text-decoration: none;
+				transition: color 0.2s ease;
 			}
 
 			.recent-posts-head .view-all:hover {
-				color: var(--primary-strong);
+				color: var(--primary-color);
 			}
 
-			/* ===== 按主题 / 系列浏览 ===== */
+			/* 列表项：大标题 + 弱元信息，悬停左侧色条 + 标题变色 */
+			.post-row {
+				display: block;
+				text-decoration: none;
+				color: var(--text-main);
+				padding: 1.4rem 0 1.4rem 1.2rem;
+				border-left: 2px solid transparent;
+				border-bottom: 1px solid var(--border-color);
+				transition: border-color 0.2s ease, padding-left 0.2s ease;
+			}
+
+			.post-row:last-child {
+				border-bottom: none;
+			}
+
+			.post-row:hover {
+				border-left-color: var(--primary-color);
+				padding-left: 1.4rem;
+			}
+
+			.post-row-meta {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+				font-family: var(--font-mono);
+				font-size: 0.72rem;
+				color: var(--text-secondary);
+				margin-bottom: 0.4rem;
+			}
+
+			.post-row-meta .theme-tag {
+				color: var(--primary-color);
+			}
+
+			.post-row-title {
+				font-size: 1.5rem;
+				font-weight: 700;
+				line-height: 1.4;
+				letter-spacing: -0.01em;
+				margin: 0 0 0.45rem;
+				color: var(--text-main);
+				transition: color 0.2s ease;
+			}
+
+			.post-row:hover .post-row-title {
+				color: var(--primary-color);
+			}
+
+			.post-row-excerpt {
+				font-size: 1rem;
+				line-height: 1.75;
+				color: var(--text-secondary);
+				margin: 0;
+				display: -webkit-box;
+				-webkit-line-clamp: 2;
+				-webkit-box-orient: vertical;
+				overflow: hidden;
+			}
+
+			/* ===== 按主题/系列浏览 ===== */
 			.browse {
-				padding: 2.75rem 0 1rem;
+				padding: 2.5rem 0 1rem;
 				margin-top: 1rem;
 				border-top: 1px solid var(--border-color);
 			}
 
 			.browse-group + .browse-group {
-				margin-top: 1.75rem;
+				margin-top: 1.5rem;
 			}
 
 			.browse-head {
 				display: flex;
 				align-items: baseline;
 				justify-content: space-between;
-				margin-bottom: 1.1rem;
+				margin-bottom: 1rem;
 			}
 
 			.browse-head h2 {
-				font-size: 0.82rem;
+				font-size: 0.8rem;
 				font-weight: 600;
-				letter-spacing: 0.14em;
+				letter-spacing: 0.12em;
 				text-transform: uppercase;
 				color: var(--text-secondary);
 				margin: 0;
 			}
 
 			.browse-head .view-all {
-				font-size: 0.9rem;
+				font-size: 0.85rem;
 				font-weight: 600;
 				color: var(--primary-color);
 				text-decoration: none;
@@ -271,87 +360,75 @@ const seriesList = [...seriesCounts.entries()]
 			.browse-chips {
 				display: flex;
 				flex-wrap: wrap;
-				gap: 0.6rem;
+				gap: 0.5rem;
 			}
 
 			.chip {
 				display: inline-flex;
 				align-items: center;
-				gap: 0.5rem;
+				gap: 0.45rem;
 				text-decoration: none;
-				font-size: 0.92rem;
+				font-size: 0.88rem;
 				color: var(--text-main);
-				padding: 0.45rem 0.85rem;
+				padding: 0.4rem 0.8rem;
 				border: 1px solid var(--border-color);
-				border-radius: 99em;
+				border-radius: 8px;
 				background: var(--surface);
 				transition:
 					border-color 0.2s ease,
-					background 0.2s ease,
 					color 0.2s ease,
-					transform 0.2s ease;
+					transform 0.2s ease,
+					box-shadow 0.2s ease;
 			}
 
 			.chip:hover {
 				border-color: var(--primary-color);
 				color: var(--primary-color);
 				transform: translateY(-2px);
+				box-shadow: var(--glow-sm);
 			}
 
 			.chip .count {
 				font-family: var(--font-mono);
-				font-size: 0.72rem;
+				font-size: 0.7rem;
 				color: var(--text-secondary);
-				background: color-mix(in srgb, var(--primary-soft) 32%, transparent);
-				padding: 0.05rem 0.45rem;
-				border-radius: 99em;
+				background: var(--code-bg);
+				padding: 0.05rem 0.4rem;
+				border-radius: 4px;
 			}
 
-			/* 小红书式：竖向卡片网格（左→右按时间流） */
+			/* 最近文章列表容器（单列） */
 			.post-list {
-				display: grid;
-				grid-template-columns: repeat(3, 1fr);
-				gap: 1.5rem;
-			}
-
-			@media (max-width: 900px) {
-				.post-list {
-					grid-template-columns: repeat(2, 1fr);
-				}
+				display: flex;
+				flex-direction: column;
 			}
 
 			@media (max-width: 720px) {
-				.masthead {
-					padding: 3.5rem 0 2.5rem;
+				.hero {
+					padding: 3rem 0 2.5rem;
 				}
-				.statement {
-					font-size: 2rem;
+				.hero-title {
+					font-size: 2.2rem;
 				}
 				.featured {
-					padding: 2.5rem 0 0.5rem;
-				}
-				.featured-link {
-					flex-direction: column;
-					gap: 1.1rem;
-					padding: 0.5rem;
-				}
-				.featured-thumb {
-					width: 100%;
-					height: 200px;
+					padding: 2rem 0 0.5rem;
 				}
 				.featured-title {
-					font-size: 1.4rem;
+					font-size: 1.7rem;
 				}
-			}
-
-			@media (max-width: 560px) {
-				.post-list {
-					grid-template-columns: 1fr; /* 手机上文章卡片单列，避免挤成两列 */
+				.featured-excerpt {
+					font-size: 1rem;
+				}
+				.post-row-title {
+					font-size: 1.3rem;
+				}
+				.post-row-excerpt {
+					font-size: 0.95rem;
 				}
 			}
 
 			@media (max-width: 480px) {
-				.statement {
+				.hero-title {
 					font-size: 1.7rem;
 				}
 			}
@@ -360,27 +437,18 @@ const seriesList = [...seriesCounts.entries()]
 	<body>
 		<Header />
 		<main>
-			<section class="masthead">
-				<div class="masthead-inner">
-					<p class="kicker">Wang's Notes</p>
-					<h1 class="statement">把构建的过程，写成可追溯的笔记。</h1>
-					<p class="lede">
-						这里收录技术实践、本地 AI 与个人思考。每一篇都来自真实的工程实践，并记录它一路长成的轨迹。
-					</p>
-				</div>
+			<section class="hero">
+				<p class="hero-kicker"><span class="pulse"></span>Wang's Notes</p>
+				<h1 class="hero-title"><span class="gradient-text">把构建的过程</span>，写成可追溯的笔记。</h1>
+				<p class="hero-lede">
+					这里收录技术实践、本地 AI 与个人思考。每一篇都来自真实的工程实践，并记录它一路长成的轨迹。
+				</p>
 			</section>
 
 			{
 				featured && (
 					<section class="featured">
 						<a class="featured-link" href={`/blog/${featured.id}/`}>
-						<div class="featured-thumb">
-							{featured.data.heroImage ? (
-								<Image src={featured.data.heroImage} alt="" width={600} height={400} />
-							) : (
-								<img src={themeCover(featured.data.theme)} alt="" width={600} height={400} loading="lazy" />
-							)}
-						</div>
 							<div class="featured-body">
 								<p class="featured-tag">最新发布</p>
 								<h2 class="featured-title">{featured.data.title}</h2>
@@ -400,13 +468,28 @@ const seriesList = [...seriesCounts.entries()]
 
 			<section class="recent-posts">
 				<div class="recent-posts-head">
-					<h2>全部文章</h2>
-					<a class="view-all" href="/blog">查看归档 →</a>
+					<h2>最近文章</h2>
+					<a class="view-all" href="/blog">全部归档 →</a>
 				</div>
 				<div class="post-list">
-					{gridPosts.map((post) => <PostCard post={post} />)}
+					{
+						recent.map((post) => (
+							<a class="post-row" href={`/blog/${post.id}/`}>
+								<div class="post-row-meta">
+									{post.data.theme && <span class="theme-tag">{post.data.theme}</span>}
+									<span>·</span>
+									<FormattedDate date={post.data.pubDate} />
+									<span>·</span>
+									{readingTime(post.body)}
+								</div>
+								<h3 class="post-row-title">{post.data.title}</h3>
+								{post.data.description && (
+									<p class="post-row-excerpt">{post.data.description}</p>
+								)}
+							</a>
+						))
+					}
 				</div>
-				<Pagination current={1} last={last} baseHref="/page/" firstHref="/" />
 			</section>
 
 			<section class="browse">
@@ -448,23 +531,5 @@ const seriesList = [...seriesCounts.entries()]
 			</section>
 		</main>
 		<Footer />
-		<script>
-			const mast = document.querySelector('.masthead');
-			if (mast && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-				let raf = 0;
-				let px = 0, py = 0;
-				mast.addEventListener('pointermove', (e) => {
-					const r = mast.getBoundingClientRect();
-					px = e.clientX - r.left;
-					py = e.clientY - r.top;
-					if (!raf)
-						raf = requestAnimationFrame(() => {
-							mast.style.setProperty('--mx', px + 'px');
-							mast.style.setProperty('--my', py + 'px');
-							raf = 0;
-						});
-				});
-			}
-		</script>
 	</body>
 </html>

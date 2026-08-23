@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 300" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">
+  <rect width="920" height="300" fill="#FAF6EE"/>
+  <text x="460" y="34" font-size="15" fill="#244c3b" text-anchor="middle">豆包是一个模型家族，不是单个聊天机器人</text>
+
+  <text x="240" y="66" font-size="13" fill="#356b54" text-anchor="middle">语言模型线</text>
+  <rect x="50" y="80" width="380" height="46" rx="6" fill="#356b54"/>
+  <text x="64" y="108" font-size="13" fill="#FAF6EE">Seed 2.1 Pro — 旗舰深度推理 / 编程</text>
+  <rect x="50" y="136" width="380" height="46" rx="6" fill="#9cc3b0"/>
+  <text x="64" y="164" font-size="13" fill="#244c3b">Seed 2.1 Turbo — 性价比，成本大降</text>
+  <rect x="50" y="192" width="380" height="46" rx="6" fill="#9cc3b0"/>
+  <text x="64" y="220" font-size="13" fill="#244c3b">2.0 系列 Lite / Mini / Code — 旗舰到端侧</text>
+
+  <text x="680" y="66" font-size="13" fill="#356b54" text-anchor="middle">多模态 / 专项线</text>
+  <rect x="490" y="80" width="380" height="46" rx="6" fill="#9cc3b0"/>
+  <text x="504" y="108" font-size="13" fill="#244c3b">Seedream — 图像生成</text>
+  <rect x="490" y="136" width="380" height="46" rx="6" fill="#9cc3b0"/>
+  <text x="504" y="164" font-size="13" fill="#244c3b">Seedance — 视频生成</text>
+  <rect x="490" y="192" width="380" height="46" rx="6" fill="#9cc3b0"/>
+  <text x="504" y="220" font-size="13" fill="#244c3b">Seeduplex — 全双工语音（边听边说）</text>
+
+  <text x="460" y="282" font-size="12" fill="#6f6657" text-anchor="middle">语言模型大家都在追，视频和语音字节走在前头</text>
+</svg>

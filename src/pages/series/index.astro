@@ -28,7 +28,7 @@ const seriesList = [...map.entries()].sort((a, b) => b[1] - a[1]);
 				margin-bottom: 2.5rem;
 			}
 			.page-head h1 {
-				font-size: 2.6rem;
+				font-size: 2.2rem;
 				font-weight: 800;
 				letter-spacing: -0.02em;
 				margin: 0 0 0.5rem;
@@ -43,24 +43,15 @@ const seriesList = [...map.entries()].sort((a, b) => b[1] - a[1]);
 				grid-template-columns: repeat(2, 1fr);
 				gap: 1.25rem;
 			}
-			.series-card {
-				display: block;
-				text-decoration: none;
-				color: var(--text-main);
-				border: 1px solid var(--border-color);
-				border-radius: 14px;
-				padding: 1.4rem 1.5rem;
-				background: var(--card-bg);
-				transition:
-					border-color 0.2s ease,
-					transform 0.2s ease,
-					box-shadow 0.2s ease;
-			}
-			.series-card:hover {
-				border-color: color-mix(in srgb, var(--primary-color) 45%, transparent);
-				transform: translateY(-2px);
-				box-shadow: 0 8px 24px -16px color-mix(in srgb, var(--primary-color) 60%, transparent);
-			}
+		.series-card {
+			display: block;
+			text-decoration: none;
+			color: var(--text-main);
+			border: 1px solid var(--border-color);
+			border-radius: 10px;
+			padding: 1.3rem 1.4rem;
+			background: var(--surface);
+		}
 			.series-card h2 {
 				margin: 0 0 0.5rem;
 				font-size: 1.35rem;
@@ -102,7 +93,7 @@ const seriesList = [...map.entries()].sort((a, b) => b[1] - a[1]);
 				seriesList.length > 0 ? (
 					<div class="series-list">
 						{seriesList.map(([name, n]) => (
-							<a class="series-card" href={`/series/${encodeURIComponent(name)}/`}>
+							<a class="series-card glow-card" href={`/series/${encodeURIComponent(name)}/`}>
 								<h2>
 									{name}
 									<span class="count">{n} 篇</span>

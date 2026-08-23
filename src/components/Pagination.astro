@@ -76,21 +76,19 @@ const pages = Array.from({ length: last }, (_, i) => i + 1);
 	}
 
 	.page-nav {
-		font-size: 0.9rem;
+		font-size: 0.85rem;
 		font-weight: 600;
 		color: var(--primary-color);
 		text-decoration: none;
-		padding: 0.42rem 0.95rem;
-		border-radius: 99em;
-		border: 1px solid color-mix(in srgb, var(--primary-color) 28%, transparent);
-		transition:
-			background 0.2s ease,
-			color 0.2s ease;
+		padding: 0.4rem 0.85rem;
+		border-radius: 6px;
+		border: 1px solid var(--border-color);
+		transition: border-color 0.2s ease, color 0.2s ease;
 	}
 
 	.page-nav:hover {
-		background: var(--primary-color);
-		color: var(--on-accent);
+		border-color: var(--primary-color);
+		color: var(--primary-color);
 	}
 
 	.page-nav.is-disabled {
@@ -112,23 +110,21 @@ const pages = Array.from({ length: last }, (_, i) => i + 1);
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		min-width: 2.1rem;
-		height: 2.1rem;
-		padding: 0 0.5rem;
-		font-size: 0.9rem;
+		min-width: 2rem;
+		height: 2rem;
+		padding: 0 0.45rem;
+		font-size: 0.85rem;
 		font-family: var(--font-mono);
 		color: var(--text-secondary);
 		text-decoration: none;
-		border-radius: 99em;
+		border-radius: 6px;
 		border: 1px solid transparent;
-		transition:
-			background 0.2s ease,
-			color 0.2s ease;
+		transition: background 0.2s ease, color 0.2s ease;
 	}
 
 	.page-num:hover {
 		color: var(--primary-color);
-		background: color-mix(in srgb, var(--primary-soft) 40%, transparent);
+		background: var(--code-bg);
 	}
 
 	.page-num.is-current {

@@ -31,7 +31,7 @@ const jsonLd = {
 	datePublished: publishedISO,
 	dateModified: (updatedDate ?? pubDate).toISOString(),
 	author: { '@type': 'Person', name: 'Wang' },
-	publisher: { '@type': 'Organization', name: 'Wang’s Notes' },
+	publisher: { '@type': 'Organization', name: "Wang's Notes" },
 	mainEntityOfPage: Astro.url.toString(),
 	image: new URL(ogImage, Astro.site).toString(),
 };
@@ -53,7 +53,7 @@ const jsonLd = {
 				position: fixed;
 				top: 0;
 				left: 0;
-				height: 3px;
+				height: 2px;
 				width: 0;
 				background: var(--primary-color);
 				z-index: 30;
@@ -71,7 +71,7 @@ const jsonLd = {
 				display: inline-flex;
 				align-items: center;
 				gap: 0.4rem;
-				font-size: 0.9rem;
+				font-size: 0.85rem;
 				font-weight: 500;
 				color: var(--text-secondary);
 				text-decoration: none;
@@ -88,6 +88,21 @@ const jsonLd = {
 				margin: 0 auto;
 			}
 
+			/* 文章标题渐变文字，增强科技感 */
+			.prose h1 {
+				background: linear-gradient(
+					100deg,
+					var(--text-main) 0%,
+					var(--text-main) 35%,
+					var(--primary-color) 78%,
+					var(--primary-2) 100%
+				);
+				-webkit-background-clip: text;
+				background-clip: text;
+				color: transparent;
+				-webkit-text-fill-color: transparent;
+			}
+
 			.post-header {
 				margin-bottom: 1.5rem;
 			}
@@ -100,23 +115,21 @@ const jsonLd = {
 			.hero-image img {
 				display: block;
 				width: 100%;
-				max-height: 380px;
+				max-height: 360px;
 				object-fit: cover;
-				border-radius: 18px;
-				box-shadow: var(--shadow-md);
+				border-radius: 12px;
+				border: 1px solid var(--border-color);
 			}
 
 			.series {
 				display: inline-block;
-				margin: 0 0 0.6rem;
+				margin: 0 0 0.5rem;
 				font-family: var(--font-mono);
-				font-size: 0.8rem;
-				letter-spacing: 0.08em;
+				font-size: 0.78rem;
+				letter-spacing: 0.06em;
 				color: var(--primary-color);
 				text-decoration: none;
-				transition:
-					color 0.2s ease,
-					opacity 0.2s ease;
+				transition: opacity 0.2s ease;
 			}
 
 			.series:hover {
@@ -124,43 +137,33 @@ const jsonLd = {
 				text-decoration: underline;
 			}
 
-			.theme-pill {
-				display: inline-flex;
-				align-items: center;
-				align-self: flex-start;
-				margin: 0 0 0.7rem;
+			.theme-label {
+				display: inline-block;
+				margin: 0 0 0.5rem;
 				font-family: var(--font-mono);
-				font-size: 0.78rem;
+				font-size: 0.75rem;
 				letter-spacing: 0.04em;
 				text-decoration: none;
 				color: var(--primary-color);
-				padding: 0.22rem 0.7rem;
-				border-radius: 99em;
-				background: color-mix(in srgb, var(--primary-soft) 55%, transparent);
-				border: 1px solid color-mix(in srgb, var(--primary-color) 28%, transparent);
-				transition:
-					background 0.2s ease,
-					color 0.2s ease;
 			}
 
-			.theme-pill:hover {
-				background: var(--primary-color);
-				color: var(--on-accent);
+			.theme-label:hover {
+				text-decoration: underline;
 			}
 
 			.post-header h1 {
 				margin: 0;
-				font-size: 2.5rem;
+				font-size: 2.2rem;
 				font-weight: 800;
 				letter-spacing: -0.02em;
-				line-height: 1.2;
+				line-height: 1.25;
 				color: var(--text-main);
 			}
 
 			.lead {
-				margin: 0.9rem 0 0;
-				font-size: 1.1rem;
-				line-height: 1.7;
+				margin: 0.8rem 0 0;
+				font-size: 1.05rem;
+				line-height: 1.65;
 				color: var(--text-secondary);
 				max-width: 38rem;
 			}
@@ -169,49 +172,47 @@ const jsonLd = {
 				display: flex;
 				flex-wrap: wrap;
 				align-items: center;
-				gap: 0.6rem 1.1rem;
-				margin-top: 1.3rem;
+				gap: 0.5rem 1rem;
+				margin-top: 1.1rem;
 			}
 
 			.tags {
 				display: flex;
 				flex-wrap: wrap;
-				gap: 0.45rem;
+				gap: 0.4rem;
 			}
 
 			.tag {
-				font-size: 0.75rem;
+				font-size: 0.72rem;
 				font-family: var(--font-mono);
-				color: var(--primary-color);
+				color: var(--text-secondary);
 				text-decoration: none;
-				padding: 0.18rem 0.6rem;
-				border: 1px solid color-mix(in srgb, var(--primary-color) 35%, transparent);
-				border-radius: 99em;
-				transition:
-					background 0.2s ease,
-					color 0.2s ease;
+				padding: 0.15rem 0.55rem;
+				border: 1px solid var(--border-color);
+				border-radius: 4px;
+				transition: border-color 0.2s ease, color 0.2s ease;
 			}
 
 			.tag:hover {
-				background: var(--primary-color);
-				color: var(--on-accent);
+				border-color: var(--primary-color);
+				color: var(--primary-color);
 			}
 
 			.meta-info {
 				font-family: var(--font-mono);
-				font-size: 0.85rem;
+				font-size: 0.8rem;
 				color: var(--text-secondary);
 			}
 
 			.meta-info .dot {
-				margin: 0 0.4rem;
+				margin: 0 0.35rem;
 				opacity: 0.6;
 			}
 
 			.last-updated-on {
 				font-style: italic;
 				color: var(--text-secondary);
-				font-size: 0.9rem;
+				font-size: 0.85rem;
 				margin-left: 0.4rem;
 			}
 
@@ -222,9 +223,9 @@ const jsonLd = {
 			.share a {
 				display: inline-flex;
 				align-items: center;
-				gap: 0.5rem;
+				gap: 0.4rem;
 				color: var(--primary-color);
-				font-size: 0.92rem;
+				font-size: 0.85rem;
 				text-decoration: none;
 				transition: opacity 0.2s ease;
 			}
@@ -234,19 +235,17 @@ const jsonLd = {
 			}
 
 			.share svg {
-				width: 16px;
-				height: 16px;
+				width: 14px;
+				height: 14px;
 				fill: currentColor;
 			}
 
-
 			.divider {
-				width: 3rem;
-				height: 3px;
-				margin: 1.5rem auto 0;
+				width: 100%;
+				height: 1px;
+				margin: 1.5rem 0 0;
 				border: none;
-				background: var(--primary-color);
-				border-radius: 2px;
+				background: var(--border-color);
 			}
 
 			/* 代码块复制按钮 */
@@ -256,25 +255,22 @@ const jsonLd = {
 
 			.copy-btn {
 				position: absolute;
-				top: 0.7rem;
-				right: 0.7rem;
+				top: 0.6rem;
+				right: 0.6rem;
 				z-index: 2;
 				display: inline-flex;
 				align-items: center;
-				gap: 0.35rem;
-				padding: 0.3rem 0.6rem;
-				font-size: 0.75rem;
+				gap: 0.3rem;
+				padding: 0.25rem 0.55rem;
+				font-size: 0.72rem;
 				font-family: var(--font-mono);
 				color: var(--text-secondary);
-				background: color-mix(in srgb, var(--surface) 80%, transparent);
+				background: color-mix(in srgb, var(--surface) 85%, transparent);
 				border: 1px solid var(--border-color);
-				border-radius: 7px;
+				border-radius: 5px;
 				cursor: pointer;
 				opacity: 0;
-				transition:
-					opacity 0.2s ease,
-					color 0.2s ease,
-					border-color 0.2s ease;
+				transition: opacity 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 			}
 
 			.prose :global(pre):hover .copy-btn {
@@ -291,32 +287,32 @@ const jsonLd = {
 				border-color: var(--primary-color);
 			}
 
-			/* 正文末尾 AI 生成声明 */
+			/* AI 生成声明 */
 			.ai-byline {
 				margin: 2.5rem 0 0;
 				padding-top: 1.2rem;
 				border-top: 1px solid var(--border-color);
 				text-align: center;
 				font-family: var(--font-mono);
-				font-size: 0.8rem;
+				font-size: 0.75rem;
 				letter-spacing: 0.05em;
-				color: color-mix(in srgb, var(--text-secondary) 72%, var(--primary-color));
+				color: var(--text-secondary);
 			}
 
 			/* 文章末尾 CTA */
 			.post-cta {
 				margin: 1.5rem 0 0;
-				padding: 1rem 1.1rem;
-				background: color-mix(in srgb, var(--primary-soft) 14%, transparent);
-				border: 1px solid color-mix(in srgb, var(--primary-color) 18%, var(--border-color));
-				border-radius: 12px;
+				padding: 0.9rem 1.1rem;
+				background: var(--code-bg);
+				border: 1px solid var(--border-color);
+				border-radius: 8px;
 				text-align: center;
 			}
 
 			.post-cta p {
 				margin: 0;
-				font-size: 0.95rem;
-				line-height: 1.7;
+				font-size: 0.9rem;
+				line-height: 1.6;
 				color: var(--text-secondary);
 			}
 
@@ -332,18 +328,18 @@ const jsonLd = {
 				box-shadow: none;
 			}
 
-			/* 目录 (ToC) */
+			/* 目录 */
 			.toc {
 				margin: 1.2rem 0 2rem;
-				padding: 0.9rem 1.1rem;
-				background: color-mix(in srgb, var(--surface) 80%, transparent);
+				padding: 0.85rem 1.1rem;
+				background: var(--code-bg);
 				border: 1px solid var(--border-color);
-				border-radius: 12px;
+				border-radius: 8px;
 			}
 
 			.toc summary {
 				font-family: var(--font-display);
-				font-size: 1rem;
+				font-size: 0.95rem;
 				font-weight: 600;
 				color: var(--text-main);
 				cursor: pointer;
@@ -354,7 +350,7 @@ const jsonLd = {
 
 			.toc summary::before {
 				content: '§';
-				margin-right: 0.6rem;
+				margin-right: 0.5rem;
 				color: var(--primary-color);
 				font-family: var(--font-mono);
 			}
@@ -362,15 +358,15 @@ const jsonLd = {
 			.toc nav {
 				display: flex;
 				flex-direction: column;
-				gap: 0.25rem;
-				margin-top: 0.7rem;
+				gap: 0.2rem;
+				margin-top: 0.6rem;
 				padding-left: 0.3rem;
-				border-left: 2px solid color-mix(in srgb, var(--primary-color) 28%, transparent);
+				border-left: 2px solid var(--border-color);
 			}
 
 			.toc-item, .toc-sub {
-				font-size: 0.92rem;
-				line-height: 1.6;
+				font-size: 0.88rem;
+				line-height: 1.5;
 				color: var(--text-secondary);
 				text-decoration: none;
 				transition: color 0.15s ease;
@@ -379,7 +375,7 @@ const jsonLd = {
 			.toc-item:hover, .toc-sub:hover { color: var(--primary-color); }
 
 			.toc-sub {
-				font-size: 0.85rem;
+				font-size: 0.82rem;
 				padding-left: 1.2rem;
 			}
 
@@ -391,24 +387,24 @@ const jsonLd = {
 				left: 0.75rem;
 				z-index: 1;
 				font-family: var(--font-mono);
-				font-size: 0.7rem;
+				font-size: 0.68rem;
 				letter-spacing: 0.04em;
 				color: var(--text-secondary);
-				opacity: 0.55;
+				opacity: 0.5;
 			}
 
 			.prose :global(pre[data-lang]) {
 				padding-top: 1.8rem;
 			}
 
-			/* 回到顶部按钮 */
+			/* 回到顶部 */
 			.back-to-top {
 				position: fixed;
-				bottom: 1.8rem;
-				right: 1.8rem;
+				bottom: 1.5rem;
+				right: 1.5rem;
 				z-index: 20;
-				width: 40px;
-				height: 40px;
+				width: 36px;
+				height: 36px;
 				border-radius: 50%;
 				border: 1px solid var(--border-color);
 				background: var(--surface);
@@ -447,31 +443,28 @@ const jsonLd = {
 			.pager a {
 				display: flex;
 				flex-direction: column;
-				gap: 0.3rem;
-				padding: 1rem 1.1rem;
+				gap: 0.25rem;
+				padding: 0.9rem 1rem;
 				border: 1px solid var(--border-color);
-				border-radius: 14px;
+				border-radius: 10px;
 				text-decoration: none;
 				color: var(--text-main);
-				transition:
-					border-color 0.2s ease,
-					background 0.2s ease;
+				transition: border-color 0.2s ease;
 			}
 
 			.pager a:hover {
 				border-color: var(--primary-color);
-				background: color-mix(in srgb, var(--primary-soft) 10%, transparent);
 			}
 
 			.pager .dir {
-				font-size: 0.78rem;
+				font-size: 0.72rem;
 				font-family: var(--font-mono);
 				color: var(--primary-color);
 				letter-spacing: 0.05em;
 			}
 
 			.pager .pt {
-				font-size: 0.95rem;
+				font-size: 0.9rem;
 				font-weight: 600;
 				line-height: 1.4;
 			}
@@ -517,7 +510,7 @@ const jsonLd = {
 					<div class="head-text">
 						{
 							theme && (
-								<a class="theme-pill" href={`/themes/${encodeURIComponent(theme)}/`}>
+								<a class="theme-label" href={`/themes/${encodeURIComponent(theme)}/`}>
 									{theme}
 								</a>
 							)
@@ -618,7 +611,7 @@ const jsonLd = {
 		</main>
 
 		<button class="back-to-top" id="back-to-top" aria-label="回到顶部" type="button">
-			<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+			<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 				<path d="M18 15l-6-6-6 6"/>
 			</svg>
 		</button>
@@ -678,7 +671,7 @@ const jsonLd = {
 				if (cls) pre.setAttribute('data-lang', cls[1]);
 			});
 
-			// 代码块折叠：把 .prose 里的每个 pre 包进 <details>，长代码默认收起
+			// 代码块折叠
 			document.querySelectorAll('.prose pre').forEach((pre) => {
 				const cls = pre.className.match(/language-(\w+)/);
 				const lang = cls ? cls[1] : 'code';
@@ -698,7 +691,7 @@ const jsonLd = {
 				});
 			});
 
-			// 文章内鼠标聚光演示：把光标在 .spotlight-demo 内的坐标写进 --mx/--my
+			// 鼠标聚光演示
 			if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
 				document.querySelectorAll('.spotlight-demo').forEach((box) => {
 					let raf = 0;

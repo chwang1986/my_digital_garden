@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 340" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">
+  <rect width="920" height="340" fill="#FAF6EE"/>
+  <text x="460" y="34" font-size="15" fill="#244c3b" text-anchor="middle">全栈闭环：从算力到应用，数据再喂回去</text>
+
+  <rect x="120" y="70" width="240" height="70" rx="8" fill="#356b54"/>
+  <text x="240" y="100" font-size="13" fill="#FAF6EE" text-anchor="middle">火山引擎</text>
+  <text x="240" y="122" font-size="11" fill="#FAF6EE" text-anchor="middle">算力 + 云</text>
+
+  <rect x="560" y="70" width="240" height="70" rx="8" fill="#356b54"/>
+  <text x="680" y="100" font-size="13" fill="#FAF6EE" text-anchor="middle">豆包</text>
+  <text x="680" y="122" font-size="11" fill="#FAF6EE" text-anchor="middle">大模型能力</text>
+
+  <rect x="560" y="210" width="240" height="70" rx="8" fill="#9cc3b0"/>
+  <text x="680" y="240" font-size="13" fill="#244c3b" text-anchor="middle">飞书 / 抖音</text>
+  <text x="680" y="262" font-size="11" fill="#244c3b" text-anchor="middle">办公 + 内容场景</text>
+
+  <rect x="120" y="210" width="240" height="70" rx="8" fill="#9cc3b0"/>
+  <text x="240" y="240" font-size="13" fill="#244c3b" text-anchor="middle">数据飞轮</text>
+  <text x="240" y="262" font-size="11" fill="#244c3b" text-anchor="middle">抖音 / 头条 / 番茄</text>
+
+  <path d="M 360 105 L 556 105" stroke="#6f6657" stroke-width="2" fill="none" marker-end="url(#a)"/>
+  <path d="M 680 140 L 680 206" stroke="#6f6657" stroke-width="2" fill="none" marker-end="url(#a)"/>
+  <path d="M 560 245 L 364 245" stroke="#6f6657" stroke-width="2" fill="none" marker-end="url(#a)"/>
+  <path d="M 240 210 L 240 144" stroke="#6f6657" stroke-width="2" fill="none" marker-end="url(#a)"/>
+  <text x="460" y="334" font-size="12" fill="#6f6657" text-anchor="middle">算力 → 模型 → 应用 → 数据，转一圈，没有短板</text>
+
+  <defs>
+    <marker id="a" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#6f6657"/>
+    </marker>
+  </defs>
+</svg>

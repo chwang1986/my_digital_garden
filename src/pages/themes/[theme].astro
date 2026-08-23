@@ -47,7 +47,7 @@ const { theme, posts } = Astro.props;
 					padding 0.2s ease;
 			}
 			.post-item:hover {
-				background: color-mix(in srgb, var(--primary-soft) 10%, transparent);
+				background: var(--code-bg);
 				padding-left: 0.6rem;
 			}
 			.post-main {
@@ -83,19 +83,16 @@ const { theme, posts } = Astro.props;
 			.post-meta .tag {
 				font-family: var(--font-mono);
 				font-size: 0.76rem;
-				color: var(--primary-color);
+				color: var(--text-secondary);
 				text-decoration: none;
-				padding: 0.12rem 0.5rem;
-				border-radius: 99em;
-				background: color-mix(in srgb, var(--primary-soft) 50%, transparent);
-				border: 1px solid color-mix(in srgb, var(--primary-color) 24%, transparent);
-				transition:
-					background 0.2s ease,
-					color 0.2s ease;
+				padding: 0.1rem 0.45rem;
+				border-radius: 4px;
+				border: 1px solid var(--border-color);
+				transition: border-color 0.2s ease, color 0.2s ease;
 			}
 			.post-meta .tag:hover {
-				background: var(--primary-color);
-				color: var(--on-accent);
+				border-color: var(--primary-color);
+				color: var(--primary-color);
 			}
 			@media (max-width: 480px) {
 				.post-main {

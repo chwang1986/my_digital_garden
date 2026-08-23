@@ -1,37 +1,53 @@
 :root {
-  /* ===== Brand palette: warm editorial (墨绿 + 奶油纸感) ===== */
-  --background-body: #faf6ee; /* 暖奶油纸感 */
+  /* ===== 科技调：冷灰底 + 青蓝主色 + 暖橙点缀 ===== */
+  --background-body: #f6f8fb;
   --surface: #ffffff;
-  --text-main: #2b2620; /* 暖墨色 */
-  --text-secondary: #6f6657;
-  --primary-color: #356b54; /* 墨绿：编辑/出版物气质，奶油底上可读 */
-  --primary-soft: #9cc3b0; /* 淡绿，hover 填充 */
-  --primary-strong: #244c3b;
-  --on-accent: #faf6ee;
+  --text-main: #0b1220;
+  --text-secondary: #5b6b82;
+
+  /* 青蓝科技主色 */
+  --primary-color: #0ea5e9;
+  --primary-strong: #0284c7;
+  --primary-soft: #c7ecfb;
+  /* 渐变辅助色（violet），用于标题/流光 */
+  --primary-2: #6366f1;
+  --glow: color-mix(in srgb, var(--primary-color) 55%, transparent);
+
+  /* 暖橙作为点缀强调 */
+  --accent-warm: #f97316;
+  --on-accent: #ffffff;
 
   /* ===== Typography ===== */
-  /* --font-atkinson 由 @astrojs/fonts 在运行时注入（自托管，正文用） */
-  /* 正文：全无衬线，统一质感，避免中西文行内衬线/无衬线混排 */
-  --font-body: var(--font-atkinson), 'PingFang SC', 'Microsoft YaHei', system-ui,
-    -apple-system, 'Helvetica Neue', Arial, sans-serif;
-  /* 标题：与正文同一套无衬线，全站统一质感 */
+  --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Microsoft YaHei', system-ui, sans-serif;
   --font-display: var(--font-body);
-  --font-mono: 'SF Mono', ui-monospace, 'JetBrains Mono', Menlo, monospace;
+  --font-mono: 'SF Mono', ui-monospace, 'JetBrains Mono', 'Fira Code', Menlo,
+    monospace;
 
   /* ===== Layout ===== */
-  --content-width: 720px; /* 舒适阅读宽 */
-  --wide-width: 960px; /* 页壳：顶栏 / 页脚 / 首页栅格 */
+  --content-width: 720px;
+  --wide-width: 960px;
 
   /* ===== Surfaces / code ===== */
-  --border-color: #e7e0d2;
-  --code-bg: #f1ece0;
-  --gray-gradient: linear-gradient(180deg, #faf6ee, #f1ece0);
+  --border-color: #dde4ee;
+  --code-bg: #eef3f9;
+  --gray-gradient: linear-gradient(180deg, #f6f8fb, #eef3f9);
 
-  /* ===== 柔和阴影 ===== */
-  --shadow-sm: 0 2px 10px -3px rgba(40, 60, 45, 0.12);
-  --shadow-md: 0 14px 34px -14px rgba(40, 60, 45, 0.18);
+  /* 网格点阵背景 */
+  --grid-dot: radial-gradient(
+    circle at 1px 1px,
+    color-mix(in srgb, var(--primary-color) 14%, transparent) 1px,
+    transparent 0
+  );
+  --grid-size: 22px;
 
-  /* ===== 兼容别名（ThemeToggle 等组件引用） ===== */
+  /* ===== 阴影 / 辉光：克制但有质感 ===== */
+  --shadow-sm: 0 1px 3px -1px rgba(15, 23, 42, 0.08);
+  --shadow-md: 0 12px 32px -16px rgba(14, 165, 233, 0.35);
+  --glow-sm: 0 0 0 1px color-mix(in srgb, var(--primary-color) 22%, transparent),
+    0 8px 28px -14px var(--glow);
+
+  /* ===== 兼容别名 ===== */
   --text-color: var(--text-main);
   --text-muted: var(--text-secondary);
   --accent-color: var(--primary-color);
@@ -42,26 +58,39 @@
 }
 
 :root.dark {
-  --background-body: #181c18; /* 暖近黑带绿调 */
-  --surface: #212621;
-  --text-main: #ece7da;
-  --text-secondary: #a9b3a3;
-  --primary-color: #8fc4ab; /* 亮墨绿，暗色发光 */
-  --primary-soft: #5e8f79;
-  --primary-strong: #b3dcc8;
-  --on-accent: #181c18;
+  --background-body: #070b14;
+  --surface: #0e1626;
+  --text-main: #e6edf6;
+  --text-secondary: #8da0bb;
 
-  --border-color: #313830;
-  --code-bg: #141814;
-  --gray-gradient: linear-gradient(180deg, #181c18, #20251f);
+  --primary-color: #38bdf8;
+  --primary-strong: #7dd3fc;
+  --primary-soft: #0b3a55;
+  --primary-2: #818cf8;
+  --glow: color-mix(in srgb, var(--primary-color) 60%, transparent);
 
-  --shadow-sm: 0 2px 10px -3px rgba(0, 0, 0, 0.45);
-  --shadow-md: 0 14px 34px -14px rgba(0, 0, 0, 0.55);
+  --accent-warm: #fb923c;
+  --on-accent: #070b14;
+
+  --border-color: #1e2c44;
+  --code-bg: #0e1626;
+  --gray-gradient: linear-gradient(180deg, #070b14, #0e1626);
+
+  --grid-dot: radial-gradient(
+    circle at 1px 1px,
+    color-mix(in srgb, var(--primary-color) 20%, transparent) 1px,
+    transparent 0
+  );
+
+  --shadow-sm: 0 1px 3px -1px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 12px 32px -16px rgba(56, 189, 248, 0.5);
+  --glow-sm: 0 0 0 1px color-mix(in srgb, var(--primary-color) 30%, transparent),
+    0 8px 28px -14px var(--glow);
 }
 
 html {
   overflow-y: scroll;
-  overflow-x: clip; /* 防止满幅 hero 的 50vw 在手机上引出横向滚动条（clip 不破坏 sticky 顶栏） */
+  overflow-x: clip;
 }
 
 @supports (scrollbar-gutter: stable) {
@@ -80,8 +109,8 @@ html {
 body {
   margin: 0;
   font-family: var(--font-body);
-  font-size: 20px;
-  line-height: 1.85;
+  font-size: 18px;
+  line-height: 1.75;
   background-color: var(--background-body);
   color: var(--text-main);
   -webkit-font-smoothing: antialiased;
@@ -96,32 +125,32 @@ h4,
 h5,
 h6 {
   font-family: var(--font-display);
-  font-weight: 600;
-  line-height: 1.2;
+  font-weight: 700;
+  line-height: 1.25;
   margin: 0 0 0.5em 0;
-  letter-spacing: normal;
+  letter-spacing: -0.01em;
 }
 
 h1 {
-  font-size: 2.6rem;
+  font-size: 2.4rem;
   margin: 0 0 0.6em 0;
 }
 
 h2 {
-  font-size: 1.7rem;
+  font-size: 1.6rem;
   margin: 1.8em 0 0.6em;
 }
 
 h3 {
-  font-size: 1.4rem;
+  font-size: 1.3rem;
 }
 
 h4 {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
 }
 
 h5 {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
 }
 
 h6 {
@@ -131,9 +160,9 @@ h6 {
 p,
 ul,
 ol {
-  font-size: 1.25rem;
-  line-height: 1.9;
-  margin: 1.5em 0;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin: 1.3em 0;
   text-wrap: pretty;
 }
 
@@ -143,7 +172,7 @@ ul {
 }
 
 li {
-  margin: 0.5rem 0;
+  margin: 0.4rem 0;
 }
 
 li p {
@@ -159,18 +188,18 @@ a:hover {
   color: var(--primary-color);
 }
 
-/* 内联链接高亮（墨绿版） */
+/* 内联链接：下划线 + hover 变色 */
 p a {
-  text-decoration: none;
-  box-shadow: inset 0 -0.12em 0 color-mix(in srgb, var(--primary-color) 30%, transparent);
-  transition:
-    box-shadow 0.2s ease-in-out,
-    color 0.2s ease-in-out;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--primary-color) 35%, transparent);
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  transition: text-decoration-color 0.2s ease, color 0.2s ease;
 }
 
 p a:hover {
-  box-shadow: inset 0 -1.5em 0 var(--primary-color);
-  color: var(--on-accent);
+  color: var(--primary-color);
+  text-decoration-color: var(--primary-color);
 }
 
 img {
@@ -181,39 +210,37 @@ img {
 hr {
   padding: 0;
   border: 0;
-  height: 10px;
-  margin: 40px auto;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg width='20' height='10'  viewBox='0 0 20 10' xmlns='http://www.w3.org/2000/svg' fill-rule='evenodd' clip-rule='evenodd' stroke-miterlimit='10'%3e%3cpath fill='none' d='M0 0h20v10H0z'/%3e%3cclipPath id='a'%3e%3cpath d='M0 0h20v10H0z'/%3e%3c/clipPath%3e%3cg clip-path='url(%23a)'%3e%3cpath d='M20 7.384c-4.999-.001-5-4.768-9.999-4.768C5 2.616 5 7.384 0 7.384' fill='none' stroke-width='3' stroke='%23356b54'/%3e%3c/g%3e%3c/svg%3e");
+  height: 1px;
+  margin: 36px auto;
+  background: var(--border-color);
 }
 
 code {
   font-family: var(--font-mono);
-  font-size: calc(1em - 2px);
+  font-size: 0.875em;
   color: var(--text-main);
-  padding: 0.2em 0.4em;
-  border-radius: 6px;
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
   background-color: var(--code-bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 pre {
-  border-radius: 14px !important;
+  border-radius: 10px !important;
   margin: 1.2em 0 !important;
   padding: 1.2em;
   box-shadow: var(--shadow-sm);
-  overflow-x: auto; /* 手机上长代码行可横滑，避免整页横向溢出 */
+  overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
 
-/* 代码块内的文字交给 shiki 上色（含双主题变量），不要再被上面的通用 code 规则覆盖成深字 */
 pre code {
   padding: 0;
   background: none;
   color: inherit;
 }
 
-/* 暗色模式：让 shiki 双主题跟随站点 .dark 类切换 */
 :root.dark .astro-code,
 :root.dark .astro-code span {
   color: var(--shiki-dark) !important;
@@ -221,32 +248,32 @@ pre code {
 }
 
 blockquote {
-  border-left: 4px solid var(--primary-color);
-  font-size: 1.3rem;
-  line-height: 1.85;
+  border-left: 3px solid var(--primary-color);
+  font-size: 1.15rem;
+  line-height: 1.8;
   font-style: italic;
-  margin: 2rem 0;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+  margin: 1.5rem 0;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
   color: var(--text-secondary);
 }
 
 blockquote footer {
-  font-size: 1rem;
+  font-size: 0.9rem;
   text-align: right;
 }
 
 figure {
-  margin: 0 0 3em 0;
+  margin: 0 0 2.5em 0;
 }
 
-/* 文章内代码块折叠：把 <pre> 包进 <details>，默认收起长代码 */
+/* 文章内代码块折叠 */
 .prose details.code-fold {
   margin: 1.2em 0;
   border: 1px solid var(--border-color);
-  border-radius: 14px;
+  border-radius: 10px;
   overflow: hidden;
-  background: color-mix(in srgb, var(--surface) 72%, transparent);
+  background: var(--surface);
 }
 
 .prose details.code-fold > summary {
@@ -256,12 +283,12 @@ figure {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.7rem 1rem;
+  padding: 0.65rem 1rem;
   font-family: var(--font-mono);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--text-secondary);
   user-select: none;
-  background: color-mix(in srgb, var(--surface) 55%, transparent);
+  background: var(--code-bg);
 }
 
 .prose details.code-fold > summary::-webkit-details-marker {
@@ -274,7 +301,7 @@ figure {
 
 .prose details.code-fold > summary .chev {
   opacity: 0.7;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
 }
 
 .prose details.code-fold > pre {
@@ -282,10 +309,9 @@ figure {
   border-radius: 0 !important;
   border-top: 1px solid var(--border-color);
   padding-top: 1.1em !important;
-  overflow-x: auto; /* 折叠态的长代码同样允许横滑 */
+  overflow-x: auto;
 }
 
-/* 折叠后不显示 shiki 顶部的语言标签，避免和摘要重复 */
 .prose details.code-fold > pre[data-lang]::before {
   display: none;
 }
@@ -295,10 +321,9 @@ figure {
   display: block;
   max-width: 100%;
   height: auto;
-  margin: 1.6em auto;
-  border-radius: 14px;
+  margin: 1.5em auto;
+  border-radius: 10px;
   border: 1px solid var(--border-color);
-  box-shadow: var(--shadow-sm);
 }
 
 .prose figure img {
@@ -306,20 +331,20 @@ figure {
 }
 
 .prose figure figcaption {
-  margin-top: 0.6rem;
+  margin-top: 0.5rem;
   text-align: center;
   font-size: 0.85rem;
   color: var(--text-secondary);
 }
 
-/* 文章内：鼠标聚光演示框。光用主题色，亮暗主题通用 */
+/* 鼠标聚光演示框 */
 .spotlight-demo {
   position: relative;
   overflow: hidden;
-  margin: 1.75rem 0;
-  min-height: 220px;
+  margin: 1.5rem 0;
+  min-height: 200px;
   border: 1px solid var(--border-color);
-  border-radius: 14px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -333,8 +358,8 @@ figure {
   inset: 0;
   pointer-events: none;
   background: radial-gradient(
-    320px circle at var(--mx, 50%) var(--my, 50%),
-    color-mix(in srgb, var(--primary-color) 26%, transparent),
+    280px circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in srgb, var(--primary-color) 22%, transparent),
     transparent 66%
   );
 }
@@ -350,14 +375,13 @@ figure {
   font-size: 0.95rem;
 }
 
-/* 块级公式在手机上可能比屏幕还宽，允许横向滚动而非撑破页面 */
+/* 块级公式横滑 */
 .katex-display {
   overflow-x: auto;
   overflow-y: hidden;
   padding-bottom: 0.3em;
 }
 
-/* 小屏上块级公式整体缩一点，更易容纳 */
 @media (max-width: 480px) {
   .katex-display {
     font-size: 0.85em;
@@ -367,10 +391,10 @@ figure {
 table {
   border-collapse: collapse;
   font-family: var(--font-body);
-  font-size: 1.15rem;
-  margin: 2em 0;
+  font-size: 1rem;
+  margin: 1.5em 0;
   width: 100%;
-  display: block; /* 宽表格在手机上可整体横滑 */
+  display: block;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -379,6 +403,7 @@ th {
   border-bottom: 2px solid var(--border-color);
   padding: 0.5em 0.8em;
   text-align: left;
+  font-weight: 600;
 }
 
 td {
@@ -386,7 +411,7 @@ td {
   border-bottom: 1px solid var(--border-color);
 }
 
-/* 文章内：AI 词典顶部索引，字母分节、蓝色条头 */
+/* AI 词典顶部索引 */
 .prose .glossary-index {
   margin: 1.25rem 0 1.75rem;
 }
@@ -396,10 +421,10 @@ td {
 .prose .glossary-index .gi-letter {
   display: block;
   background: var(--primary-color);
-  color: var(--bg-color);
+  color: var(--on-accent);
   font-weight: 700;
-  padding: 0.25rem 0.7rem;
-  border-radius: 6px;
+  padding: 0.2rem 0.7rem;
+  border-radius: 4px;
   margin-bottom: 0.35rem;
 }
 .prose .glossary-index .gi-terms {
@@ -409,7 +434,7 @@ td {
   padding-left: 0.2rem;
 }
 
-/* 锚点跳转时把标题往下推，避开顶部 sticky 导航栏（约 60px 高） */
+/* 锚点偏移 */
 .prose h2[id],
 .prose h3[id] {
   scroll-margin-top: 5rem;
@@ -421,10 +446,9 @@ td {
   width: 100%;
 }
 
-/* ===== 归档页通用页头（themes / series / tags / posts / blog / 分页页共用） =====
-   提取自各页重复的 .page-head 作用域样式；各页仅保留自身差异覆盖。 */
+/* ===== 归档页页头 ===== */
 .page-head {
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
 }
 
 .page-head .back {
@@ -440,7 +464,7 @@ td {
 }
 
 .page-head h1 {
-  font-size: 2.4rem;
+  font-size: 2.2rem;
   font-weight: 800;
   letter-spacing: -0.02em;
   color: var(--text-main);
@@ -453,7 +477,7 @@ td {
 }
 
 .content h1 {
-  font-size: 2.9rem;
+  font-size: 2.6rem;
   margin: 1em 0;
 }
 
@@ -504,26 +528,26 @@ input[name='theme-toggle'] {
 
 @media (max-width: 1020px) {
   h1 {
-    font-size: 2.2rem;
+    font-size: 2rem;
   }
   .content h1 {
-    font-size: 2.4rem;
+    font-size: 2.2rem;
   }
 }
 
 @media (max-width: 480px) {
   body {
-    font-size: 18px;
+    font-size: 16px;
   }
   p,
   ul,
   ol {
-    font-size: 1.1rem;
-    margin: 1.3em 0;
+    font-size: 1rem;
+    margin: 1.1em 0;
   }
 }
 
-/* 触摸设备（手机/平板）：放大导航、标签、主题 chip 的点击区域，减少误触 */
+/* 触摸设备：放大点击区域 */
 @media (hover: none) and (pointer: coarse) {
   .internal-links a {
     padding: 0.55rem 0.15rem !important;
@@ -537,29 +561,14 @@ input[name='theme-toggle'] {
   }
 }
 
-/* ===== 文字特效工具类（卡通 / 花式文字） ===== */
-/* 渐变文字：背景裁成文字形状，字色透明；-webkit-text-fill-color 兼顾 Safari */
-.grad-text {
-  background: linear-gradient(100deg, var(--primary-color), #8fc4ab);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  font-weight: 600;
-}
-/* 马克笔高亮：背景只覆盖底部一截，像荧光笔划过；color-mix 让它在暗色模式也不刺眼 */
+/* ===== 文字工具类 ===== */
 .mark {
-  background: linear-gradient(transparent 55%, color-mix(in srgb, var(--primary-color) 45%, transparent) 55%);
+  background: linear-gradient(transparent 55%, color-mix(in srgb, var(--primary-color) 35%, transparent) 55%);
   padding: 0 0.14em;
-  border-radius: 3px;
+  border-radius: 2px;
 }
-/* 空心描边文字 */
-.outline-text {
-  -webkit-text-stroke: 2px var(--text-main);
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-}
-/* 融入版面的插画：去掉默认边框/阴影/圆角，透明背景直接坐在底色上，不再像贴纸 */
+
+/* 融入版面的插画 */
 .prose figure.art {
   margin: 1.4em auto;
   text-align: center;
@@ -571,3 +580,181 @@ input[name='theme-toggle'] {
   margin: 0 auto;
   max-width: 300px;
 }
+
+/* ===================================================================
+   科技质感层：网格背景 / 渐变标题 / 流光边框 / 灵动过渡
+   =================================================================== */
+
+/* 全站细微网格点阵（极淡，不抢内容） */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: var(--grid-dot);
+  background-size: var(--grid-size) var(--grid-size);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* 渐变标题：青蓝 → 紫，科技感 */
+.gradient-text {
+  background: linear-gradient(
+    100deg,
+    var(--primary-color),
+    var(--primary-2) 70%,
+    var(--primary-2)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 流光边框卡片：
+   用伪元素画一条沿边框流动的青蓝光带（hover 时启动） */
+.glow-card {
+  position: relative;
+  border: 1px solid var(--border-color);
+  background: var(--surface);
+  border-radius: 12px;
+  transition:
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.28s ease,
+    border-color 0.28s ease;
+}
+
+.glow-card::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    120deg,
+    transparent 30%,
+    var(--primary-color),
+    var(--primary-2),
+    transparent 70%
+  );
+  background-size: 220% 220%;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.glow-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--glow-sm);
+  border-color: transparent;
+}
+
+.glow-card:hover::after {
+  opacity: 1;
+  animation: border-flow 2.4s linear infinite;
+}
+
+@keyframes border-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 220% 50%;
+  }
+}
+
+/* 灵动链接/按钮：统一平滑过渡 + 微光 */
+a,
+.btn,
+button {
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+/* 等宽字体标签：科技终端感 */
+.mono-tag {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.01em;
+}
+
+/* 装饰性小角标（如「//」前缀），增强工程感 */
+.tech-prefix::before {
+  content: "// ";
+  color: var(--primary-color);
+  font-family: var(--font-mono);
+  opacity: 0.7;
+}
+
+/* 减少动效偏好：关闭流光/网格动画 */
+@media (prefers-reduced-motion: reduce) {
+  .glow-card:hover {
+    transform: none;
+  }
+  .glow-card:hover::after {
+    animation: none;
+  }
+  body::before {
+    opacity: 0.35;
+  }
+}
+
+/* ===================================================================
+   主题色切换器：通过 <html data-accent="..."> 覆盖全站强调色
+   在列表页等位置提供切换小工具，选择存入 localStorage
+   =================================================================== */
+:root[data-accent='violet'] {
+  --primary-color: #6366f1;
+  --primary-2: #8b5cf6;
+  --primary-strong: #4f46e5;
+  --primary-soft: #c7d2fe;
+  --glow: rgba(99, 102, 241, 0.35);
+  --glow-sm: 0 8px 28px -16px rgba(99, 102, 241, 0.6);
+}
+:root[data-accent='violet'].dark {
+  --primary-color: #818cf8;
+  --primary-2: #a78bfa;
+  --primary-strong: #a5b4fc;
+  --primary-soft: #312e81;
+}
+
+:root[data-accent='green'] {
+  --primary-color: #10b981;
+  --primary-2: #14b8a6;
+  --primary-strong: #059669;
+  --primary-soft: #a7f3d0;
+  --glow: rgba(16, 185, 129, 0.35);
+  --glow-sm: 0 8px 28px -16px rgba(16, 185, 129, 0.6);
+}
+:root[data-accent='green'].dark {
+  --primary-color: #34d399;
+  --primary-2: #2dd4bf;
+  --primary-strong: #6ee7b7;
+  --primary-soft: #064e3b;
+}
+
+:root[data-accent='amber'] {
+  --primary-color: #f59e0b;
+  --primary-2: #f97316;
+  --primary-strong: #d97706;
+  --primary-soft: #fde68a;
+  --glow: rgba(245, 158, 11, 0.35);
+  --glow-sm: 0 8px 28px -16px rgba(245, 158, 11, 0.6);
+}
+:root[data-accent='amber'].dark {
+  --primary-color: #fbbf24;
+  --primary-2: #fb923c;
+  --primary-strong: #fcd34d;
+  --primary-soft: #78350f;
+}
+
+/* 默认青蓝（cyan）即 :root 本身，无需覆盖 */

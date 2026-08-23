@@ -4,12 +4,10 @@ import ThemeToggle from './ThemeToggle.astro';
 import Search from './Search.astro';
 ---
 
-<header>
-	<nav>
-		<!-- 站点标题 / Logo -->
-		<h2><a href="/">Wang's Notes</a></h2>
+	<header>
+		<nav>
+			<h2><a href="/">Wang's <span class="logo-accent">Notes</span></a></h2>
 
-		<!-- 导航菜单与主题切换 -->
 		<div class="nav-links">
 			<div class="internal-links">
 				<HeaderLink href="/">首页</HeaderLink>
@@ -17,9 +15,7 @@ import Search from './Search.astro';
 				<HeaderLink href="/categories">分类</HeaderLink>
 				<HeaderLink href="/about">关于</HeaderLink>
 			</div>
-			<!-- 暗黑模式切换按钮 -->
 			<ThemeToggle />
-			<!-- 搜索 -->
 			<Search />
 		</div>
 	</nav>
@@ -28,12 +24,10 @@ import Search from './Search.astro';
 <style>
 	header {
 		margin: 0;
-		padding: 1.1rem 1.25rem;
+		padding: 1rem 1.25rem;
 		border-bottom: 1px solid var(--border-color);
-		background-color: color-mix(in srgb, var(--bg-color) 85%, transparent);
-		transition:
-			background-color 0.2s ease,
-			border-color 0.2s ease;
+		background-color: color-mix(in srgb, var(--bg-color) 88%, transparent);
+		transition: background-color 0.2s ease, border-color 0.2s ease;
 		position: sticky;
 		top: 0;
 		z-index: 10;
@@ -51,7 +45,7 @@ import Search from './Search.astro';
 
 	h2 {
 		margin: 0;
-		font-size: 1.2rem;
+		font-size: 1.1rem;
 		font-weight: 700;
 		letter-spacing: -0.01em;
 	}
@@ -66,63 +60,82 @@ import Search from './Search.astro';
 		color: var(--accent-color);
 	}
 
-	.nav-links {
-		display: flex;
-		align-items: center;
-		gap: 1.5rem;
+	.logo-accent {
+		background: linear-gradient(100deg, var(--primary-color), var(--primary-2));
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+		-webkit-text-fill-color: transparent;
 	}
 
-	.internal-links {
+	.nav-links {
 		display: flex;
 		align-items: center;
 		gap: 1.25rem;
 	}
 
-	/* HeaderLink 组件在导航栏中的外观 */
+	.internal-links {
+		display: flex;
+		align-items: center;
+		gap: 1.1rem;
+	}
+
 	.internal-links :global(a) {
 		padding: 0.25rem 0;
 		color: var(--text-muted);
 		text-decoration: none;
-		font-size: 0.95rem;
+		font-size: 0.9rem;
 		font-weight: 500;
-		border-bottom: 2px solid transparent;
-		transition: all 0.2s ease;
+		transition: color 0.2s ease;
 	}
 
 	.internal-links :global(a:hover) {
-		color: var(--text-color);
+		color: var(--primary-color);
 	}
 
-	/* 当前页面高亮样式 */
+	.internal-links :global(a::after) {
+		content: "";
+		display: block;
+		height: 2px;
+		margin-top: 2px;
+		background: linear-gradient(90deg, var(--primary-color), var(--primary-2));
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 0.25s ease;
+	}
+
+	.internal-links :global(a:hover::after),
+	.internal-links :global(a.active::after) {
+		transform: scaleX(1);
+	}
+
 	.internal-links :global(a.active) {
-		color: var(--text-color);
-		border-bottom-color: var(--accent-color);
+		color: var(--primary-color);
 		font-weight: 600;
 	}
 
 	@media (max-width: 600px) {
 		header {
-			padding: 0.9rem 1rem;
+			padding: 0.85rem 1rem;
 		}
 
 		h2 {
-			font-size: 1.05rem;
+			font-size: 1rem;
 		}
 
 		.nav-links {
-			gap: 1rem;
-		}
-
-		.internal-links {
 			gap: 0.85rem;
 		}
 
+		.internal-links {
+			gap: 0.8rem;
+		}
+
 		.internal-links :global(a) {
-			font-size: 0.9rem;
+			font-size: 0.85rem;
 		}
 	}
 
-	/* 超窄屏（≤420px）：收起站名，给导航让出空间，避免顶栏挤换行 */
 	@media (max-width: 420px) {
 		h2 {
 			display: none;
