@@ -1,0 +1,447 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+
+const tools = [
+	{ id: 'counter', name: '文本统计', desc: '字数、词数、行数、预计阅读时长' },
+	{ id: 'color', name: '颜色转换', desc: 'HEX / RGB / HSL 互转，实时预览' },
+	{ id: 'timestamp', name: '时间戳', desc: '当前时间戳，以及时间戳与日期互转' },
+	{ id: 'password', name: '密码生成', desc: '可配置长度与字符集，一键复制' },
+];
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={`小工具 - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+		<style>
+			main {
+				max-width: var(--wide-width);
+				margin: 0 auto;
+				padding: 3.5rem 1.25rem 1rem;
+			}
+
+			.page-head h1 {
+				font-size: 2.2rem;
+				margin: 0 0 0.5rem;
+			}
+
+			.page-head p {
+				margin: 0;
+				color: var(--text-secondary);
+				font-size: 1.05rem;
+			}
+
+			.tool-grid {
+				display: grid;
+				grid-template-columns: repeat(2, 1fr);
+				gap: 1.25rem;
+				margin: 2rem 0 1rem;
+			}
+
+			@media (max-width: 760px) {
+				.tool-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+
+			.card {
+				border: 1px solid var(--border-color);
+				border-radius: 12px;
+				background: var(--surface);
+				padding: 1.3rem 1.4rem;
+			}
+
+			.card-head {
+				display: flex;
+				align-items: baseline;
+				justify-content: space-between;
+				gap: 0.5rem;
+				margin-bottom: 1rem;
+			}
+
+			.card-head h2 {
+				font-size: 1.05rem;
+				margin: 0;
+				font-weight: 700;
+			}
+
+			.card-head .desc {
+				font-size: 0.78rem;
+				color: var(--text-secondary);
+				font-family: var(--font-mono);
+			}
+
+			/* 通用输入 */
+			textarea,
+			input[type='text'],
+			input[type='number'] {
+				width: 100%;
+				font-family: var(--font-mono);
+				font-size: 0.9rem;
+				color: var(--text-main);
+				background: var(--code-bg);
+				border: 1px solid var(--border-color);
+				border-radius: 8px;
+				padding: 0.6rem 0.7rem;
+				resize: vertical;
+			}
+
+			textarea:focus,
+			input:focus {
+				outline: none;
+				border-color: var(--primary-color);
+				box-shadow: 0 0 0 3px var(--glow);
+			}
+
+			label {
+				display: block;
+				font-size: 0.8rem;
+				color: var(--text-secondary);
+				margin: 0.8rem 0 0.35rem;
+			}
+
+			.stat-row {
+				display: grid;
+				grid-template-columns: repeat(4, 1fr);
+				gap: 0.6rem;
+				margin-top: 0.8rem;
+			}
+
+			.stat {
+				text-align: center;
+				background: var(--code-bg);
+				border: 1px solid var(--border-color);
+				border-radius: 8px;
+				padding: 0.6rem 0.3rem;
+			}
+
+			.stat b {
+				display: block;
+				font-size: 1.3rem;
+				color: var(--primary-color);
+				font-family: var(--font-mono);
+			}
+
+			.stat span {
+				font-size: 0.72rem;
+				color: var(--text-secondary);
+			}
+
+			/* 颜色工具 */
+			.color-preview {
+				height: 56px;
+				border-radius: 8px;
+				border: 1px solid var(--border-color);
+				margin: 0.8rem 0 0.4rem;
+				background: #0ea5e9;
+				transition: background 0.15s ease;
+			}
+
+			/* 时间戳 */
+			.ts-now {
+				font-family: var(--font-mono);
+				font-size: 1.4rem;
+				color: var(--primary-color);
+				margin: 0.4rem 0;
+			}
+
+			/* 密码 */
+			.pw-out {
+				font-size: 1rem;
+				letter-spacing: 0.02em;
+				word-break: break-all;
+			}
+
+			.controls {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				gap: 0.8rem 1.1rem;
+				margin: 0.6rem 0;
+			}
+
+			.controls label {
+				margin: 0;
+				display: inline-flex;
+				align-items: center;
+				gap: 0.35rem;
+				font-size: 0.82rem;
+				color: var(--text-main);
+			}
+
+			.controls input[type='number'] {
+				width: 64px;
+			}
+
+			.controls input[type='checkbox'] {
+				width: 15px;
+				height: 15px;
+				accent-color: var(--primary-color);
+			}
+
+			.btn {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.4rem;
+				font-family: var(--font-body);
+				font-size: 0.88rem;
+				font-weight: 600;
+				color: var(--on-accent);
+				background: linear-gradient(100deg, var(--primary-color), var(--primary-2));
+				border: none;
+				border-radius: 8px;
+				padding: 0.55rem 0.95rem;
+				cursor: pointer;
+				box-shadow: var(--glow-sm);
+				transition:
+					filter 0.2s ease,
+					transform 0.15s ease;
+			}
+
+			.btn:hover {
+				filter: brightness(1.06);
+			}
+
+			.btn:active {
+				transform: scale(0.97);
+			}
+
+			.btn.ghost {
+				color: var(--primary-color);
+				background: transparent;
+				border: 1px solid color-mix(in srgb, var(--primary-color) 45%, transparent);
+				box-shadow: none;
+			}
+
+			.hint {
+				font-size: 0.78rem;
+				color: var(--text-secondary);
+				margin: 0.5rem 0 0;
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<header class="page-head">
+				<h1>小工具</h1>
+				<p>几个纯前端、离线可用的小工具，打开就能用。</p>
+			</header>
+
+			<section class="tool-grid">
+				<!-- 文本统计 -->
+				<article class="card" id="counter">
+					<div class="card-head">
+						<h2>文本统计</h2>
+						<span class="desc">字数 / 词数 / 行数</span>
+					</div>
+					<textarea id="counter-text" rows="4" placeholder="粘贴或输入文本…"></textarea>
+					<div class="stat-row">
+						<div class="stat"><b id="st-chars">0</b><span>字符</span></div>
+						<div class="stat"><b id="st-chars-no-space">0</b><span>去空格</span></div>
+						<div class="stat"><b id="st-words">0</b><span>词数</span></div>
+						<div class="stat"><b id="st-lines">0</b><span>行数</span></div>
+					</div>
+					<p class="hint" id="st-read">预计阅读：0 分钟</p>
+				</article>
+
+				<!-- 颜色转换 -->
+				<article class="card" id="color">
+					<div class="card-head">
+						<h2>颜色转换</h2>
+						<span class="desc">HEX / RGB / HSL</span>
+					</div>
+					<label for="color-hex">HEX</label>
+					<input type="text" id="color-hex" value="#0ea5e9" spellcheck="false" />
+					<div class="color-preview" id="color-preview"></div>
+					<label for="color-rgb">RGB</label>
+					<input type="text" id="color-rgb" readonly />
+					<label for="color-hsl">HSL</label>
+					<input type="text" id="color-hsl" readonly />
+				</article>
+
+				<!-- 时间戳 -->
+				<article class="card" id="timestamp">
+					<div class="card-head">
+						<h2>时间戳</h2>
+						<span class="desc">Unix 秒 / 毫秒</span>
+					</div>
+					<p class="ts-now" id="ts-now">—</p>
+					<label for="ts-input">时间戳 → 日期（支持秒或毫秒）</label>
+					<input type="text" id="ts-input" placeholder="如 1700000000" spellcheck="false" />
+					<p class="hint" id="ts-result">—</p>
+					<label for="ts-date">日期 → 时间戳</label>
+					<input type="text" id="ts-date" placeholder="如 2026-08-23 18:00:00" spellcheck="false" />
+					<p class="hint" id="ts-result2">—</p>
+				</article>
+
+				<!-- 密码生成 -->
+				<article class="card" id="password">
+					<div class="card-head">
+						<h2>密码生成</h2>
+						<span class="desc">本地生成</span>
+					</div>
+					<input type="text" id="pw-out" class="pw-out" readonly />
+					<div class="controls">
+						<label>长度 <input type="number" id="pw-len" value="16" min="4" max="64" /></label>
+						<label><input type="checkbox" id="pw-lower" checked /> 小写</label>
+						<label><input type="checkbox" id="pw-upper" checked /> 大写</label>
+						<label><input type="checkbox" id="pw-num" checked /> 数字</label>
+						<label><input type="checkbox" id="pw-sym" /> 符号</label>
+					</div>
+					<div class="controls">
+						<button class="btn" id="pw-gen">生成</button>
+						<button class="btn ghost" id="pw-copy">复制</button>
+					</div>
+				</article>
+			</section>
+		</main>
+		<Footer />
+
+		<script>
+			// ===== 文本统计 =====
+			const cText = document.getElementById('counter-text') as HTMLTextAreaElement | null;
+			const st = {
+				chars: document.getElementById('st-chars'),
+				noSpace: document.getElementById('st-chars-no-space'),
+				words: document.getElementById('st-words'),
+				lines: document.getElementById('st-lines'),
+				read: document.getElementById('st-read'),
+			};
+			cText?.addEventListener('input', () => {
+				const v = cText.value;
+				const chars = v.length;
+				const noSpace = v.replace(/\s/g, '').length;
+				const words = (v.trim().match(/[\u4e00-\u9fa5]|[A-Za-z0-9]+/g) || []).length;
+				const lines = v === '' ? 0 : v.split('\n').length;
+				if (st.chars) st.chars.textContent = String(chars);
+				if (st.noSpace) st.noSpace.textContent = String(noSpace);
+				if (st.words) st.words.textContent = String(words);
+				if (st.lines) st.lines.textContent = String(lines);
+				if (st.read) {
+					const min = Math.max(1, Math.ceil(words / 300));
+					st.read.textContent = `预计阅读：${words === 0 ? 0 : min} 分钟`;
+				}
+			});
+
+			// ===== 颜色转换 =====
+			const hexIn = document.getElementById('color-hex') as HTMLInputElement | null;
+			const rgbIn = document.getElementById('color-rgb') as HTMLInputElement | null;
+			const hslIn = document.getElementById('color-hsl') as HTMLInputElement | null;
+			const preview = document.getElementById('color-preview');
+			const clamp = (n: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, n));
+
+			const hexToRgb = (hex: string) => {
+				const m = hex.replace('#', '').match(/^([0-9a-f]{6})$/i);
+				if (!m) return null;
+				const n = parseInt(m[1], 16);
+				return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+			};
+			const rgbToHsl = (r: number, g: number, b: number) => {
+				r /= 255; g /= 255; b /= 255;
+				const max = Math.max(r, g, b), min = Math.min(r, g, b);
+				let h = 0, s = 0;
+				const l = (max + min) / 2;
+				const d = max - min;
+				if (d !== 0) {
+					s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+					switch (max) {
+						case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+						case g: h = (b - r) / d + 2; break;
+						default: h = (r - g) / d + 4;
+					}
+					h /= 6;
+				}
+				return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
+			};
+			const updateColor = (hex: string) => {
+				const rgb = hexToRgb(hex);
+				if (!rgb) return;
+				if (rgbIn) rgbIn.value = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+				const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+				if (hslIn) hslIn.value = `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`;
+				if (preview) preview.style.background = hex;
+			};
+			hexIn?.addEventListener('input', () => updateColor(hexIn.value.trim()));
+			updateColor(hexIn?.value || '#0ea5e9');
+
+			// ===== 时间戳 =====
+			const tsNow = document.getElementById('ts-now');
+			const tsInput = document.getElementById('ts-input') as HTMLInputElement | null;
+			const tsResult = document.getElementById('ts-result');
+			const tsDate = document.getElementById('ts-date') as HTMLInputElement | null;
+			const tsResult2 = document.getElementById('ts-result2');
+			const pad = (n: number) => String(n).padStart(2, '0');
+			const fmt = (d: Date) =>
+				`${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+			const tickNow = () => {
+				const n = Math.floor(Date.now() / 1000);
+				if (tsNow) tsNow.textContent = `${n} （毫秒 ${n * 1000}）`;
+			};
+			tickNow();
+			window.setInterval(tickNow, 1000);
+			tsInput?.addEventListener('input', () => {
+				const v = tsInput.value.trim();
+				const n = Number(v);
+				if (!v || !Number.isFinite(n)) {
+					if (tsResult) tsResult.textContent = '—';
+					return;
+				}
+				const ms = v.length >= 13 ? n : n * 1000;
+				if (tsResult) tsResult.textContent = fmt(new Date(ms));
+			});
+			tsDate?.addEventListener('input', () => {
+				const v = tsDate.value.trim();
+				const d = new Date(v.replace(' ', 'T'));
+				if (isNaN(d.getTime())) {
+					if (tsResult2) tsResult2.textContent = '—';
+					return;
+				}
+				const s = Math.floor(d.getTime() / 1000);
+				if (tsResult2) tsResult2.textContent = `秒 ${s} · 毫秒 ${s * 1000}`;
+			});
+
+			// ===== 密码生成 =====
+			const pwOut = document.getElementById('pw-out') as HTMLInputElement | null;
+			const pwLen = document.getElementById('pw-len') as HTMLInputElement | null;
+			const sets = {
+				lower: 'abcdefghijkmnpqrstuvwxyz',
+				upper: 'ABCDEFGHJKLMNPQRSTUVWXYZ',
+				num: '23456789',
+				sym: '!@#$%^&*-_=+',
+			};
+			const genPw = () => {
+				const len = clamp(parseInt(pwLen?.value || '16', 10) || 16, 4, 64);
+				let pool = '';
+				const picks: string[] = [];
+				(['lower', 'upper', 'num', 'sym'] as const).forEach((k) => {
+					const el = document.getElementById('pw-' + k) as HTMLInputElement | null;
+					if (el?.checked) {
+						pool += sets[k];
+						picks.push(sets[k][Math.floor(Math.random() * sets[k].length)]);
+					}
+				});
+				if (!pool) {
+					if (pwOut) pwOut.value = '请至少选择一种字符';
+					return;
+				}
+				let out = picks.join('');
+				while (out.length < len) out += pool[Math.floor(Math.random() * pool.length)];
+				out = out.slice(0, len);
+				if (pwOut) pwOut.value = out;
+			};
+			document.getElementById('pw-gen')?.addEventListener('click', genPw);
+			document.getElementById('pw-copy')?.addEventListener('click', async () => {
+				if (pwOut?.value) {
+					try {
+						await navigator.clipboard.writeText(pwOut.value);
+					} catch {}
+				}
+			});
+			genPw();
+		</script>
+	</body>
+</html>
