@@ -11,13 +11,14 @@ type Props = CollectionEntry<'blog'>['data'] & {
 	readingTime?: string;
 	prev?: CollectionEntry<'blog'> | null;
 	next?: CollectionEntry<'blog'> | null;
+	related?: CollectionEntry<'blog'>[];
 	tags?: string[];
 	series?: string | null;
 	order?: number | null;
 	headings?: { depth: number; text: string; slug: string }[];
 };
 
-const { title, description, pubDate, updatedDate, heroImage, readingTime, prev, next, tags = [], series = null, order = null, theme = '随笔', headings = [] } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, readingTime, prev, next, related = [], tags = [], series = null, order = null, theme = '随笔', headings = [] } = Astro.props;
 
 const slug = Astro.url.pathname.split('/').filter(Boolean)[1] ?? '';
 const ogImage = `/og/${slug}`;
@@ -48,18 +49,6 @@ const jsonLd = {
 		/>
 		<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 		<style>
-			/* 阅读进度条 */
-			.progress {
-				position: fixed;
-				top: 0;
-				left: 0;
-				height: 2px;
-				width: 0;
-				background: var(--primary-color);
-				z-index: 30;
-				transition: width 0.1s linear;
-			}
-
 			main {
 				width: 100%;
 				max-width: var(--wide-width);
@@ -328,8 +317,66 @@ const jsonLd = {
 				box-shadow: none;
 			}
 
-			/* 目录 */
-			.toc {
+			/* 目录：宽屏右侧 sticky 栏，窄屏内联折叠 */
+			.layout {
+				display: grid;
+				grid-template-columns: minmax(0, 1fr) 220px;
+				gap: 2.5rem;
+				align-items: start;
+				max-width: var(--wide-width);
+				margin: 0 auto;
+			}
+
+			.toc-rail {
+				position: sticky;
+				top: 5.5rem;
+				max-height: calc(100vh - 6.5rem);
+				overflow-y: auto;
+				padding: 0.2rem 0;
+			}
+
+			.toc-rail .toc-title {
+				font-family: var(--font-mono);
+				font-size: 0.7rem;
+				letter-spacing: 0.12em;
+				text-transform: uppercase;
+				color: var(--primary-color);
+				margin: 0 0 0.7rem;
+			}
+
+			.toc-rail nav {
+				display: flex;
+				flex-direction: column;
+				gap: 0.1rem;
+				border-left: 2px solid var(--border-color);
+			}
+
+			.toc-rail a {
+				font-size: 0.82rem;
+				line-height: 1.45;
+				color: var(--text-secondary);
+				text-decoration: none;
+				padding: 0.28rem 0 0.28rem 0.85rem;
+				margin-left: -2px;
+				border-left: 2px solid transparent;
+				transition: color 0.18s ease, border-color 0.18s ease;
+			}
+
+			.toc-rail a:hover { color: var(--primary-color); }
+
+			.toc-rail a.active {
+				color: var(--primary-color);
+				border-left-color: var(--primary-color);
+				font-weight: 600;
+			}
+
+			.toc-rail a.sub {
+				padding-left: 1.7rem;
+				font-size: 0.78rem;
+			}
+
+			/* 窄屏：内联折叠目录 */
+			.toc-inline {
 				margin: 1.2rem 0 2rem;
 				padding: 0.85rem 1.1rem;
 				background: var(--code-bg);
@@ -337,7 +384,7 @@ const jsonLd = {
 				border-radius: 8px;
 			}
 
-			.toc summary {
+			.toc-inline summary {
 				font-family: var(--font-display);
 				font-size: 0.95rem;
 				font-weight: 600;
@@ -346,16 +393,16 @@ const jsonLd = {
 				list-style: none;
 			}
 
-			.toc summary::-webkit-details-marker { display: none; }
+			.toc-inline summary::-webkit-details-marker { display: none; }
 
-			.toc summary::before {
+			.toc-inline summary::before {
 				content: '§';
 				margin-right: 0.5rem;
 				color: var(--primary-color);
 				font-family: var(--font-mono);
 			}
 
-			.toc nav {
+			.toc-inline nav {
 				display: flex;
 				flex-direction: column;
 				gap: 0.2rem;
@@ -364,7 +411,7 @@ const jsonLd = {
 				border-left: 2px solid var(--border-color);
 			}
 
-			.toc-item, .toc-sub {
+			.toc-inline a {
 				font-size: 0.88rem;
 				line-height: 1.5;
 				color: var(--text-secondary);
@@ -372,11 +419,16 @@ const jsonLd = {
 				transition: color 0.15s ease;
 			}
 
-			.toc-item:hover, .toc-sub:hover { color: var(--primary-color); }
+			.toc-inline a:hover { color: var(--primary-color); }
+			.toc-inline a.sub { padding-left: 1.2rem; font-size: 0.82rem; }
 
-			.toc-sub {
-				font-size: 0.82rem;
-				padding-left: 1.2rem;
+			@media (max-width: 1000px) {
+				.layout { display: block; }
+				.toc-rail { display: none; }
+			}
+
+			@media (min-width: 1001px) {
+				.toc-inline { display: none; }
 			}
 
 			/* 代码块语言标签 */
@@ -479,6 +531,82 @@ const jsonLd = {
 				pointer-events: none;
 			}
 
+			/* 相关阅读 */
+			.related {
+				max-width: var(--wide-width);
+				margin: 3rem auto 0;
+			}
+
+			.related h2 {
+				font-size: 1.15rem;
+				margin: 0 0 1rem;
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+			}
+
+			.related h2::before {
+				content: '';
+				width: 3px;
+				height: 1.05rem;
+				border-radius: 2px;
+				background: linear-gradient(180deg, var(--primary-color), var(--primary-2));
+			}
+
+			.related-grid {
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				gap: 1rem;
+			}
+
+			.related-card {
+				display: flex;
+				flex-direction: column;
+				gap: 0.4rem;
+				padding: 1rem 1.1rem;
+				border: 1px solid var(--border-color);
+				border-radius: 10px;
+				text-decoration: none;
+				color: var(--text-main);
+				background: var(--surface);
+				transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+			}
+
+			.related-card:hover {
+				border-color: color-mix(in srgb, var(--primary-color) 50%, transparent);
+				transform: translateY(-3px);
+				box-shadow: var(--glow-sm);
+			}
+
+			.related-card .rc-title {
+				font-size: 0.95rem;
+				font-weight: 600;
+				line-height: 1.45;
+				color: var(--text-main);
+			}
+
+			.related-card .rc-excerpt {
+				font-size: 0.82rem;
+				line-height: 1.55;
+				color: var(--text-secondary);
+				margin: 0;
+				display: -webkit-box;
+				-webkit-line-clamp: 2;
+				-webkit-box-orient: vertical;
+				overflow: hidden;
+			}
+
+			.related-card .rc-meta {
+				font-family: var(--font-mono);
+				font-size: 0.72rem;
+				color: var(--text-secondary);
+				margin-top: auto;
+			}
+
+			@media (max-width: 1000px) {
+				.related-grid { grid-template-columns: 1fr; }
+			}
+
 			@media (max-width: 600px) {
 				.pager {
 					grid-template-columns: 1fr;
@@ -491,7 +619,6 @@ const jsonLd = {
 	</head>
 
 	<body>
-		<div class="progress" id="progress"></div>
 		<Header />
 		<main>
 			<article>
@@ -502,6 +629,7 @@ const jsonLd = {
 					返回文章
 				</a>
 
+				<div class="layout">
 				<div class="prose">
 					<div class="post-header">
 						<div class="hero-image">
@@ -562,21 +690,22 @@ const jsonLd = {
 								</div>
 							</div>
 						</div>
-						<hr class="divider" />
-					</div>
+					<hr class="divider" />
+				</div>
 
-					{
-						headings.length > 1 && (
-							<details class="toc">
-								<summary>目录</summary>
-								<nav>
-									{headings.map((h) => (
-										<a href={`#${h.slug}`} class={h.depth === 3 ? 'toc-sub' : 'toc-item'}>{h.text}</a>
-									))}
-								</nav>
-							</details>
-						)
-					}
+				{
+					headings.length > 1 && (
+						<details class="toc-inline">
+							<summary>目录</summary>
+							<nav>
+								{headings.map((h) => (
+									<a href={`#${h.slug}`} class={h.depth === 3 ? 'sub' : ''}>{h.text}</a>
+								))}
+							</nav>
+						</details>
+					)
+				}
+
 				<slot />
 				<p class="ai-byline">人工智能生成 · 人机协同创造</p>
 
@@ -584,6 +713,20 @@ const jsonLd = {
 					<p>如果这篇对你有启发，欢迎 <a href="https://twitter.com/intent/tweet?url={encodeURIComponent(Astro.url)}&text={encodeURIComponent(title)}" target="_blank" rel="noopener noreferrer">分享到 X</a>，或 <a href="/blog">浏览更多文章</a>。</p>
 				</div>
 			</div>
+
+				{
+					headings.length > 1 && (
+						<aside class="toc-rail" aria-label="目录">
+							<p class="toc-title">本文目录</p>
+							<nav id="toc-nav">
+								{headings.map((h) => (
+									<a href={`#${h.slug}`} data-slug={h.slug} class={h.depth === 3 ? 'sub' : ''}>{h.text}</a>
+								))}
+							</nav>
+						</aside>
+					)
+				}
+				</div>
 
 				<nav class="pager" aria-label="文章导航">
 					{
@@ -607,6 +750,27 @@ const jsonLd = {
 						)
 					}
 				</nav>
+
+				{
+					related.length > 0 && (
+						<section class="related" aria-label="相关阅读">
+							<h2>相关阅读</h2>
+							<div class="related-grid">
+								{related.map((p) => (
+									<a class="related-card" href={`/blog/${p.id}/`}>
+										<span class="rc-title">{p.data.title}</span>
+										{p.data.description && <p class="rc-excerpt">{p.data.description}</p>}
+										<span class="rc-meta">
+											{p.data.theme}
+											<span class="dot"> · </span>
+											<FormattedDate date={p.data.pubDate} />
+										</span>
+									</a>
+								))}
+							</div>
+						</section>
+					)
+				}
 			</article>
 		</main>
 
@@ -619,17 +783,36 @@ const jsonLd = {
 		<Footer />
 
 		<script>
-			// 阅读进度条
-			const progress = document.getElementById('progress');
-			const onScroll = () => {
-				const h = document.documentElement;
-				const scrolled = h.scrollTop;
-				const height = h.scrollHeight - h.clientHeight;
-				const pct = height > 0 ? (scrolled / height) * 100 : 0;
-				if (progress) progress.style.width = pct + '%';
-			};
-			document.addEventListener('scroll', onScroll, { passive: true });
-			onScroll();
+			// 目录滚动高亮（scroll-spy）
+			const tocLinks = Array.from(
+				document.querySelectorAll('#toc-nav a')
+			) as HTMLAnchorElement[];
+			if (tocLinks.length) {
+				const map = new Map<string, HTMLAnchorElement>();
+				tocLinks.forEach((a) => map.set(a.dataset.slug || '', a));
+				const targets = tocLinks
+					.map((a) => document.getElementById(a.dataset.slug || ''))
+					.filter((el): el is HTMLElement => !!el);
+				const setActive = (slug: string) => {
+					tocLinks.forEach((a) => a.classList.toggle('active', a.dataset.slug === slug));
+				};
+				const observer = new IntersectionObserver(
+					(entries) => {
+						const visible = entries
+							.filter((e) => e.isIntersecting)
+							.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+						if (visible[0]) setActive(visible[0].target.id);
+					},
+					{ rootMargin: '-15% 0px -70% 0px', threshold: 0 }
+				);
+				targets.forEach((t) => observer.observe(t));
+				// 点击平滑滚动并高亮
+				tocLinks.forEach((a) => {
+					a.addEventListener('click', () => {
+						setActive(a.dataset.slug || '');
+					});
+				});
+			}
 
 			// 代码块复制按钮
 			document.querySelectorAll('pre').forEach((pre) => {

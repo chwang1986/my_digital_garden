@@ -23,6 +23,19 @@ export async function getStaticPaths() {
 		const idx = sibs.findIndex((p) => p.id === post.id);
 		const prev = idx > 0 ? sibs[idx - 1] : null;
 		const next = idx >= 0 && idx < sibs.length - 1 ? sibs[idx + 1] : null;
+		// 相关阅读：同主题优先，其次按共享标签数排序，排除自身与同系列相邻篇
+		const myTags = new Set(post.data.tags ?? []);
+		const related = all
+			.filter((p) => p.id !== post.id && (!post.data.series || p.data.series !== post.data.series))
+			.map((p) => {
+				const shared = (p.data.tags ?? []).filter((t) => myTags.has(t)).length;
+				const themeScore = p.data.theme === post.data.theme ? 100 : 0;
+				return { p, score: themeScore + shared * 10 + (p.data.theme === post.data.theme ? 1 : 0) };
+			})
+			.filter((x) => x.score > 0)
+			.sort((a, b) => b.score - a.score)
+			.slice(0, 3)
+			.map((x) => x.p);
 		return {
 			params: { slug: post.id },
 			props: {
@@ -30,26 +43,28 @@ export async function getStaticPaths() {
 				readingTime: readingTime(post.body),
 				prev,
 				next,
+				related,
 				series: post.data.series ?? null,
 				order: post.data.order ?? null,
 			},
 		};
 	});
 }
-type Props = {
+	type Props = {
 	post: CollectionEntry<'blog'>;
 	readingTime: string;
 	prev: CollectionEntry<'blog'> | null;
 	next: CollectionEntry<'blog'> | null;
+	related: CollectionEntry<'blog'>[];
 	series?: string | null;
 	order?: number | null;
 };
 
-const { post, readingTime, prev, next, series, order } = Astro.props;
+const { post, readingTime, prev, next, related, series, order } = Astro.props;
 const { Content, headings } = await render(post);
 const tocHeadings = headings.filter(h => h.depth >= 2 && h.depth <= 3);
 ---
 
-<BlogPost {...post.data} readingTime={readingTime} prev={prev} next={next} headings={tocHeadings}>
+<BlogPost {...post.data} readingTime={readingTime} prev={prev} next={next} related={related} headings={tocHeadings}>
 	<Content />
 </BlogPost>

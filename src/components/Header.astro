@@ -5,6 +5,7 @@ import Search from './Search.astro';
 ---
 
 	<header>
+		<div class="progress" id="progress"></div>
 		<nav>
 			<h2><a href="/">Wang's <span class="logo-accent">Notes</span></a></h2>
 
@@ -142,4 +143,31 @@ import Search from './Search.astro';
 			display: none;
 		}
 	}
+
+	/* 阅读进度条：全站 */
+	.progress {
+		position: fixed;
+		top: 0;
+		left: 0;
+		height: 3px;
+		width: 0;
+		background: linear-gradient(90deg, var(--primary-color), var(--primary-2));
+		box-shadow: 0 0 8px var(--glow);
+		z-index: 40;
+		transition: width 0.1s linear;
+	}
 </style>
+
+<script>
+	// 阅读进度条（全站）
+	const progress = document.getElementById('progress');
+	const onScroll = () => {
+		const h = document.documentElement;
+		const scrolled = h.scrollTop;
+		const height = h.scrollHeight - h.clientHeight;
+		const pct = height > 0 ? (scrolled / height) * 100 : 0;
+		if (progress) progress.style.width = pct + '%';
+	};
+	document.addEventListener('scroll', onScroll, { passive: true });
+	onScroll();
+</script>
