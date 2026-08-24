@@ -59,34 +59,36 @@
 
 :root.dark {
   --background-body: #070b14;
-  --surface: #0e1626;
-  --text-main: #e6edf6;
-  --text-secondary: #8da0bb;
+  --surface: #0d1626;
+  --text-main: #e8eef8;
+  --text-secondary: #94a6c2;
 
   --primary-color: #38bdf8;
   --primary-strong: #7dd3fc;
-  --primary-soft: #0b3a55;
+  --primary-soft: #0b3650;
   --primary-2: #818cf8;
-  --glow: color-mix(in srgb, var(--primary-color) 60%, transparent);
+  --glow: color-mix(in srgb, var(--primary-color) 65%, transparent);
 
   --accent-warm: #fb923c;
   --on-accent: #070b14;
 
-  --border-color: #1e2c44;
-  --code-bg: #0e1626;
-  --gray-gradient: linear-gradient(180deg, #070b14, #0e1626);
+  --border-color: #1d2a42;
+  --code-bg: #0b1320;
+  --gray-gradient: linear-gradient(180deg, #070b14, #0d1626);
 
   --grid-dot: radial-gradient(
     circle at 1px 1px,
-    color-mix(in srgb, var(--primary-color) 20%, transparent) 1px,
+    color-mix(in srgb, var(--primary-color) 22%, transparent) 1px,
     transparent 0
   );
 
-  --shadow-sm: 0 1px 3px -1px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 12px 32px -16px rgba(56, 189, 248, 0.5);
-  --glow-sm: 0 0 0 1px color-mix(in srgb, var(--primary-color) 30%, transparent),
-    0 8px 28px -14px var(--glow);
+  --shadow-sm: 0 1px 3px -1px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 16px 40px -18px rgba(56, 189, 248, 0.55);
+  --glow-sm: 0 0 0 1px color-mix(in srgb, var(--primary-color) 32%, transparent),
+    0 10px 32px -14px var(--glow);
 }
+
+/* 暗色质感增强：内容区背后一层极淡的青蓝辉光，让深色不再死板 */
 
 html {
   overflow-y: scroll;
@@ -758,3 +760,73 @@ button {
 }
 
 /* 默认青蓝（cyan）即 :root 本身，无需覆盖 */
+
+/* ===================================================================
+   暗色质感增强（仅 :root.dark）：辉光底 / 代码块 / 引用 / 卡片层次
+   =================================================================== */
+:root.dark body::before {
+  /* 网格点阵更克制，避免暗色下噪点感 */
+  opacity: 0.35;
+}
+
+:root.dark::after {
+  /* 内容背后的青蓝辉光，营造纵深与高级感 */
+  content: "";
+  position: fixed;
+  top: -10vh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1100px, 90vw);
+  height: 60vh;
+  z-index: -2;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in srgb, var(--primary-color) 14%, transparent),
+    transparent 68%
+  );
+}
+
+:root.dark .glow-card {
+  /* 暗色下默认就有一点内发光，hover 时更明显 */
+  border-color: #213252;
+  box-shadow:
+    0 0 0 1px rgba(56, 189, 248, 0.06),
+    0 18px 40px -24px rgba(0, 0, 0, 0.8);
+}
+
+:root.dark .glow-card:hover {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--primary-color) 40%, transparent),
+    0 22px 48px -20px var(--glow);
+}
+
+:root.dark pre {
+  /* 暗色代码块：更深底 + 细边框，对比更清晰 */
+  background: #0b1320 !important;
+  border: 1px solid var(--border-color);
+  box-shadow:
+    0 0 0 1px rgba(56, 189, 248, 0.05),
+    var(--shadow-sm);
+}
+
+:root.dark code {
+  background-color: rgba(56, 189, 248, 0.1);
+}
+
+:root.dark blockquote {
+  /* 暗色引用：淡面板而非纯左边线，更易读 */
+  background: linear-gradient(
+    100deg,
+    color-mix(in srgb, var(--primary-color) 10%, transparent),
+    transparent 70%
+  );
+  border-left-color: var(--primary-color);
+  border-radius: 0 8px 8px 0;
+  padding: 0.6rem 1.25rem;
+}
+
+:root.dark .mark {
+  /* 暗色高亮：更柔的荧光黄底感 */
+  background: linear-gradient(transparent 55%, color-mix(in srgb, var(--primary-color) 30%, transparent) 55%);
+}

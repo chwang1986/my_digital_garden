@@ -9,6 +9,9 @@ const tools = [
 	{ id: 'color', name: '颜色转换', desc: 'HEX / RGB / HSL 互转，实时预览' },
 	{ id: 'timestamp', name: '时间戳', desc: '当前时间戳，以及时间戳与日期互转' },
 	{ id: 'password', name: '密码生成', desc: '可配置长度与字符集，一键复制' },
+	{ id: 'json', name: 'JSON 格式化', desc: '格式化、压缩、校验 JSON' },
+	{ id: 'base64', name: 'Base64 编解码', desc: '文本与 Base64 互转，UTF-8 安全' },
+	{ id: 'convert', name: '单位换算', desc: '长度 / 重量 / 温度常用单位' },
 ];
 ---
 
@@ -182,6 +185,26 @@ const tools = [
 				accent-color: var(--primary-color);
 			}
 
+			.controls select {
+				font-family: var(--font-mono);
+				font-size: 0.85rem;
+				color: var(--text-main);
+				background: var(--code-bg);
+				border: 1px solid var(--border-color);
+				border-radius: 8px;
+				padding: 0.45rem 0.55rem;
+			}
+
+			.controls select:focus {
+				outline: none;
+				border-color: var(--primary-color);
+				box-shadow: 0 0 0 3px var(--glow);
+			}
+
+			.msg-err {
+				color: #ef4444 !important;
+			}
+
 			.btn {
 				display: inline-flex;
 				align-items: center;
@@ -292,12 +315,69 @@ const tools = [
 						<label><input type="checkbox" id="pw-num" checked /> 数字</label>
 						<label><input type="checkbox" id="pw-sym" /> 符号</label>
 					</div>
-					<div class="controls">
-						<button class="btn" id="pw-gen">生成</button>
-						<button class="btn ghost" id="pw-copy">复制</button>
-					</div>
-				</article>
-			</section>
+				<div class="controls">
+					<button class="btn" id="pw-gen">生成</button>
+					<button class="btn ghost" id="pw-copy">复制</button>
+				</div>
+			</article>
+
+			<!-- JSON 格式化 -->
+			<article class="card" id="json">
+				<div class="card-head">
+					<h2>JSON 格式化</h2>
+					<span class="desc">格式化 / 压缩 / 校验</span>
+				</div>
+				<textarea id="json-in" rows="5" placeholder="粘贴 JSON…"></textarea>
+				<div class="controls">
+					<button class="btn" id="json-fmt">格式化</button>
+					<button class="btn ghost" id="json-min">压缩</button>
+					<button class="btn ghost" id="json-copy">复制</button>
+				</div>
+				<textarea id="json-out" rows="5" readonly placeholder="结果将显示在这里"></textarea>
+				<p class="hint" id="json-msg">支持格式化（缩进 2 空格）与压缩，自动校验。</p>
+			</article>
+
+			<!-- Base64 编解码 -->
+			<article class="card" id="base64">
+				<div class="card-head">
+					<h2>Base64 编解码</h2>
+					<span class="desc">UTF-8 安全</span>
+				</div>
+				<textarea id="b64-in" rows="3" placeholder="输入文本或 Base64…"></textarea>
+				<div class="controls">
+					<button class="btn" id="b64-enc">编码 →</button>
+					<button class="btn ghost" id="b64-dec">← 解码</button>
+					<button class="btn ghost" id="b64-copy">复制</button>
+				</div>
+				<textarea id="b64-out" rows="3" readonly placeholder="结果将显示在这里"></textarea>
+				<p class="hint" id="b64-msg">中文等 Unicode 内容也能正确编解码。</p>
+			</article>
+
+			<!-- 单位换算 -->
+			<article class="card" id="convert">
+				<div class="card-head">
+					<h2>单位换算</h2>
+					<span class="desc">长度 / 重量 / 温度</span>
+				</div>
+				<div class="controls">
+					<label>类别
+						<select id="cv-cat">
+							<option value="length">长度</option>
+							<option value="weight">重量</option>
+							<option value="temp">温度</option>
+						</select>
+					</label>
+				</div>
+				<div class="controls">
+					<input type="number" id="cv-from" value="1" step="any" style="width:90px" />
+					<select id="cv-unit-a"></select>
+					<span style="color:var(--text-secondary)">→</span>
+					<input type="text" id="cv-to" readonly style="width:90px" />
+					<select id="cv-unit-b"></select>
+				</div>
+				<p class="hint" id="cv-msg">输入左侧数值即时换算。</p>
+			</article>
+		</section>
 		</main>
 		<Footer />
 
@@ -442,6 +522,128 @@ const tools = [
 				}
 			});
 			genPw();
+
+			// ===== JSON 格式化 =====
+			const jsonIn = document.getElementById('json-in') as HTMLTextAreaElement | null;
+			const jsonOut = document.getElementById('json-out') as HTMLTextAreaElement | null;
+			const jsonMsg = document.getElementById('json-msg');
+			const utf8 = (s: string) => new TextEncoder().encode(s);
+			const setJsonMsg = (t: string, err = false) => {
+				if (jsonMsg) {
+					jsonMsg.textContent = t;
+					jsonMsg.classList.toggle('msg-err', err);
+				}
+			};
+			const parseJson = (raw: string) => {
+				try {
+					return { ok: true, val: JSON.parse(raw) as unknown };
+				} catch (e) {
+					return { ok: false, err: (e as Error).message };
+				}
+			};
+			const doJsonFmt = () => {
+				if (!jsonIn || !jsonOut) return;
+				const r = parseJson(jsonIn.value.trim());
+				if (!r.ok) { jsonOut.value = ''; setJsonMsg('解析失败：' + r.err, true); return; }
+				jsonOut.value = JSON.stringify(r.val, null, 2);
+				setJsonMsg('已格式化（缩进 2 空格）。');
+			};
+			const doJsonMin = () => {
+				if (!jsonIn || !jsonOut) return;
+				const r = parseJson(jsonIn.value.trim());
+				if (!r.ok) { jsonOut.value = ''; setJsonMsg('解析失败：' + r.err, true); return; }
+				jsonOut.value = JSON.stringify(r.val);
+				setJsonMsg('已压缩为一行。');
+			};
+			document.getElementById('json-fmt')?.addEventListener('click', doJsonFmt);
+			document.getElementById('json-min')?.addEventListener('click', doJsonMin);
+			document.getElementById('json-copy')?.addEventListener('click', async () => {
+				if (jsonOut?.value) { try { await navigator.clipboard.writeText(jsonOut.value); setJsonMsg('已复制到剪贴板。'); } catch {} }
+			});
+
+			// ===== Base64 编解码 =====
+			const b64In = document.getElementById('b64-in') as HTMLTextAreaElement | null;
+			const b64Out = document.getElementById('b64-out') as HTMLTextAreaElement | null;
+			const b64Msg = document.getElementById('b64-msg');
+			const setB64Msg = (t: string, err = false) => {
+				if (b64Msg) { b64Msg.textContent = t; b64Msg.classList.toggle('msg-err', err); }
+			};
+			const bytesToB64 = (bytes: Uint8Array) => {
+				let bin = '';
+				bytes.forEach((b) => (bin += String.fromCharCode(b)));
+				return btoa(bin);
+			};
+			const b64ToBytes = (s: string) => {
+				const bin = atob(s);
+				const out = new Uint8Array(bin.length);
+				for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+				return out;
+			};
+			document.getElementById('b64-enc')?.addEventListener('click', () => {
+				if (!b64In || !b64Out) return;
+				try {
+					b64Out.value = bytesToB64(utf8(b64In.value));
+					setB64Msg('已编码为 Base64。');
+				} catch { b64Out.value = ''; setB64Msg('编码失败。', true); }
+			});
+			document.getElementById('b64-dec')?.addEventListener('click', () => {
+				if (!b64In || !b64Out) return;
+				try {
+					b64Out.value = new TextDecoder().decode(b64ToBytes(b64In.value.trim()));
+					setB64Msg('已解码。');
+				} catch { b64Out.value = ''; setB64Msg('不是合法的 Base64。', true); }
+			});
+			document.getElementById('b64-copy')?.addEventListener('click', async () => {
+				if (b64Out?.value) { try { await navigator.clipboard.writeText(b64Out.value); setB64Msg('已复制到剪贴板。'); } catch {} }
+			});
+
+			// ===== 单位换算 =====
+			const cvData: Record<string, Record<string, number>> = {
+				length: { m: 1, cm: 0.01, mm: 0.001, km: 1000, in: 0.0254, ft: 0.3048, mi: 1609.344 },
+				weight: { kg: 1, g: 0.001, t: 1000, lb: 0.45359237, oz: 0.028349523125 },
+				temp: { C: 1, F: 1, K: 1 },
+			};
+			const cvCat = document.getElementById('cv-cat') as HTMLSelectElement | null;
+			const cvFrom = document.getElementById('cv-from') as HTMLInputElement | null;
+			const cvTo = document.getElementById('cv-to') as HTMLInputElement | null;
+			const cvA = document.getElementById('cv-unit-a') as HTMLSelectElement | null;
+			const cvB = document.getElementById('cv-unit-b') as HTMLSelectElement | null;
+			const cvMsg = document.getElementById('cv-msg');
+			const fillUnits = (cat: string) => {
+				const units = Object.keys(cvData[cat]);
+				if (cvA && cvB) {
+					cvA.innerHTML = units.map((u) => `<option value="${u}">${u}</option>`).join('');
+					cvB.innerHTML = units.map((u) => `<option value="${u}">${u}</option>`).join('');
+					// 默认选两个不同的单位
+					if (units.length > 1) cvB.selectedIndex = 1;
+				}
+			};
+			const convert = () => {
+				if (!cvCat || !cvFrom || !cvTo || !cvA || !cvB || !cvMsg) return;
+				const cat = cvCat.value;
+				const a = cvA.value, b = cvB.value;
+				const v = parseFloat(cvFrom.value);
+				if (!Number.isFinite(v)) { cvTo.value = ''; return; }
+				let res: number;
+				if (cat === 'temp') {
+					// 先转成摄氏度
+					let c: number;
+					if (a === 'C') c = v;
+					else if (a === 'F') c = (v - 32) * 5 / 9;
+					else c = v - 273.15;
+					if (b === 'C') res = c;
+					else if (b === 'F') res = c * 9 / 5 + 32;
+					else res = c + 273.15;
+				} else {
+					res = (v * cvData[cat][a]) / cvData[cat][b];
+				}
+				cvTo.value = String(Math.round(res * 1e6) / 1e6);
+			};
+			cvCat?.addEventListener('change', () => { fillUnits(cvCat!.value); convert(); });
+			cvFrom?.addEventListener('input', convert);
+			cvA?.addEventListener('change', convert);
+			cvB?.addEventListener('change', convert);
+			if (cvCat) { fillUnits(cvCat.value); convert(); }
 		</script>
 	</body>
 </html>
