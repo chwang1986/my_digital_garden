@@ -7,11 +7,15 @@ import { getCollection } from 'astro:content';
 import FormattedDate from '../components/FormattedDate.astro';
 import { readingTime } from '../utils/reading-time';
 import { sortPosts } from '../utils/sort-posts';
+import { notes } from '../data/notes';
 
 const posts = sortPosts(await getCollection('blog'));
 const [featured, ...rest] = posts;
 // 首页只突出最近文章：头条 1 篇 + 下方精简列表 3 篇
 const recent = rest.slice(0, 3);
+
+// 本周随想：取日期最新的一条
+const latestNote = [...notes].sort((a, b) => (a.date < b.date ? 1 : -1))[0] ?? null;
 
 // 主题 / 系列计数
 const themeCounts = new Map<string, number>();
@@ -225,6 +229,62 @@ const seriesList = [...seriesCounts.entries()]
 			.featured-date .dot {
 				margin: 0 0.4rem;
 				opacity: 0.6;
+			}
+
+			/* ===== 本周随想：轻量真人感入口 ===== */
+			.note {
+				padding: 2.25rem 0 0.5rem;
+			}
+
+			.note-card {
+				position: relative;
+				border: 1px solid var(--border-color);
+				border-radius: 14px;
+				background: var(--surface);
+				padding: 1.4rem 1.5rem 1.3rem 1.7rem;
+				border-left: 3px solid var(--primary-2);
+			}
+
+			.note-head {
+				display: flex;
+				align-items: baseline;
+				justify-content: space-between;
+				gap: 0.5rem;
+				margin-bottom: 0.7rem;
+			}
+
+			.note-label {
+				font-family: var(--font-mono);
+				font-size: 0.74rem;
+				letter-spacing: 0.12em;
+				text-transform: uppercase;
+				color: var(--primary-2);
+				margin: 0;
+			}
+
+			.note-date {
+				font-family: var(--font-mono);
+				font-size: 0.74rem;
+				color: var(--text-secondary);
+			}
+
+			.note-text {
+				margin: 0 0 0.8rem;
+				font-size: 1.02rem;
+				line-height: 1.75;
+				color: var(--text-main);
+			}
+
+			.note-more {
+				font-size: 0.85rem;
+				font-weight: 600;
+				color: var(--primary-2);
+				text-decoration: none;
+				transition: color 0.2s ease;
+			}
+
+			.note-more:hover {
+				color: var(--primary-strong);
 			}
 
 			/* ===== 最近文章：单列精简列表，突出标题 ===== */
@@ -462,6 +522,21 @@ const seriesList = [...seriesCounts.entries()]
 								</span>
 							</div>
 						</a>
+					</section>
+				)
+			}
+
+			{
+				latestNote && (
+					<section class="note">
+						<div class="note-card">
+							<div class="note-head">
+								<p class="note-label">本周随想</p>
+								<span class="note-date">{latestNote.date}</span>
+							</div>
+							<p class="note-text">{latestNote.text}</p>
+							<a class="note-more" href="/themes/瞎想/">更多随想 →</a>
+						</div>
 					</section>
 				)
 			}

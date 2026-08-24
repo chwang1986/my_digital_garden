@@ -58,12 +58,26 @@ const tags = [...counts.entries()].sort((a, b) => b[1] - a[1]);
 			border-color: var(--primary-color);
 			color: var(--primary-color);
 		}
-			.tag-cloud .count {
-				font-family: var(--font-mono);
-				font-size: 0.78rem;
-				opacity: 0.7;
-			}
-			@media (max-width: 600px) {
+		.tag-cloud .count {
+			font-family: var(--font-mono);
+			font-size: 0.78rem;
+			opacity: 0.7;
+		}
+		.all-link {
+			margin-top: 2.2rem;
+			font-size: 0.95rem;
+		}
+		.all-link a {
+			color: var(--primary-color);
+			text-decoration: none;
+			border-bottom: 1px solid color-mix(in srgb, var(--primary-color) 40%, transparent);
+			padding-bottom: 1px;
+			transition: border-color 0.2s ease;
+		}
+		.all-link a:hover {
+			border-color: var(--primary-color);
+		}
+		@media (max-width: 600px) {
 				.page-head h1 {
 					font-size: 2rem;
 				}
@@ -75,7 +89,7 @@ const tags = [...counts.entries()].sort((a, b) => b[1] - a[1]);
 		<main>
 			<header class="page-head">
 				<h1>标签</h1>
-				<p>按主题归档，点进去看同一类文章。</p>
+				<p>文章里出现过的自由标签，按使用次数排列。点进去看带这个标签的文章。</p>
 			</header>
 			{
 				tags.length > 0 ? (
@@ -91,6 +105,9 @@ const tags = [...counts.entries()].sort((a, b) => b[1] - a[1]);
 					<p>还没有标签。</p>
 				)
 			}
+			<p class="all-link">
+				<a href="/themes">换个角度看：按主题归类 →</a>
+			</p>
 		</main>
 		<Footer />
 	</body>
