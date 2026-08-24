@@ -11,11 +11,12 @@ import Search from './Search.astro';
 
 		<div class="nav-links">
 			<div class="internal-links">
-				<HeaderLink href="/">首页</HeaderLink>
-				<HeaderLink href="/blog">文章</HeaderLink>
-				<HeaderLink href="/tools">小工具</HeaderLink>
-				<HeaderLink href="/categories">分类</HeaderLink>
-				<HeaderLink href="/about">关于</HeaderLink>
+			<HeaderLink href="/">首页</HeaderLink>
+			<HeaderLink href="/blog">文章</HeaderLink>
+			<HeaderLink href="/themes">主题</HeaderLink>
+			<HeaderLink href="/tools">小工具</HeaderLink>
+			<HeaderLink href="/categories">分类</HeaderLink>
+			<HeaderLink href="/about">关于</HeaderLink>
 			</div>
 			<ThemeToggle />
 			<Search />
@@ -126,21 +127,33 @@ import Search from './Search.astro';
 		}
 
 		.nav-links {
-			gap: 0.85rem;
+			gap: 0.6rem;
 		}
 
 		.internal-links {
-			gap: 0.8rem;
+			gap: 0.6rem;
 		}
 
 		.internal-links :global(a) {
-			font-size: 0.85rem;
+			font-size: 0.82rem;
 		}
 	}
 
 	@media (max-width: 420px) {
 		h2 {
 			display: none;
+		}
+
+		.nav-links {
+			gap: 0.45rem;
+		}
+
+		.internal-links {
+			gap: 0.45rem;
+		}
+
+		.internal-links :global(a) {
+			font-size: 0.78rem;
 		}
 	}
 
