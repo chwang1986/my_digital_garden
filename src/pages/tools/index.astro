@@ -4,13 +4,14 @@ import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 
+// 按常见使用频率从高到低排序（开发/调试最常碰的靠前）
 const tools = [
-	{ id: 'counter', name: '文本统计', desc: '字数、词数、行数、预计阅读时长' },
-	{ id: 'color', name: '颜色转换', desc: 'HEX / RGB / HSL 互转，实时预览' },
-	{ id: 'timestamp', name: '时间戳', desc: '当前时间戳，以及时间戳与日期互转' },
-	{ id: 'password', name: '密码生成', desc: '可配置长度与字符集，一键复制' },
 	{ id: 'json', name: 'JSON 格式化', desc: '格式化、压缩、校验 JSON' },
 	{ id: 'base64', name: 'Base64 编解码', desc: '文本与 Base64 互转，UTF-8 安全' },
+	{ id: 'timestamp', name: '时间戳', desc: '当前时间戳，以及时间戳与日期互转' },
+	{ id: 'counter', name: '文本统计', desc: '字数、词数、行数、预计阅读时长' },
+	{ id: 'password', name: '密码生成', desc: '可配置长度与字符集，一键复制' },
+	{ id: 'color', name: '颜色转换', desc: 'HEX / RGB / HSL 互转，实时预览' },
 	{ id: 'convert', name: '单位换算', desc: '长度 / 重量 / 温度常用单位' },
 ];
 ---
@@ -73,16 +74,24 @@ const tools = [
 			.tool-grid {
 				display: flex;
 				flex-direction: column;
-				gap: 1.25rem;
+				gap: 2.2rem;
 				margin: 1.5rem 0 1rem;
 			}
 
+			/* 奇偶卡片交替底色，强化区块分割 */
 			.card {
+				position: relative;
 				border: 1px solid var(--border-color);
 				border-radius: 12px;
 				background: var(--surface);
-				padding: 1.3rem 1.4rem;
+				padding: 1.3rem 1.4rem 1.1rem;
 				scroll-margin-top: 8rem;
+				border-left: 3px solid var(--primary-color);
+			}
+
+			.tool-grid .card:nth-child(even) {
+				background: color-mix(in srgb, var(--primary-soft) 14%, var(--surface));
+				border-left-color: var(--primary-2);
 			}
 
 			/* 每个工具卡片底部的回到顶端 */
@@ -115,16 +124,30 @@ const tools = [
 
 			.card-head {
 				display: flex;
-				align-items: baseline;
-				justify-content: space-between;
-				gap: 0.5rem;
-				margin-bottom: 1rem;
+				align-items: center;
+				gap: 0.6rem;
+				margin-bottom: 1.1rem;
+				padding-bottom: 0.8rem;
+				border-bottom: 1px solid var(--border-color);
+			}
+
+			.card-no {
+				flex: none;
+				font-family: var(--font-mono);
+				font-size: 0.82rem;
+				font-weight: 700;
+				color: var(--on-accent);
+				background: linear-gradient(120deg, var(--primary-color), var(--primary-2));
+				border-radius: 7px;
+				padding: 0.22rem 0.5rem;
+				letter-spacing: 0.02em;
 			}
 
 			.card-head h2 {
-				font-size: 1.05rem;
+				font-size: 1.1rem;
 				margin: 0;
 				font-weight: 700;
+				flex: 1;
 			}
 
 			.card-head .desc {
@@ -318,80 +341,11 @@ const tools = [
 				}
 			</nav>
 
-			<section class="tool-grid">
-				<!-- 文本统计 -->
-				<article class="card" id="counter">
-					<div class="card-head">
-						<h2>文本统计</h2>
-						<span class="desc">字数 / 词数 / 行数</span>
-					</div>
-					<textarea id="counter-text" rows="4" placeholder="粘贴或输入文本…"></textarea>
-					<div class="stat-row">
-						<div class="stat"><b id="st-chars">0</b><span>字符</span></div>
-						<div class="stat"><b id="st-chars-no-space">0</b><span>去空格</span></div>
-						<div class="stat"><b id="st-words">0</b><span>词数</span></div>
-						<div class="stat"><b id="st-lines">0</b><span>行数</span></div>
-					</div>
-					<p class="hint" id="st-read">预计阅读：0 分钟</p>
-					<div class="card-foot"><button class="to-top" data-top>↑ 回到顶端</button></div>
-				</article>
-
-				<!-- 颜色转换 -->
-				<article class="card" id="color">
-					<div class="card-head">
-						<h2>颜色转换</h2>
-						<span class="desc">HEX / RGB / HSL</span>
-					</div>
-					<label for="color-hex">HEX</label>
-					<input type="text" id="color-hex" value="#0ea5e9" spellcheck="false" />
-					<div class="color-preview" id="color-preview"></div>
-				<label for="color-rgb">RGB</label>
-				<input type="text" id="color-rgb" readonly />
-				<label for="color-hsl">HSL</label>
-				<input type="text" id="color-hsl" readonly />
-				<div class="card-foot"><button class="to-top" data-top>↑ 回到顶端</button></div>
-			</article>
-
-				<!-- 时间戳 -->
-				<article class="card" id="timestamp">
-					<div class="card-head">
-						<h2>时间戳</h2>
-						<span class="desc">Unix 秒 / 毫秒</span>
-					</div>
-					<p class="ts-now" id="ts-now">—</p>
-					<label for="ts-input">时间戳 → 日期（支持秒或毫秒）</label>
-					<input type="text" id="ts-input" placeholder="如 1700000000" spellcheck="false" />
-					<p class="hint" id="ts-result">—</p>
-					<label for="ts-date">日期 → 时间戳</label>
-					<input type="text" id="ts-date" placeholder="如 2026-08-23 18:00:00" spellcheck="false" />
-					<p class="hint" id="ts-result2">—</p>
-					<div class="card-foot"><button class="to-top" data-top>↑ 回到顶端</button></div>
-				</article>
-
-				<!-- 密码生成 -->
-				<article class="card" id="password">
-					<div class="card-head">
-						<h2>密码生成</h2>
-						<span class="desc">本地生成</span>
-					</div>
-					<input type="text" id="pw-out" class="pw-out" readonly />
-					<div class="controls">
-						<label>长度 <input type="number" id="pw-len" value="16" min="4" max="64" /></label>
-						<label><input type="checkbox" id="pw-lower" checked /> 小写</label>
-						<label><input type="checkbox" id="pw-upper" checked /> 大写</label>
-						<label><input type="checkbox" id="pw-num" checked /> 数字</label>
-						<label><input type="checkbox" id="pw-sym" /> 符号</label>
-					</div>
-				<div class="controls">
-					<button class="btn" id="pw-gen">生成</button>
-					<button class="btn ghost" id="pw-copy">复制</button>
-				</div>
-				<div class="card-foot"><button class="to-top" data-top>↑ 回到顶端</button></div>
-			</article>
-
+		<section class="tool-grid">
 			<!-- JSON 格式化 -->
 			<article class="card" id="json">
 				<div class="card-head">
+					<span class="card-no">01</span>
 					<h2>JSON 格式化</h2>
 					<span class="desc">格式化 / 压缩 / 校验</span>
 				</div>
@@ -409,6 +363,7 @@ const tools = [
 			<!-- Base64 编解码 -->
 			<article class="card" id="base64">
 				<div class="card-head">
+					<span class="card-no">02</span>
 					<h2>Base64 编解码</h2>
 					<span class="desc">UTF-8 安全</span>
 				</div>
@@ -423,9 +378,84 @@ const tools = [
 				<div class="card-foot"><button class="to-top" data-top>↑ 回到顶端</button></div>
 			</article>
 
+			<!-- 时间戳 -->
+			<article class="card" id="timestamp">
+				<div class="card-head">
+					<span class="card-no">03</span>
+					<h2>时间戳</h2>
+					<span class="desc">Unix 秒 / 毫秒</span>
+				</div>
+				<p class="ts-now" id="ts-now">—</p>
+				<label for="ts-input">时间戳 → 日期（支持秒或毫秒）</label>
+				<input type="text" id="ts-input" placeholder="如 1700000000" spellcheck="false" />
+				<p class="hint" id="ts-result">—</p>
+				<label for="ts-date">日期 → 时间戳</label>
+				<input type="text" id="ts-date" placeholder="如 2026-08-23 18:00:00" spellcheck="false" />
+				<p class="hint" id="ts-result2">—</p>
+				<div class="card-foot"><button class="to-top" data-top>↑ 回到顶端</button></div>
+			</article>
+
+			<!-- 文本统计 -->
+			<article class="card" id="counter">
+				<div class="card-head">
+					<span class="card-no">04</span>
+					<h2>文本统计</h2>
+					<span class="desc">字数 / 词数 / 行数</span>
+				</div>
+				<textarea id="counter-text" rows="4" placeholder="粘贴或输入文本…"></textarea>
+				<div class="stat-row">
+					<div class="stat"><b id="st-chars">0</b><span>字符</span></div>
+					<div class="stat"><b id="st-chars-no-space">0</b><span>去空格</span></div>
+					<div class="stat"><b id="st-words">0</b><span>词数</span></div>
+					<div class="stat"><b id="st-lines">0</b><span>行数</span></div>
+				</div>
+				<p class="hint" id="st-read">预计阅读：0 分钟</p>
+				<div class="card-foot"><button class="to-top" data-top>↑ 回到顶端</button></div>
+			</article>
+
+			<!-- 密码生成 -->
+			<article class="card" id="password">
+				<div class="card-head">
+					<span class="card-no">05</span>
+					<h2>密码生成</h2>
+					<span class="desc">本地生成</span>
+				</div>
+				<input type="text" id="pw-out" class="pw-out" readonly />
+				<div class="controls">
+					<label>长度 <input type="number" id="pw-len" value="16" min="4" max="64" /></label>
+					<label><input type="checkbox" id="pw-lower" checked /> 小写</label>
+					<label><input type="checkbox" id="pw-upper" checked /> 大写</label>
+					<label><input type="checkbox" id="pw-num" checked /> 数字</label>
+					<label><input type="checkbox" id="pw-sym" /> 符号</label>
+				</div>
+				<div class="controls">
+					<button class="btn" id="pw-gen">生成</button>
+					<button class="btn ghost" id="pw-copy">复制</button>
+				</div>
+				<div class="card-foot"><button class="to-top" data-top>↑ 回到顶端</button></div>
+			</article>
+
+			<!-- 颜色转换 -->
+			<article class="card" id="color">
+				<div class="card-head">
+					<span class="card-no">06</span>
+					<h2>颜色转换</h2>
+					<span class="desc">HEX / RGB / HSL</span>
+				</div>
+				<label for="color-hex">HEX</label>
+				<input type="text" id="color-hex" value="#0ea5e9" spellcheck="false" />
+				<div class="color-preview" id="color-preview"></div>
+				<label for="color-rgb">RGB</label>
+				<input type="text" id="color-rgb" readonly />
+				<label for="color-hsl">HSL</label>
+				<input type="text" id="color-hsl" readonly />
+				<div class="card-foot"><button class="to-top" data-top>↑ 回到顶端</button></div>
+			</article>
+
 			<!-- 单位换算 -->
 			<article class="card" id="convert">
 				<div class="card-head">
+					<span class="card-no">07</span>
 					<h2>单位换算</h2>
 					<span class="desc">长度 / 重量 / 温度</span>
 				</div>
