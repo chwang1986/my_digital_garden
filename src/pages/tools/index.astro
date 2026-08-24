@@ -37,17 +37,44 @@ const tools = [
 				font-size: 1.05rem;
 			}
 
-			.tool-grid {
-				display: grid;
-				grid-template-columns: repeat(2, 1fr);
-				gap: 1.25rem;
-				margin: 2rem 0 1rem;
+			/* 工具跳转锚点栏 */
+			.tool-nav {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.5rem;
+				margin: 1.6rem 0 0.5rem;
+				position: sticky;
+				top: 4.2rem;
+				z-index: 10;
+				padding: 0.6rem 0.7rem;
+				background: color-mix(in srgb, var(--surface) 88%, transparent);
+				backdrop-filter: blur(8px);
+				border: 1px solid var(--border-color);
+				border-radius: 12px;
 			}
 
-			@media (max-width: 760px) {
-				.tool-grid {
-					grid-template-columns: 1fr;
-				}
+			.tool-nav a {
+				font-family: var(--font-mono);
+				font-size: 0.82rem;
+				color: var(--text-secondary);
+				text-decoration: none;
+				padding: 0.35rem 0.7rem;
+				border-radius: 8px;
+				border: 1px solid transparent;
+				transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+			}
+
+			.tool-nav a:hover {
+				color: var(--primary-color);
+				background: var(--code-bg);
+				border-color: color-mix(in srgb, var(--primary-color) 35%, transparent);
+			}
+
+			.tool-grid {
+				display: flex;
+				flex-direction: column;
+				gap: 1.25rem;
+				margin: 1.5rem 0 1rem;
 			}
 
 			.card {
@@ -55,6 +82,35 @@ const tools = [
 				border-radius: 12px;
 				background: var(--surface);
 				padding: 1.3rem 1.4rem;
+				scroll-margin-top: 8rem;
+			}
+
+			/* 每个工具卡片底部的回到顶端 */
+			.card-foot {
+				display: flex;
+				justify-content: flex-end;
+				margin-top: 0.4rem;
+			}
+
+			.to-top {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.35rem;
+				font-family: var(--font-mono);
+				font-size: 0.78rem;
+				color: var(--text-secondary);
+				background: transparent;
+				border: 1px solid var(--border-color);
+				border-radius: 999px;
+				padding: 0.3rem 0.8rem;
+				cursor: pointer;
+				transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+			}
+
+			.to-top:hover {
+				color: var(--primary-color);
+				border-color: color-mix(in srgb, var(--primary-color) 40%, transparent);
+				background: var(--code-bg);
 			}
 
 			.card-head {
@@ -254,6 +310,14 @@ const tools = [
 				<p>几个纯前端、离线可用的小工具，打开就能用。</p>
 			</header>
 
+			<nav class="tool-nav" aria-label="工具快速跳转">
+				{
+					tools.map((t) => (
+						<a href={`#${t.id}`}>{t.name}</a>
+					))
+				}
+			</nav>
+
 			<section class="tool-grid">
 				<!-- 文本统计 -->
 				<article class="card" id="counter">
@@ -269,6 +333,7 @@ const tools = [
 						<div class="stat"><b id="st-lines">0</b><span>行数</span></div>
 					</div>
 					<p class="hint" id="st-read">预计阅读：0 分钟</p>
+					<div class="card-foot"><button class="to-top" data-top>↑ 回到顶端</button></div>
 				</article>
 
 				<!-- 颜色转换 -->
@@ -280,11 +345,12 @@ const tools = [
 					<label for="color-hex">HEX</label>
 					<input type="text" id="color-hex" value="#0ea5e9" spellcheck="false" />
 					<div class="color-preview" id="color-preview"></div>
-					<label for="color-rgb">RGB</label>
-					<input type="text" id="color-rgb" readonly />
-					<label for="color-hsl">HSL</label>
-					<input type="text" id="color-hsl" readonly />
-				</article>
+				<label for="color-rgb">RGB</label>
+				<input type="text" id="color-rgb" readonly />
+				<label for="color-hsl">HSL</label>
+				<input type="text" id="color-hsl" readonly />
+				<div class="card-foot"><button class="to-top" data-top>↑ 回到顶端</button></div>
+			</article>
 
 				<!-- 时间戳 -->
 				<article class="card" id="timestamp">
@@ -299,6 +365,7 @@ const tools = [
 					<label for="ts-date">日期 → 时间戳</label>
 					<input type="text" id="ts-date" placeholder="如 2026-08-23 18:00:00" spellcheck="false" />
 					<p class="hint" id="ts-result2">—</p>
+					<div class="card-foot"><button class="to-top" data-top>↑ 回到顶端</button></div>
 				</article>
 
 				<!-- 密码生成 -->
@@ -319,6 +386,7 @@ const tools = [
 					<button class="btn" id="pw-gen">生成</button>
 					<button class="btn ghost" id="pw-copy">复制</button>
 				</div>
+				<div class="card-foot"><button class="to-top" data-top>↑ 回到顶端</button></div>
 			</article>
 
 			<!-- JSON 格式化 -->
@@ -335,6 +403,7 @@ const tools = [
 				</div>
 				<textarea id="json-out" rows="5" readonly placeholder="结果将显示在这里"></textarea>
 				<p class="hint" id="json-msg">支持格式化（缩进 2 空格）与压缩，自动校验。</p>
+				<div class="card-foot"><button class="to-top" data-top>↑ 回到顶端</button></div>
 			</article>
 
 			<!-- Base64 编解码 -->
@@ -351,6 +420,7 @@ const tools = [
 				</div>
 				<textarea id="b64-out" rows="3" readonly placeholder="结果将显示在这里"></textarea>
 				<p class="hint" id="b64-msg">中文等 Unicode 内容也能正确编解码。</p>
+				<div class="card-foot"><button class="to-top" data-top>↑ 回到顶端</button></div>
 			</article>
 
 			<!-- 单位换算 -->
@@ -376,6 +446,7 @@ const tools = [
 					<select id="cv-unit-b"></select>
 				</div>
 				<p class="hint" id="cv-msg">输入左侧数值即时换算。</p>
+				<div class="card-foot"><button class="to-top" data-top>↑ 回到顶端</button></div>
 			</article>
 		</section>
 		</main>
@@ -644,6 +715,13 @@ const tools = [
 			cvA?.addEventListener('change', convert);
 			cvB?.addEventListener('change', convert);
 			if (cvCat) { fillUnits(cvCat.value); convert(); }
+
+			// ===== 回到顶端 =====
+			document.querySelectorAll<HTMLButtonElement>('[data-top]').forEach((btn) => {
+				btn.addEventListener('click', () => {
+					window.scrollTo({ top: 0, behavior: 'smooth' });
+				});
+			});
 		</script>
 	</body>
 </html>
