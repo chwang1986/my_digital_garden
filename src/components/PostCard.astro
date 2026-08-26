@@ -5,9 +5,10 @@ import { readingTime } from '../utils/reading-time';
 
 interface Props {
 	post: CollectionEntry<'blog'>;
+	showOrder?: boolean;
 }
 
-const { post } = Astro.props;
+const { post, showOrder = false } = Astro.props;
 const p = post.data;
 ---
 
@@ -19,6 +20,11 @@ const p = post.data;
 					<a class="post-card-theme" href={`/themes/${encodeURIComponent(p.theme)}/`}>
 						{p.theme}
 					</a>
+				)
+			}
+			{
+				showOrder && p.order != null && (
+					<span class="post-card-order">第 {p.order} 篇</span>
 				)
 			}
 			<h3 class="post-card-title">{p.title}</h3>
@@ -143,6 +149,15 @@ const p = post.data;
 
 	.post-card-theme:hover {
 		text-decoration: underline;
+	}
+
+	.post-card-order {
+		align-self: flex-start;
+		font-family: var(--font-mono);
+		font-size: 0.72rem;
+		font-weight: 700;
+		letter-spacing: 0.02em;
+		color: var(--primary-color);
 	}
 
 	.post-card-title a {

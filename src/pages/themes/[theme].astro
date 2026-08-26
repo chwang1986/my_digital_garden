@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
-import FormattedDate from '../../components/FormattedDate.astro';
+import PostGrid from '../../components/PostGrid.astro';
 import { sortPosts } from '../../utils/sort-posts';
 import { SITE_TITLE } from '../../consts';
 
@@ -33,72 +33,7 @@ const { theme, posts } = Astro.props;
 				margin: 0 auto;
 				padding: 3.5rem 1.25rem 1rem;
 			}
-			.post-list {
-				list-style: none;
-				margin: 0;
-				padding: 0;
-				border-top: 1px solid var(--border-color);
-			}
-			.post-item {
-				padding: 1.1rem 0.25rem;
-				border-bottom: 1px solid var(--border-color);
-				transition:
-					background 0.2s ease,
-					padding 0.2s ease;
-			}
-			.post-item:hover {
-				background: var(--code-bg);
-				padding-left: 0.6rem;
-			}
-			.post-main {
-				display: flex;
-				flex-direction: column;
-				gap: 0.45rem;
-			}
-			.post-title {
-				font-size: 1.15rem;
-				font-weight: 600;
-				line-height: 1.4;
-				color: var(--text-main);
-				text-decoration: none;
-			}
-			.post-item:hover .post-title {
-				color: var(--primary-color);
-			}
-			.post-title:hover {
-				text-decoration: underline;
-			}
-			.post-meta {
-				display: flex;
-				flex-wrap: wrap;
-				align-items: center;
-				gap: 0.5rem;
-				font-size: 0.82rem;
-				color: var(--text-secondary);
-				font-family: var(--font-mono);
-			}
-			.post-meta .dot {
-				color: var(--border-color);
-			}
-			.post-meta .tag {
-				font-family: var(--font-mono);
-				font-size: 0.76rem;
-				color: var(--text-secondary);
-				text-decoration: none;
-				padding: 0.1rem 0.45rem;
-				border-radius: 4px;
-				border: 1px solid var(--border-color);
-				transition: border-color 0.2s ease, color 0.2s ease;
-			}
-			.post-meta .tag:hover {
-				border-color: var(--primary-color);
-				color: var(--primary-color);
-			}
-			@media (max-width: 480px) {
-				.post-main {
-					gap: 0.35rem;
-				}
-			}
+			/* 卡片网格由 PostGrid 组件统一管理 */
 		</style>
 	</head>
 	<body>
@@ -108,24 +43,7 @@ const { theme, posts } = Astro.props;
 				<a class="back" href="/themes">← 全部主题</a>
 				<h1><span class="mark">▍</span>{theme}</h1>
 			</header>
-			<ul class="post-list">
-				{
-					posts.map((post) => (
-						<li class="post-item">
-							<div class="post-main">
-								<a class="post-title" href={`/blog/${post.id}/`}>{post.data.title}</a>
-								<div class="post-meta">
-									<FormattedDate date={post.data.pubDate} />
-									<span class="dot">·</span>
-									{post.data.tags.map((t) => (
-										<a class="tag" href={`/tags/${encodeURIComponent(t)}/`}>{t}</a>
-									))}
-								</div>
-							</div>
-						</li>
-					))
-				}
-			</ul>
+			<PostGrid posts={posts} />
 		</main>
 		<Footer />
 	</body>

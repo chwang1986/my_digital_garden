@@ -27,10 +27,10 @@ const doctorPosts = allPosts.filter((p) => p.data.theme === '机器博士说');
 const doctorLatest = doctorPosts.slice(0, 3);
 const doctorCount = doctorPosts.length;
 
-// 跳过置顶文，让发刊说明留在专栏区呈现
-const flow = allPosts.filter((p) => !p.data.pinned);
-const featured = flow[0];
-const recentTwo = flow.slice(1, 3);
+// 焦点大卡：最新一篇（置顶优先；机器博士说发刊文有专属专栏区，不占头条）
+const featured = allPosts.find((p) => p.data.theme !== '机器博士说') ?? null;
+// 最新文章：除机器博士说专栏外的近期两篇（专栏已有专属 band，避免重复）
+const recentTwo = allPosts.filter((p) => p.data.theme !== '机器博士说').slice(1, 3);
 
 const latestNote = [...notes].sort((a, b) => (a.date < b.date ? 1 : -1))[0] ?? null;
 ---

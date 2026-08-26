@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseHead from '../../../components/BaseHead.astro';
 import Footer from '../../../components/Footer.astro';
 import Header from '../../../components/Header.astro';
-import PostCard from '../../../components/PostCard.astro';
+import PostGrid from '../../../components/PostGrid.astro';
 import Pagination from '../../../components/Pagination.astro';
 import { sortPosts } from '../../../utils/sort-posts';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../../consts';
@@ -49,19 +49,7 @@ const last = page.lastPage;
 				font-size: 1.15rem;
 			}
 
-			/* 小红书式：竖向卡片网格（左→右按时间流） */
-			.post-list {
-				display: grid;
-				grid-template-columns: repeat(3, 1fr);
-				gap: 1.5rem;
-			}
-
-			@media (max-width: 900px) {
-				.post-list {
-					grid-template-columns: repeat(2, 1fr);
-				}
-			}
-
+			/* 卡片网格由 PostGrid 组件统一管理 */
 			@media (max-width: 600px) {
 				main {
 					padding-top: 2.5rem;
@@ -79,9 +67,7 @@ const last = page.lastPage;
 				<h1>文章</h1>
 				<p>技术笔记与思考合集。</p>
 			</header>
-			<div class="post-list">
-				{posts.map((post) => <PostCard post={post} />)}
-			</div>
+			<PostGrid posts={posts} />
 			<Pagination current={current} last={last} baseHref="/blog/page/" firstHref="/blog/" />
 		</main>
 		<Footer />

@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
-import PostCard from '../../components/PostCard.astro';
+import PostGrid from '../../components/PostGrid.astro';
 import Pagination from '../../components/Pagination.astro';
 import { sortPosts } from '../../utils/sort-posts';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
@@ -236,28 +236,13 @@ const allLinks = all.map((p) => `/blog/${p.id}/`);
 				color: #f59e0b;
 			}
 
-			/* 卡片网格（无图） */
-			.post-list {
-				display: grid;
-				grid-template-columns: repeat(3, 1fr);
-				gap: 1.25rem;
-			}
-
-			@media (max-width: 900px) {
-				.post-list {
-					grid-template-columns: repeat(2, 1fr);
-				}
-			}
-
+			/* 卡片网格由 PostGrid 组件统一管理 */
 			@media (max-width: 600px) {
 				main {
 					padding-top: 2.5rem;
 				}
 				.page-head h1 {
 					font-size: 2rem;
-				}
-				.post-list {
-					grid-template-columns: 1fr;
 				}
 			}
 		</style>
@@ -315,9 +300,7 @@ const allLinks = all.map((p) => `/blog/${p.id}/`);
 				</div>
 			</section>
 
-			<div class="post-list">
-				{posts.map((post) => <PostCard post={post} />)}
-			</div>
+			<PostGrid posts={posts} />
 			<Pagination current={1} last={last} baseHref="/blog/page/" firstHref="/blog/" />
 		</main>
 		<Footer />
