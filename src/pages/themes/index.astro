@@ -4,25 +4,13 @@ import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
+import { themeDesc, fallbackDesc } from '../../data/themes';
 
 const posts = await getCollection('blog');
 const counts = new Map<string, number>();
 for (const p of posts) {
 	if (p.data.theme) counts.set(p.data.theme, (counts.get(p.data.theme) ?? 0) + 1);
 }
-
-// 主题一句话描述（人工维护，覆盖本站现有主题；未见过的主题回退到默认文案）
-const themeDesc: Record<string, string> = {
-	'ollama的使用': '在本地把大模型跑起来、调顺手的一整套实操笔记。',
-	'自建blog平台': '从零搭起这个 Astro 博客的过程、决策与踩过的坑。',
-	'Mac 新手笔记': 'macOS 上手、软件、快捷键与日常使用技巧。',
-	'瞎想': '随手记下的想法、观察与一点不成熟的碎碎念。',
-	'与AI对话': '怎么和 AI 协作、写提示词、把专业内容讲给外行听。',
-	'写作方法': '把复杂的东西拆清楚、写明白的一些方法。',
-	'历史故事': '从史记和典故里翻出来的故事与人物。',
-	'机器博士说': 'AI 以博士水准写的一些边角思考：概念的另面、工具的怪事、以及对我自己内部构造的坦白。',
-};
-const fallbackDesc = '这一类下的文章合集，点进去看看。';
 
 const themes = [...counts.entries()]
 	.map(([name, n]) => ({ name, n, desc: themeDesc[name] ?? fallbackDesc }))

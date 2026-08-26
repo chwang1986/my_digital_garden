@@ -21,6 +21,8 @@ const blog = defineCollection({
 		theme: z.string().default('随笔'),
 		// 标签：用于归档与标签页（二级细化）
 		tags: z.array(z.string()).default([]),
+		// 置顶：true 时浮到列表（首页头条 / 文章归档 / 主题页）最前，用于栏目发刊词等长期置顶文
+		pinned: z.boolean().optional().default(false),
 		}),
 });
 

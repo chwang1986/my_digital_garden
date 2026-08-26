@@ -8,29 +8,31 @@ import FormattedDate from '../components/FormattedDate.astro';
 import { readingTime } from '../utils/reading-time';
 import { sortPosts } from '../utils/sort-posts';
 import { notes } from '../data/notes';
+import { themeDesc, fallbackDesc } from '../data/themes';
 
-const posts = sortPosts(await getCollection('blog'));
-const [featured, ...rest] = posts;
-// 首页只突出最近文章：头条 1 篇 + 下方精简列表 3 篇
-const recent = rest.slice(0, 3);
+const allPosts = sortPosts(await getCollection('blog'));
 
-// 本周随想：取日期最新的一条
-const latestNote = [...notes].sort((a, b) => (a.date < b.date ? 1 : -1))[0] ?? null;
-
-// 主题 / 系列计数
+// 主题计数 + 一句话描述
 const themeCounts = new Map<string, number>();
-const seriesCounts = new Map<string, number>();
-for (const post of posts) {
+for (const post of allPosts) {
 	const t = post.data.theme || '随笔';
 	themeCounts.set(t, (themeCounts.get(t) ?? 0) + 1);
-	if (post.data.series) seriesCounts.set(post.data.series, (seriesCounts.get(post.data.series) ?? 0) + 1);
 }
 const themes = [...themeCounts.entries()]
-	.map(([name, count]) => ({ name, count }))
-	.sort((a, b) => b.count - a.count);
-const seriesList = [...seriesCounts.entries()]
-	.map(([name, count]) => ({ name, count }))
-	.sort((a, b) => b.count - a.count);
+	.map(([name, count]) => ({ name, count, desc: themeDesc[name] ?? fallbackDesc }))
+	.sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, 'zh'))
+	.slice(0, 4);
+
+const doctorPosts = allPosts.filter((p) => p.data.theme === '机器博士说');
+const doctorLatest = doctorPosts.slice(0, 3);
+const doctorCount = doctorPosts.length;
+
+// 跳过置顶文，让发刊说明留在专栏区呈现
+const flow = allPosts.filter((p) => !p.data.pinned);
+const featured = flow[0];
+const recentTwo = flow.slice(1, 3);
+
+const latestNote = [...notes].sort((a, b) => (a.date < b.date ? 1 : -1))[0] ?? null;
 ---
 
 <!doctype html>
@@ -39,141 +41,59 @@ const seriesList = [...seriesCounts.entries()]
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<style>
 			main {
-				max-width: var(--wide-width);
+				max-width: 1080px;
 				margin: 0 auto;
 				padding: 0 1.25rem;
 			}
 
-			/* ===== Hero：聚焦文字，弱化装饰 ===== */
-			.hero {
-				position: relative;
-				padding: 4rem 0 3rem;
-				border-bottom: 1px solid var(--border-color);
+			/* ===== 紧凑引言：3 秒说清站是什么 ===== */
+			.intro {
+				padding: 4rem 0 2.5rem;
+				max-width: 40rem;
 			}
-
-			.hero-kicker {
+			.intro .kick {
 				font-family: var(--font-mono);
 				font-size: 0.78rem;
-				font-weight: 500;
-				letter-spacing: 0.15em;
+				letter-spacing: 0.12em;
 				text-transform: uppercase;
 				color: var(--primary-color);
-				margin: 0 0 1.4rem;
-				display: inline-flex;
-				align-items: center;
-				gap: 0.5rem;
-			}
-
-			.hero-kicker .pulse {
-				width: 7px;
-				height: 7px;
-				border-radius: 50%;
-				background: var(--primary-color);
-				box-shadow: 0 0 0 0 var(--glow);
-				animation: pulse 2.2s ease-out infinite;
-			}
-
-			@keyframes pulse {
-				0% {
-					box-shadow: 0 0 0 0 var(--glow);
-				}
-				70% {
-					box-shadow: 0 0 0 7px transparent;
-				}
-				100% {
-					box-shadow: 0 0 0 0 transparent;
-				}
-			}
-
-			.hero-title {
-				font-size: 3.2rem;
-				font-weight: 800;
-				line-height: 1.12;
-				letter-spacing: -0.025em;
 				margin: 0 0 1.2rem;
-				color: var(--text-main);
-				max-width: 16ch;
 			}
-
-			.hero-lede {
-				font-size: 1.15rem;
-				line-height: 1.7;
+			.intro h1 {
+				font-size: 2.6rem;
+				font-weight: 800;
+				line-height: 1.15;
+				letter-spacing: -0.03em;
+				margin: 0 0 1rem;
+				color: var(--text-main);
+			}
+			.intro p {
+				font-size: 1.1rem;
+				line-height: 1.75;
 				color: var(--text-secondary);
 				margin: 0;
-				max-width: 34rem;
 			}
 
-			/* ===== 头条（最新一篇，做主角） ===== */
-			.featured {
-				padding: 2.75rem 0 1rem;
+			/* ===== Bento 异形网格 ===== */
+			.bento {
+				display: grid;
+				grid-template-columns: repeat(4, 1fr);
+				grid-template-areas:
+					'feat feat doc   doc'
+					'feat feat note  note'
+					'news news tools themes';
+				gap: 1.25rem;
+				padding-bottom: 3rem;
 			}
 
-			.featured-link {
-				position: relative;
-				display: block;
+			.card {
+				display: flex;
+				flex-direction: column;
+				padding: 1.45rem 1.6rem;
 				text-decoration: none;
-				color: var(--text-main);
-				border-radius: 16px;
-				border: 1px solid var(--border-color);
-				background: var(--surface);
-				transition:
-					transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
-					box-shadow 0.28s ease,
-					border-color 0.28s ease;
+				color: inherit;
 			}
-
-			.featured-link::after {
-				content: "";
-				position: absolute;
-				inset: -1px;
-				border-radius: inherit;
-				padding: 1px;
-				background: linear-gradient(
-					120deg,
-					transparent 30%,
-					var(--primary-color),
-					var(--primary-2),
-					transparent 70%
-				);
-				background-size: 220% 220%;
-				-webkit-mask:
-					linear-gradient(#fff 0 0) content-box,
-					linear-gradient(#fff 0 0);
-				-webkit-mask-composite: xor;
-				mask-composite: exclude;
-				opacity: 0;
-				transition: opacity 0.3s ease;
-				pointer-events: none;
-			}
-
-			.featured-link:hover {
-				transform: translateY(-3px);
-				box-shadow: var(--glow-sm);
-				border-color: transparent;
-			}
-
-			.featured-link:hover::after {
-				opacity: 1;
-				animation: border-flow 2.4s linear infinite;
-			}
-
-			@keyframes border-flow {
-				0% {
-					background-position: 0% 50%;
-				}
-				100% {
-					background-position: 220% 50%;
-				}
-			}
-
-			.featured-body {
-				padding: 1.8rem 1.9rem 2rem;
-			}
-
-			.featured-tag {
-				display: inline-flex;
-				align-items: center;
-				gap: 0.4rem;
+			.card .kick {
 				font-family: var(--font-mono);
 				font-size: 0.72rem;
 				letter-spacing: 0.1em;
@@ -181,315 +101,237 @@ const seriesList = [...seriesCounts.entries()]
 				color: var(--primary-color);
 				margin: 0 0 0.8rem;
 			}
-
-			.featured-tag::before {
-				content: "";
-				width: 6px;
-				height: 6px;
-				border-radius: 50%;
-				background: var(--primary-color);
+			.card .kick.violet {
+				color: var(--primary-2);
+			}
+			.card .more {
+				font-size: 0.85rem;
+				font-weight: 600;
+				color: var(--primary-2);
+				text-decoration: none;
+				margin-top: auto;
+				align-self: flex-start;
+			}
+			.card .more:hover {
+				color: var(--primary-strong);
 			}
 
-			.featured-title {
-				font-size: 2.3rem;
+			/* 焦点大卡：全页唯一视觉焦点 */
+			.feat {
+				grid-area: feat;
+				padding: 2.2rem 2.3rem;
+				justify-content: center;
+			}
+			.feat .kick {
+				font-size: 0.8rem;
+				margin-bottom: 1rem;
+			}
+			.feat h2 {
+				font-size: 2.1rem;
 				font-weight: 800;
-				line-height: 1.25;
+				line-height: 1.18;
 				letter-spacing: -0.02em;
-				margin: 0 0 0.8rem;
+				margin: 0 0 0.9rem;
 				color: var(--text-main);
-				background: linear-gradient(
-					100deg,
-					var(--text-main) 0%,
-					var(--text-main) 55%,
-					var(--primary-strong) 100%
-				);
-				-webkit-background-clip: text;
-				background-clip: text;
-				color: transparent;
-				-webkit-text-fill-color: transparent;
 			}
-
-			.featured-excerpt {
-				font-size: 1.08rem;
-				line-height: 1.8;
+			.feat p {
+				font-size: 1.05rem;
+				line-height: 1.7;
 				color: var(--text-secondary);
-				margin: 0 0 1.2rem;
+				margin: 0 0 1.3rem;
 				display: -webkit-box;
 				-webkit-line-clamp: 3;
 				-webkit-box-orient: vertical;
 				overflow: hidden;
 			}
-
-			.featured-date {
-				font-family: var(--font-mono);
-				font-size: 0.8rem;
+			.feat .meta {
+				font-size: 0.78rem;
 				color: var(--text-secondary);
-			}
-
-			.featured-date .dot {
-				margin: 0 0.4rem;
-				opacity: 0.6;
-			}
-
-			/* ===== 本周随想：轻量真人感入口 ===== */
-			.note {
-				padding: 2.25rem 0 0.5rem;
-			}
-
-			.note-card {
-				position: relative;
-				border: 1px solid var(--border-color);
-				border-radius: 14px;
-				background: var(--surface);
-				padding: 1.4rem 1.5rem 1.3rem 1.7rem;
-				border-left: 3px solid var(--primary-2);
-			}
-
-			.note-head {
-				display: flex;
-				align-items: baseline;
-				justify-content: space-between;
-				gap: 0.5rem;
 				margin-bottom: 0.7rem;
 			}
-
-			.note-label {
-				font-family: var(--font-mono);
-				font-size: 0.74rem;
-				letter-spacing: 0.12em;
-				text-transform: uppercase;
-				color: var(--primary-2);
-				margin: 0;
-			}
-
-			.note-date {
-				font-family: var(--font-mono);
-				font-size: 0.74rem;
-				color: var(--text-secondary);
-			}
-
-			.note-text {
-				margin: 0 0 0.8rem;
-				font-size: 1.02rem;
-				line-height: 1.75;
-				color: var(--text-main);
-			}
-
-			.note-more {
-				font-size: 0.85rem;
+			.feat .go {
+				font-size: 0.92rem;
 				font-weight: 600;
-				color: var(--primary-2);
-				text-decoration: none;
-				transition: color 0.2s ease;
+				color: var(--primary-color);
 			}
 
-			.note-more:hover {
-				color: var(--primary-strong);
+			/* 机器博士说：普通栏目，紫色仅作标签 */
+			.doc {
+				grid-area: doc;
 			}
-
-			/* ===== 最近文章：单列精简列表，突出标题 ===== */
-			.recent-posts {
-				padding: 2.75rem 0 1rem;
-			}
-
-			.recent-posts-head {
+			.doc-list {
+				list-style: none;
+				margin: 0 0 0.9rem;
+				padding: 0;
 				display: flex;
-				align-items: baseline;
-				justify-content: space-between;
-				margin-bottom: 1.4rem;
+				flex-direction: column;
+				gap: 0.55rem;
+				flex: 1;
 			}
-
-			.recent-posts-head h2 {
-				font-size: 0.78rem;
-				font-weight: 700;
-				letter-spacing: 0.16em;
-				text-transform: uppercase;
-				color: var(--primary-color);
-				margin: 0;
-			}
-
-			.recent-posts-head .view-all {
-				font-size: 0.85rem;
-				font-weight: 600;
-				color: var(--text-secondary);
-				text-decoration: none;
-				transition: color 0.2s ease;
-			}
-
-			.recent-posts-head .view-all:hover {
-				color: var(--primary-color);
-			}
-
-			/* 列表项：大标题 + 弱元信息，悬停左侧色条 + 标题变色 */
-			.post-row {
-				display: block;
-				text-decoration: none;
-				color: var(--text-main);
-				padding: 1.4rem 0 1.4rem 1.2rem;
-				border-left: 2px solid transparent;
-				border-bottom: 1px solid var(--border-color);
-				transition: border-color 0.2s ease, padding-left 0.2s ease;
-			}
-
-			.post-row:last-child {
-				border-bottom: none;
-			}
-
-			.post-row:hover {
-				border-left-color: var(--primary-color);
-				padding-left: 1.4rem;
-			}
-
-			.post-row-meta {
-				display: flex;
-				align-items: center;
-				gap: 0.5rem;
-				font-family: var(--font-mono);
-				font-size: 0.72rem;
-				color: var(--text-secondary);
-				margin-bottom: 0.4rem;
-			}
-
-			.post-row-meta .theme-tag {
-				color: var(--primary-color);
-			}
-
-			.post-row-title {
-				font-size: 1.5rem;
-				font-weight: 700;
-				line-height: 1.4;
-				letter-spacing: -0.01em;
-				margin: 0 0 0.45rem;
-				color: var(--text-main);
-				transition: color 0.2s ease;
-			}
-
-			.post-row:hover .post-row-title {
-				color: var(--primary-color);
-			}
-
-			.post-row-excerpt {
+			.doc-list li a {
 				font-size: 1rem;
-				line-height: 1.75;
+				font-weight: 500;
+				line-height: 1.4;
+				color: var(--text-main);
+				text-decoration: none;
+				display: -webkit-box;
+				-webkit-line-clamp: 1;
+				-webkit-box-orient: vertical;
+				overflow: hidden;
+			}
+			.doc-list li a:hover {
+				color: var(--primary-2);
+			}
+
+			/* 本周随想：紫左线 */
+			.note {
+				grid-area: note;
+				border-left: 3px solid var(--primary-2);
+			}
+			.note .txt {
+				font-size: 0.98rem;
+				line-height: 1.7;
+				color: var(--text-main);
+				margin: 0 0 0.9rem;
+				display: -webkit-box;
+				-webkit-line-clamp: 4;
+				-webkit-box-orient: vertical;
+				overflow: hidden;
+				flex: 1;
+			}
+
+			/* 最新文章：两篇列表 */
+			.news {
+				grid-area: news;
+			}
+			.news ul {
+				list-style: none;
+				margin: 0 0 0.9rem;
+				padding: 0;
+				display: flex;
+				flex-direction: column;
+				gap: 0.7rem;
+				flex: 1;
+			}
+			.news li a {
+				text-decoration: none;
+				color: var(--text-main);
+				display: flex;
+				justify-content: space-between;
+				align-items: baseline;
+				gap: 1rem;
+				font-size: 1rem;
+				line-height: 1.4;
+			}
+			.news li a:hover {
+				color: var(--primary-color);
+			}
+			.news .date {
+				font-family: var(--font-mono);
+				font-size: 0.74rem;
 				color: var(--text-secondary);
-				margin: 0;
+				white-space: nowrap;
+			}
+
+			/* 工具箱 / 主题地图：入口卡 */
+			.tools,
+			.themes {
+				grid-area: tools;
+			}
+			.themes {
+				grid-area: themes;
+			}
+			.tools h3,
+			.themes h3 {
+				font-size: 1.1rem;
+				font-weight: 700;
+				margin: 0 0 0.5rem;
+				color: var(--text-main);
+			}
+			.tools p {
+				font-size: 0.9rem;
+				line-height: 1.6;
+				color: var(--text-secondary);
+				margin: 0 0 0.9rem;
 				display: -webkit-box;
 				-webkit-line-clamp: 2;
 				-webkit-box-orient: vertical;
 				overflow: hidden;
 			}
-
-			/* ===== 按主题/系列浏览 ===== */
-			.browse {
-				padding: 2.5rem 0 1rem;
-				margin-top: 1rem;
-				border-top: 1px solid var(--border-color);
-			}
-
-			.browse-group + .browse-group {
-				margin-top: 1.5rem;
-			}
-
-			.browse-head {
-				display: flex;
-				align-items: baseline;
-				justify-content: space-between;
-				margin-bottom: 1rem;
-			}
-
-			.browse-head h2 {
-				font-size: 0.8rem;
-				font-weight: 600;
-				letter-spacing: 0.12em;
-				text-transform: uppercase;
-				color: var(--text-secondary);
-				margin: 0;
-			}
-
-			.browse-head .view-all {
+			.tools .sub,
+			.themes .sub {
 				font-size: 0.85rem;
 				font-weight: 600;
 				color: var(--primary-color);
+				margin-top: auto;
+				align-self: flex-start;
 				text-decoration: none;
 			}
-
-			.browse-head .view-all:hover {
-				color: var(--primary-strong);
-			}
-
-			.browse-chips {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 0.5rem;
-			}
-
-			.chip {
-				display: inline-flex;
-				align-items: center;
-				gap: 0.45rem;
+			.themes .theme-title {
 				text-decoration: none;
-				font-size: 0.88rem;
-				color: var(--text-main);
-				padding: 0.4rem 0.8rem;
-				border: 1px solid var(--border-color);
-				border-radius: 8px;
-				background: var(--surface);
-				transition:
-					border-color 0.2s ease,
-					color 0.2s ease,
-					transform 0.2s ease,
-					box-shadow 0.2s ease;
+				color: inherit;
 			}
-
-			.chip:hover {
-				border-color: var(--primary-color);
-				color: var(--primary-color);
-				transform: translateY(-2px);
-				box-shadow: var(--glow-sm);
+			.themes .theme-title h3 {
+				margin: 0 0 0.5rem;
 			}
-
-			.chip .count {
-				font-family: var(--font-mono);
-				font-size: 0.7rem;
-				color: var(--text-secondary);
-				background: var(--code-bg);
-				padding: 0.05rem 0.4rem;
-				border-radius: 4px;
-			}
-
-			/* 最近文章列表容器（单列） */
-			.post-list {
+			.themes ul {
+				list-style: none;
+				margin: 0 0 0.8rem;
+				padding: 0;
 				display: flex;
 				flex-direction: column;
+				gap: 0.35rem;
+				flex: 1;
+			}
+			.themes li a {
+				text-decoration: none;
+				color: var(--text-main);
+				font-size: 0.9rem;
+				display: flex;
+				justify-content: space-between;
+				gap: 0.5rem;
+			}
+			.themes li a:hover {
+				color: var(--primary-color);
+			}
+			.themes .c {
+				font-size: 0.72rem;
+				color: var(--text-secondary);
+				white-space: nowrap;
 			}
 
-			@media (max-width: 720px) {
-				.hero {
-					padding: 3rem 0 2.5rem;
+			@media (max-width: 900px) {
+				.bento {
+					grid-template-columns: repeat(2, 1fr);
+					grid-template-areas:
+						'feat feat'
+						'doc  note'
+						'news news'
+						'tools themes';
 				}
-				.hero-title {
-					font-size: 2.2rem;
-				}
-				.featured {
-					padding: 2rem 0 0.5rem;
-				}
-				.featured-title {
-					font-size: 1.7rem;
-				}
-				.featured-excerpt {
-					font-size: 1rem;
-				}
-				.post-row-title {
-					font-size: 1.3rem;
-				}
-				.post-row-excerpt {
-					font-size: 0.95rem;
+				.feat h2 {
+					font-size: 1.8rem;
 				}
 			}
-
-			@media (max-width: 480px) {
-				.hero-title {
-					font-size: 1.7rem;
+			@media (max-width: 560px) {
+				.intro {
+					padding: 2.8rem 0 2rem;
+				}
+				.intro h1 {
+					font-size: 2rem;
+				}
+				.bento {
+					grid-template-columns: 1fr;
+					grid-template-areas:
+						'feat'
+						'doc'
+						'note'
+						'news'
+						'tools'
+						'themes';
+				}
+				.feat h2 {
+					font-size: 1.5rem;
 				}
 			}
 		</style>
@@ -497,113 +339,101 @@ const seriesList = [...seriesCounts.entries()]
 	<body>
 		<Header />
 		<main>
-			<section class="hero">
-				<p class="hero-kicker"><span class="pulse"></span>Wang's Notes</p>
-				<h1 class="hero-title"><span class="gradient-text">把构建的过程</span>，写成可追溯的笔记。</h1>
-				<p class="hero-lede">
-					这里收录技术实践、本地 AI 与个人思考。每一篇都来自真实的工程实践，并记录它一路长成的轨迹。
-				</p>
+			<section class="intro">
+				<p class="kick">Wang's Notes</p>
+				<h1><span class="gradient-text">把构建的过程</span>，写成可追溯的笔记。</h1>
+				<p>这里收录技术实践、本地 AI 与个人思考。每一篇都来自真实工程，并记录它一路长成的轨迹。</p>
 			</section>
 
-			{
-				featured && (
-					<section class="featured">
-						<a class="featured-link" href={`/blog/${featured.id}/`}>
-							<div class="featured-body">
-								<p class="featured-tag">最新发布</p>
-								<h2 class="featured-title">{featured.data.title}</h2>
-								{featured.data.description && (
-									<p class="featured-excerpt">{featured.data.description}</p>
-								)}
-								<span class="featured-date">
-									<FormattedDate date={featured.data.pubDate} />
-									<span class="dot">·</span>
-									{readingTime(featured.body)}
-								</span>
-							</div>
+			<div class="bento">
+				{
+					featured && (
+						<a class="card feat glow-card" href={`/blog/${featured.id}/`}>
+							<span class="kick mono-tag">{featured.data.theme}</span>
+							<h2>{featured.data.title}</h2>
+							{featured.data.description && <p>{featured.data.description}</p>}
+							<span class="meta mono-tag">
+								<FormattedDate date={featured.data.pubDate} />
+								<span> · </span>
+								{readingTime(featured.body)}
+							</span>
+							<span class="go">阅读 →</span>
 						</a>
-					</section>
-				)
-			}
+					)
+				}
 
-			{
-				latestNote && (
-					<section class="note">
-						<div class="note-card">
-							<div class="note-head">
-								<p class="note-label">本周随想</p>
-								<span class="note-date">{latestNote.date}</span>
-							</div>
-							<p class="note-text">{latestNote.text}</p>
-							<a class="note-more" href="/themes/瞎想/">更多随想 →</a>
-						</div>
-					</section>
-				)
-			}
-
-			<section class="recent-posts">
-				<div class="recent-posts-head">
-					<h2>最近文章</h2>
-					<a class="view-all" href="/blog">全部归档 →</a>
-				</div>
-				<div class="post-list">
-					{
-						recent.map((post) => (
-							<a class="post-row" href={`/blog/${post.id}/`}>
-								<div class="post-row-meta">
-									{post.data.theme && <span class="theme-tag">{post.data.theme}</span>}
-									<span>·</span>
-									<FormattedDate date={post.data.pubDate} />
-									<span>·</span>
-									{readingTime(post.body)}
-								</div>
-								<h3 class="post-row-title">{post.data.title}</h3>
-								{post.data.description && (
-									<p class="post-row-excerpt">{post.data.description}</p>
-								)}
-							</a>
-						))
-					}
-				</div>
-			</section>
-
-			<section class="browse">
-				<div class="browse-group">
-					<div class="browse-head">
-						<h2>按主题浏览</h2>
-						<a class="view-all" href="/categories">全部分类 →</a>
-					</div>
-					<div class="browse-chips">
+				<div class="card doc glow-card">
+					<span class="kick violet mono-tag">机器博士说</span>
+					<ul class="doc-list">
 						{
-							themes.map((t) => (
-								<a class="chip" href={`/themes/${encodeURIComponent(t.name)}/`}>
-									{t.name}
-									<span class="count">{t.count}</span>
-								</a>
+							doctorLatest.map((p) => (
+								<li>
+									<a href={`/blog/${p.id}/`}>{p.data.title}</a>
+								</li>
 							))
 						}
-					</div>
+					</ul>
+					<a class="more" href={`/themes/${encodeURIComponent('机器博士说')}/`}>
+						看全部 {doctorCount} 篇 →
+					</a>
 				</div>
+
 				{
-					seriesList.length > 0 && (
-						<div class="browse-group">
-							<div class="browse-head">
-								<h2>按系列浏览</h2>
-							</div>
-							<div class="browse-chips">
-								{
-									seriesList.map((s) => (
-										<a class="chip" href={`/series/${encodeURIComponent(s.name)}/`}>
-											{s.name}
-											<span class="count">{s.count}</span>
-										</a>
-									))
-								}
-							</div>
+					latestNote && (
+						<div class="card note glow-card">
+							<span class="kick violet mono-tag">本周随想</span>
+							<p class="txt">{latestNote.text}</p>
+							<a class="more" href="/themes/瞎想/">更多随想 →</a>
 						</div>
 					)
 				}
-			</section>
+
+				<div class="card news glow-card">
+					<span class="kick mono-tag">最新文章</span>
+					<ul>
+						{
+							recentTwo.map((p) => (
+								<li>
+									<a href={`/blog/${p.id}/`}>
+										{p.data.title}
+										<span class="date">
+											<FormattedDate date={p.data.pubDate} />
+										</span>
+									</a>
+								</li>
+							))
+						}
+					</ul>
+					<a class="more" href="/blog">全部文章 →</a>
+				</div>
+
+				<a class="card tools glow-card" href="/tools">
+					<span class="kick mono-tag">小工具</span>
+					<h3>实用小工具</h3>
+					<p>JSON、Base64、时间戳、密码生成……日常用得上的转换器。</p>
+					<span class="sub">打开工具箱 →</span>
+				</a>
+
+				<div class="card themes glow-card">
+					<span class="kick mono-tag">主题地图</span>
+					<a class="theme-title" href="/themes">
+						<h3>按主题逛</h3>
+					</a>
+					<ul>
+						{
+							themes.map((t) => (
+								<li>
+									<a href={`/themes/${encodeURIComponent(t.name)}/`}>
+										<span>{t.name}</span>
+										<span class="c">{t.count} 篇</span>
+									</a>
+								</li>
+							))
+						}
+					</ul>
+					<a class="sub" href="/themes">完整地图 →</a>
+				</div>
+			</div>
 		</main>
 		<Footer />
 	</body>
